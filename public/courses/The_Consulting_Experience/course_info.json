@@ -1,0 +1,23 @@
+{
+  "name": "The Consulting Experience",
+  "total_reviews": 4,
+  "average_rating": 4.25,
+  "critical_issues_count": 2,
+  "modules": {
+    "Module 1": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues_count": 1
+    },
+    "Module 3": {
+      "average_rating": 4.5,
+      "total_reviews": 2,
+      "critical_issues_count": 1
+    },
+    "Module 2": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues_count": 0
+    }
+  }
+}

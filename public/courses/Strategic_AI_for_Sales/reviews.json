@@ -1,0 +1,78 @@
+[
+  {
+    "reviewer": {
+      "response_id": "thCOLfGC",
+      "first_name": "Gus",
+      "last_name": "Byleveld",
+      "email": "byleveldgerdus@gmail.com",
+      "completion_time": "May 05, 2024 09:40:44 AM",
+      "time_taken": "20 mins 11 secs "
+    },
+    "course_name": "Strategic AI for Sales",
+    "module_name": "Module 4",
+    "rating": 3,
+    "positive_comments": "The module gives a broad overview of typical challenges that must be overcome.",
+    "improvement_opportunities": "The lecturer speaks very fast, and his delivery is quite monotonous. It feels like he is reading from a teleprompter.  It would be great to have a summary slide for each video. I am missing the \"how\" element. I realize this is a strategic overview and is, therefore, high-level by default. However, I feel I am not getting guidance on getting started or thinking about solving the challenges listed.",
+    "is_show_stopper": true,
+    "show_stopper_details": "The overview gives a landscape overview but does not prompt my thinking about how to address my challenges. Therefore, I am left with an \"okay, what now\" feeling.",
+    "attachments": NaN,
+    "review_date": "May 05, 2024 09:40:44 AM"
+  },
+  {
+    "reviewer": {
+      "response_id": "thCOLfGC",
+      "first_name": "Gus",
+      "last_name": "Byleveld",
+      "email": "byleveldgerdus@gmail.com",
+      "completion_time": "May 05, 2024 09:40:44 AM",
+      "time_taken": "20 mins 11 secs "
+    },
+    "course_name": "Strategic AI for Sales",
+    "module_name": "Module 7",
+    "rating": 3,
+    "positive_comments": "The examples given in the modules give a good overview of typical challenges that can be addressed.",
+    "improvement_opportunities": "The term \"IA \"feels generic and overused. I understand that this module gives insight into the types of problems that could be solved by deploying AI, but it does not speak to what kind of IA could be used. For example, are we talking about NLP, Deep Learning, Machine Learning, Computer Vision, Generative IA, etc.?  Therefore, I am getting a sense of which project could be good for AI intervention, but no guidance on what type of IA could be used.",
+    "is_show_stopper": true,
+    "show_stopper_details": "",
+    "attachments": NaN,
+    "review_date": "May 05, 2024 09:40:44 AM"
+  },
+  {
+    "reviewer": {
+      "response_id": "KtBTGv3H",
+      "first_name": "GERDUS",
+      "last_name": "BYLEVELD",
+      "email": "byleveldgerdus@gmail.com",
+      "completion_time": "Feb 01, 2024 12:39:40 PM",
+      "time_taken": "1 hr 43 mins 53 secs "
+    },
+    "course_name": "Strategic AI for Sales",
+    "module_name": "Module 1",
+    "rating": 4,
+    "positive_comments": "The content gives a well-rounded overview of AI, and the pace is very comfortable.",
+    "improvement_opportunities": "What is AI? Basic Concepts and Definitions: I'd like to see a summary slide at the end of this module that lists all the sub-components of AI that were discussed. This will allow for easier reference later.  In general, summary slides after each video will be useful. This will go hand-in-hand with the articles shared at the end of the module. I would have loved to see more examples of the challenges of theperiods as CRM evolved so I could connect it with the benefits of today to make my strategic arguments.  The course seems to be geared more towards B2C and commodity sales than B2B sales. Correct?",
+    "is_show_stopper": false,
+    "show_stopper_details": NaN,
+    "attachments": NaN,
+    "review_date": "Feb 01, 2024 12:39:40 PM"
+  },
+  {
+    "reviewer": {
+      "response_id": "KtBTGv3H",
+      "first_name": "GERDUS",
+      "last_name": "BYLEVELD",
+      "email": "byleveldgerdus@gmail.com",
+      "completion_time": "Feb 01, 2024 12:39:40 PM",
+      "time_taken": "1 hr 43 mins 53 secs "
+    },
+    "course_name": "Strategic AI for Sales",
+    "module_name": "Module 2",
+    "rating": 4,
+    "positive_comments": "I appreciate how the module outlines the evolution of CRM",
+    "improvement_opportunities": "Again, I think a summary of the evolution of CRM will be very useful here.  In addition, it is argued that the evolution of CRM is useful and impactful; I would love to see a few metrics of how impactful CRM used to be and how it is today. Especially as we moved from more manual capturing to an automated environment. Strategically, it would be great to know the baseline we are working with today. i.e., what kind of strategic disadvantage will we have without looking at AI seriously?",
+    "is_show_stopper": false,
+    "show_stopper_details": "",
+    "attachments": NaN,
+    "review_date": "Feb 01, 2024 12:39:40 PM"
+  }
+]

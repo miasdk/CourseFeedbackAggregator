@@ -1,0 +1,87 @@
+{
+  "overview": {
+    "total_reviews": 6,
+    "average_rating": 3.0,
+    "critical_issues": 4
+  },
+  "rating_distribution": {
+    "2": 2,
+    "4": 2,
+    "3": 2
+  },
+  "modules": {
+    "Module 2": {
+      "average_rating": 3.0,
+      "total_reviews": 2,
+      "critical_issues": [
+        {
+          "reviewer": "Britney Beck",
+          "issue": "Logistical items: \u2022\tThe videos in Module 4 cut off the speech at each transition. \u2022\tWere these videos created with U.S. employment in mind? I ask because the video re: EE Wellness in Module 4 has examples and encourages AI use in ways that will get a U.S. employer in a lot of trouble. See my notes in that section.  Video 1 \u2022\tThe video title says, \u201cThe \u2018new reality\u2019 of Customer Experience (CX)\u201d \u2013 is this the correct title?  \u2022\tAdditional concerns about video content (see attached) Article 1 - concerns regarding content (see attached) Video 2 - concerns regarding content (see attached) Discussion Q2 - \u2022\tRecommend changing the question from \u201cCan you think of any drawbacks\u2026\u201d to \u201cWhat are the drawbacks of\u2026\u201d Assignment 1: \u2022 Recommend including the word \u201ccurrent\u201d in the assignment title, so it would say, \u201cMap Your Current Recruitment Processes.\u201d Assignment 2: \u2022 Instructions make it seem like this is a collaborative assignment, but that\u2019s not the case if they are completing it and submitting it. Should this be a Discussion Q instead?  Discussion Q3: \u2022\tThis question has nothing to do with the article. Is that intended?  Capstone Project Description: \u2022 Says, \u201cSet specific and quantifiable customer experience objectives\u2026\u201d Is that right? Shouldn\u2019t it be related to AI in HR?",
+          "details": "Incorrect titles/descriptions. Concerns about content posing legal risks. See attached for details."
+        }
+      ]
+    },
+    "Module 4": {
+      "average_rating": 2.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Britney Beck",
+          "issue": "Discussion Q1: \u2022\tI recommend adding, \u201cwhy/why not\u201d to the question.  Video 2: \u2022\tWhat does the Accenture example have to do with performance management? It wasn\u2019t made clear. It seemed like it was referring to its use for B2C.  Discussion Q2, Article: \u2022\tIs this a verified blog? There are spelling/grammatical errors within.   Assignment 1: \u2022\tThe instructions say to discuss answers with fellow learners, but this is an assignment. Should it be a Discussion Question instead? Otherwise, where should they discuss their answers? Video 3: \u2022\tHas a glitch \u2013 it repeats two parts of the video. Video 4: \u2022\tThe description under this video is Video 3\u2019s description.  \u2022\tThe IBM Watson example concerns me. \u2022\tThe Humanyze example for ID Badges is another privacy issue.  Discussion Q3: \u2022\tThis question should be after Video 3. It is about compensation and has nothing to do with Video 4.  Capstone Project Description: \u2022 Says, \u201cSet specific and quantifiable customer experience objectives\u2026\u201d Is that right? Shouldn\u2019t it be related to AI in HR?",
+          "details": ""
+        }
+      ]
+    },
+    "Module 1": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 6": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Margaret Pagnucco",
+          "issue": "surprised at oversized clothing selection of speaker. Errors noted in several sections: section 2 - discussion question needs reworded - should say \"how do you think AI can consider...\" (instead of \"think can AI\" as it currently states) section 3 - in video, speaker uses terms \"ERP\" and \"PLM\" without explaining what these acronyms mean section 6 - related to Role Change Management When Implementing AI, in objectives (under video link) it states ...\"foster technologically averse culture.\"  I believe this is the opposite of the author's intent.",
+          "details": "Errors noted above"
+        }
+      ]
+    },
+    "Course Overview": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Margaret Pagnucco",
+          "issue": "apparent error in section 3 video objectives - states \"AI transforms...but risks stagnation.\"  Shouldn't it say without AI there are risks of stagnation?",
+          "details": ""
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 2",
+      "reviewer": "Britney Beck",
+      "issue": "Logistical items: \u2022\tThe videos in Module 4 cut off the speech at each transition. \u2022\tWere these videos created with U.S. employment in mind? I ask because the video re: EE Wellness in Module 4 has exam..."
+    },
+    {
+      "module": "Module 4",
+      "reviewer": "Britney Beck",
+      "issue": "Discussion Q1: \u2022\tI recommend adding, \u201cwhy/why not\u201d to the question.  Video 2: \u2022\tWhat does the Accenture example have to do with performance management? It wasn\u2019t made clear. It seemed like it was refe..."
+    },
+    {
+      "module": "Module 6",
+      "reviewer": "Margaret Pagnucco",
+      "issue": "surprised at oversized clothing selection of speaker. Errors noted in several sections: section 2 - discussion question needs reworded - should say \"how do you think AI can consider...\" (instead of \"t..."
+    },
+    {
+      "module": "Course Overview",
+      "reviewer": "Margaret Pagnucco",
+      "issue": "apparent error in section 3 video objectives - states \"AI transforms...but risks stagnation.\"  Shouldn't it say without AI there are risks of stagnation?"
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

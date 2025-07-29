@@ -1,0 +1,37 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 4.0,
+    "critical_issues": 1
+  },
+  "rating_distribution": {
+    "4": 2
+  },
+  "modules": {
+    "Module 1": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 2": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Pavan Bakshi",
+          "issue": "The Slides are cluttered with too many words and sentences. We could use diagrams/Images  for Emotional Intelligence as attached.  Various points on slides should come as bullet points one by one, or else the learner gets busy reading other points which are not being talked about.  In Intelligence  1 of 14 Presentation. There is a mismatch with the slides and what the speaker is saying in this video/presentation.  The content is not Women Leaders focused or presented as such. Some Study/Research/White paper/book  could be a basis of the content such as : https://hbr.org/2019/06/research-women-score-higher-than-men-in-most-leadership-skills or  https://www.routledge.com/go/the_transpersonal_leadership_white_paper_series_women_naturally_better_lead In Intelligence  3 of 14 Presentation. Connecting EI with movies may not be land since the participants may not have seen the movie.",
+          "details": ""
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 2",
+      "reviewer": "Pavan Bakshi",
+      "issue": "The Slides are cluttered with too many words and sentences. We could use diagrams/Images  for Emotional Intelligence as attached.  Various points on slides should come as bullet points one by one, or ..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

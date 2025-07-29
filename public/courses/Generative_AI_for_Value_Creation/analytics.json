@@ -1,0 +1,86 @@
+{
+  "overview": {
+    "total_reviews": 6,
+    "average_rating": 4.33,
+    "critical_issues": 4
+  },
+  "rating_distribution": {
+    "4": 4,
+    "5": 2
+  },
+  "modules": {
+    "Module 2": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Venkata Krishna Dasari",
+          "issue": "(GenAI 7 of 11) Presentation: AI\u2019s Role in Predictive Maintenance and Operational Efficiency in Manufacturing Feedback\u2014The slides are missing examples like GE, Crystal Ball, etc\u2026 The entire video has blank slides.",
+          "details": "(GenAI 7 of 11) Presentation: AI\u2019s Role in Predictive Maintenance and Operational Efficiency in Manufacturing Feedback\u2014The slides are missing examples like GE, Crystal Ball, etc\u2026 The entire video has blank slides."
+        }
+      ]
+    },
+    "Module 3": {
+      "average_rating": 4.0,
+      "total_reviews": 2,
+      "critical_issues": [
+        {
+          "reviewer": "Ryan Lavallee",
+          "issue": "In the first lecture, some of the visuals are not appearing next to the presenter (see screenshot 1.)  Also, at the end of the lecture, the presenter summarizes the lesson stating that \"...how generative AI can build and nurture customer relationships.\"  However the lecture included examples of both predictive and generative AI.  I would suggest changing this to eliminate confusion...as not all AI is generative AI.  I could not attempt Assignment 1, as it is disabled.  In lecture 3 at 0:41, the presenter is speaking about customer data and then makes the statement \"Generative AI excels in handling complex data streams.\"  This could be confusing, as the presenter is speaking about predictive AI, not generative AI.    Also, at 3:09 the presenter mistakes a comma for a period--as a result, the tonality is awkward.   In part 6, the linked article is very insightful, but the description is inaccurate.  It does not explore 11 industries.  In Lecture 4, the presenter discusses how Fintrust uses Generative AI to manage risk.  At 1:13, she talks about how AI was used to \"sift through vast data sets, including transaction histories.\"  I believe she may be talking about unsupervised machine learning, as opposed to generative AI, but the example is not detailed enough for me to be certain.  In the final quiz, several questions use the term \"generative AI\" when referring to predictive AI and machine learning.  I think this is likely to lead to confusion as to the meaning of generative AI. See screenshots 2 and 3.",
+          "details": "I have identified several areas above where the term \"generative AI\" is being used interchangeably to describe other types of Artificial Intelligence, including in the final quiz.  Given that the course is focused on AI, I would suggest editing these sections to ensure that the terminology is clear."
+        }
+      ]
+    },
+    "Module 7": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 8": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Sir Kolapo IGE.Ph.D",
+          "issue": "(Role 5 of 11) Presentation: Strategies for Navigating AI Implementation Challenges Note: Observation  The Lecturer has done fantastic job with incredible knowledge of the subject matter. However, I observed that there\u2019s overlapping in the list of the PowerPoints highlighted by the lecturer.  We should rearrange the points to ensure that they appear vividly. See the screenshot provided below ",
+          "details": ""
+        }
+      ]
+    },
+    "Module 5": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Craig LeGrande",
+          "issue": "I thought the first half of the module was too generic on ethics. I would like to see high level comments on AI's impact on making ethics even more important for the future to better setup the 2nd half of this module.  Also, i noted a few suggestions: - take some of the pts from the LI article and spread them into the 1st video - Section #2 Qs: For Q1, what about asking the student to identify the top 2-3 business strategies for their company and then highlight the top ethical challenges they could face when implementing these strategies? I think that would provide a more direct/structured output - 2:43 into the 2nd video the text didnt match the narrative - timing was a bit off. - challenge 3: would like 1-2 specific AI examples of ethical challenges. One idea - misinformation is mentioned perhaps give an AI example of how that could happen - Challenge#5 video: @ 1:20 there was a glitch from editing in the video narrative.  This video has excellent content  - Challenge #7 video: @1:30 the text didnt match the narrative - timing issue with the text... - Infoweek article is excellent and provides a good framework of how to think about setting up an AI Ethics framwork (3 categories) - perhaps weave that into the video and/or homework assignment.",
+          "details": "the video glitches and text should be easy to fix but would be required for quality purposes..."
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 2",
+      "reviewer": "Venkata Krishna Dasari",
+      "issue": "(GenAI 7 of 11) Presentation: AI\u2019s Role in Predictive Maintenance and Operational Efficiency in Manufacturing Feedback\u2014The slides are missing examples like GE, Crystal Ball, etc\u2026 The entire video has ..."
+    },
+    {
+      "module": "Module 8",
+      "reviewer": "Sir Kolapo IGE.Ph.D",
+      "issue": "(Role 5 of 11) Presentation: Strategies for Navigating AI Implementation Challenges Note: Observation  The Lecturer has done fantastic job with incredible knowledge of the subject matter. However, I o..."
+    },
+    {
+      "module": "Module 5",
+      "reviewer": "Craig LeGrande",
+      "issue": "I thought the first half of the module was too generic on ethics. I would like to see high level comments on AI's impact on making ethics even more important for the future to better setup the 2nd hal..."
+    },
+    {
+      "module": "Module 3",
+      "reviewer": "Ryan Lavallee",
+      "issue": "In the first lecture, some of the visuals are not appearing next to the presenter (see screenshot 1.)  Also, at the end of the lecture, the presenter summarizes the lesson stating that \"...how generat..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

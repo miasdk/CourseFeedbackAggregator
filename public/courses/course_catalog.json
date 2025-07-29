@@ -1,0 +1,489 @@
+{
+  "generated_at": "2025-07-22T16:15:12.187918",
+  "total_courses": 45,
+  "total_reviews": 155,
+  "courses": [
+    {
+      "name": "Design Thinking",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Transformative Leadership 1.0 and 2.0 Continued",
+      "total_reviews": 1,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Course Overview"
+      ]
+    },
+    {
+      "name": "Transformative Leadership in Disruptive Times 2.0",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Transformative Leadership in Disruptive Times",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "UC Santa Barbara - Customer Experience Program + Ultimate Toolkit 2024",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 6",
+        "Module 7"
+      ]
+    },
+    {
+      "name": "Transformative-Leadership-Leading-For-The-Future-1",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 3",
+        "Module 4"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading for the Future 2.0",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 4",
+        "Module 7"
+      ]
+    },
+    {
+      "name": "Women in Leadership in the Age of AI 1.0 and Women in Leadership in the Age of AI 2.0",
+      "total_reviews": 2,
+      "average_rating": 5.0,
+      "critical_issues": 1,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Customer Experience Program",
+      "total_reviews": 1,
+      "average_rating": 5.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1"
+      ]
+    },
+    {
+      "name": "Sustainability & AI",
+      "total_reviews": 8,
+      "average_rating": 4.88,
+      "critical_issues": 0,
+      "modules": [
+        "Module 7",
+        "Module 8",
+        "Module 5",
+        "Module 6",
+        "Module 3",
+        "Module 4",
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Strategic AI",
+      "total_reviews": 11,
+      "average_rating": 4.82,
+      "critical_issues": 1,
+      "modules": [
+        "Module 1",
+        "Module 2",
+        "Module 4",
+        "Module 3",
+        "Module 8"
+      ]
+    },
+    {
+      "name": "Transformative Leadership 1.0 and 2.0",
+      "total_reviews": 4,
+      "average_rating": 4.75,
+      "critical_issues": 0,
+      "modules": [
+        "Course Overview",
+        "Module 1"
+      ]
+    },
+    {
+      "name": "Women in Leadership in the Age of AI",
+      "total_reviews": 21,
+      "average_rating": 4.67,
+      "critical_issues": 1,
+      "modules": [
+        "Module 7",
+        "Module 8",
+        "Module 5",
+        "Module 6",
+        "Module 1",
+        "Module 2",
+        "Module 3",
+        "Module 4",
+        "Course Overview"
+      ]
+    },
+    {
+      "name": "Customer experience in Healthcare: Revolutionizing Pateint-Centric Care",
+      "total_reviews": 2,
+      "average_rating": 4.5,
+      "critical_issues": 2,
+      "modules": [
+        "Module 1"
+      ]
+    },
+    {
+      "name": "Transformative Leadership- Leading for the Future 2.0",
+      "total_reviews": 2,
+      "average_rating": 4.5,
+      "critical_issues": 1,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading for the Future",
+      "total_reviews": 6,
+      "average_rating": 4.5,
+      "critical_issues": 1,
+      "modules": [
+        "Module 7",
+        "Module 8",
+        "Module 1",
+        "Course Overview",
+        "Module 3",
+        "Module 4"
+      ]
+    },
+    {
+      "name": "Transformative Leadership in Disruptive Times 1.0",
+      "total_reviews": 2,
+      "average_rating": 4.5,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Navigating AI 1.0 and Women in Leadership in the Age of AI 2.0",
+      "total_reviews": 2,
+      "average_rating": 4.5,
+      "critical_issues": 0,
+      "modules": [
+        "Module 5",
+        "Module 4"
+      ]
+    },
+    {
+      "name": "Generative AI for Value Creation",
+      "total_reviews": 6,
+      "average_rating": 4.33,
+      "critical_issues": 4,
+      "modules": [
+        "Module 2",
+        "Module 3",
+        "Module 7",
+        "Module 8",
+        "Module 5"
+      ]
+    },
+    {
+      "name": "Transformative Leadership",
+      "total_reviews": 4,
+      "average_rating": 4.25,
+      "critical_issues": 2,
+      "modules": [
+        "Module 2",
+        "Module 4",
+        "Module 5"
+      ]
+    },
+    {
+      "name": "The Consulting Experience",
+      "total_reviews": 4,
+      "average_rating": 4.25,
+      "critical_issues": 2,
+      "modules": [
+        "Module 1",
+        "Module 3",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Strategic AI in HR",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1",
+        "Module 3"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading For The Future 2.0",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 4",
+        "Module 5"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading For the Future 1.0",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 1",
+        "Module 6"
+      ]
+    },
+    {
+      "name": "Women in Leadership in the Age of AI 1.0/2.0",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 4",
+        "Module 8"
+      ]
+    },
+    {
+      "name": "Sustainability and AI",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 2,
+      "modules": [
+        "Course Overview"
+      ]
+    },
+    {
+      "name": "Gender Disparities in AI Education and Research",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 7"
+      ]
+    },
+    {
+      "name": "Review Team University of San Francisco - Women in Leadership Program + Ultimate Toolkit 2024",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 1,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Women in Leadership Program + Ultimate Toolkit 2024",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading For The Future 1.0",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 2",
+        "Module 6"
+      ]
+    },
+    {
+      "name": "Women in Leadership in the Age of AI 2.0",
+      "total_reviews": 3,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 3",
+        "Module 2",
+        "Module 6"
+      ]
+    },
+    {
+      "name": "Generative AI to Drive Organizational Value and Leadership Transformation",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "AIHR",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1"
+      ]
+    },
+    {
+      "name": "CX2.0",
+      "total_reviews": 2,
+      "average_rating": 4.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 5",
+        "Module 6"
+      ]
+    },
+    {
+      "name": "The Why of AI - Generative AI to Drive Organizational Value and Leadership Transformation",
+      "total_reviews": 10,
+      "average_rating": 3.9,
+      "critical_issues": 2,
+      "modules": [
+        "Module 5",
+        "Module 8",
+        "Module 1",
+        "Module 3",
+        "Module 6",
+        "Module 4",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Women in Leadership in the Age of AI 1.0",
+      "total_reviews": 6,
+      "average_rating": 3.83,
+      "critical_issues": 0,
+      "modules": [
+        "Module 3",
+        "Module 4",
+        "Module 7",
+        "Module 6",
+        "Course Overview"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading for the Future 1.0",
+      "total_reviews": 2,
+      "average_rating": 3.5,
+      "critical_issues": 0,
+      "modules": [
+        "Module 2",
+        "Module 4"
+      ]
+    },
+    {
+      "name": "Strategic AI for Sales",
+      "total_reviews": 4,
+      "average_rating": 3.5,
+      "critical_issues": 2,
+      "modules": [
+        "Module 4",
+        "Module 7",
+        "Module 1",
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Transformative Leadership Leading for the Future 1.0 and 2.0.",
+      "total_reviews": 2,
+      "average_rating": 3.5,
+      "critical_issues": 1,
+      "modules": [
+        "Module 6",
+        "Module 1"
+      ]
+    },
+    {
+      "name": "section 1.0",
+      "total_reviews": 2,
+      "average_rating": 3.5,
+      "critical_issues": 0,
+      "modules": [
+        "Module 2"
+      ]
+    },
+    {
+      "name": "Gen AI for Value Creation",
+      "total_reviews": 2,
+      "average_rating": 3.5,
+      "critical_issues": 1,
+      "modules": [
+        "Module 6",
+        "Module 7"
+      ]
+    },
+    {
+      "name": "IT and Cybersecurity Leadership",
+      "total_reviews": 1,
+      "average_rating": 3.0,
+      "critical_issues": 0,
+      "modules": [
+        "Module 1"
+      ]
+    },
+    {
+      "name": "Strategic AI for HR Professionals",
+      "total_reviews": 6,
+      "average_rating": 3.0,
+      "critical_issues": 4,
+      "modules": [
+        "Module 2",
+        "Module 4",
+        "Module 1",
+        "Module 6",
+        "Course Overview"
+      ]
+    },
+    {
+      "name": "Transformative Leadership - Leading for the Future 1",
+      "total_reviews": 2,
+      "average_rating": 3.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 2",
+        "Module 1"
+      ]
+    },
+    {
+      "name": "CX in Healthcare",
+      "total_reviews": 3,
+      "average_rating": 3.0,
+      "critical_issues": 2,
+      "modules": [
+        "Module 2",
+        "Capstone",
+        "Module 4"
+      ]
+    }
+  ]
+}

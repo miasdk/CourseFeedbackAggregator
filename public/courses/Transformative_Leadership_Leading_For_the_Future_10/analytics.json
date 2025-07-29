@@ -1,0 +1,25 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 4.0,
+    "critical_issues": 0
+  },
+  "rating_distribution": {
+    "4": 2
+  },
+  "modules": {
+    "Module 2": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 6": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    }
+  },
+  "critical_issues": [],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

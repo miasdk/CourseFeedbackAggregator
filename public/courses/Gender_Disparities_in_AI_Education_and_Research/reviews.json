@@ -1,0 +1,40 @@
+[
+  {
+    "reviewer": {
+      "response_id": "RCCOpaJY",
+      "first_name": "Pache",
+      "last_name": "Felton",
+      "email": "pfelton217@gmail.com",
+      "completion_time": "May 11, 2024 03:43:47 PM",
+      "time_taken": "6 mins "
+    },
+    "course_name": "Gender Disparities in AI Education and Research",
+    "module_name": "Module 7",
+    "rating": 4,
+    "positive_comments": "Great  introduction to course and talking points.",
+    "improvement_opportunities": "Please see attachment.",
+    "is_show_stopper": false,
+    "show_stopper_details": NaN,
+    "attachments": "Gender Disparities in AI Education and Research.docx",
+    "review_date": "May 11, 2024 03:43:47 PM"
+  },
+  {
+    "reviewer": {
+      "response_id": "RCCOpaJY",
+      "first_name": "Pache",
+      "last_name": "Felton",
+      "email": "pfelton217@gmail.com",
+      "completion_time": "May 11, 2024 03:43:47 PM",
+      "time_taken": "6 mins "
+    },
+    "course_name": "Gender Disparities in AI Education and Research",
+    "module_name": "Module 7",
+    "rating": 4,
+    "positive_comments": "Great introduction to course and talking points.",
+    "improvement_opportunities": "Please see attachment.",
+    "is_show_stopper": false,
+    "show_stopper_details": "",
+    "attachments": "Suggestions Initiatives to Attract and Retain Women in AI Research Fields.docx",
+    "review_date": "May 11, 2024 03:43:47 PM"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 3.5,
+    "critical_issues": 1
+  },
+  "rating_distribution": {
+    "4": 1,
+    "3": 1
+  },
+  "modules": {
+    "Module 6": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "craig legrande",
+          "issue": "Here are improvement areas that i noted during my review:  -\tVideo #1: can we call out the geographical/country differences in regulations and ensure that the legal team is knowledgeable about these differences and requirements -\tFor the Qs in #2 \u2013 can we ask as the 1st Question: How do you see your company organizing to develop an AI mindset given the recommendations in the article? -\tVideo (transform #3): 1:40 \u2013 this is really good material! I would just reinforce that to demystify AI they should treat it similar to deploying a large IT program \u2013 communicate early, often, and over multiple channels (e.g., partyrock, town halls, intranet, videos, posters) and use ADKAR certified change specialists to design these programs to maximize their effect. -\tVideo (transform #5): there isn\u2019t any text for the narrative similar to the other videos just white screen next to the speaker. I think when he speaks to the cross functional teams \u2013 he spoke about CM, Tech and legal but should have also said functional expertise to then also match with the IBM HR example.  What about recommendations on outside vendors that can bring in AI development, industry best practices, change mgmt experts? -\tDiscussion 2: Inclusive AI Teams article. My read of this article was that it focuses on AI to take bias out of hiring to create a diverse team.  I would recommend looking for an article that focuses more on the topic of the prior video \u2013 how implementing AI requires a diverse team of talents.  This would then provide greater detail on the roles and responsibilities, skill sets and even an example or two of these teams in action.",
+          "details": "just b/c the text didnt show up on the one video and the article could be one of two instead of the only article supporting the need for diversity in skills to design a good AI program."
+        }
+      ]
+    },
+    "Module 7": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 6",
+      "reviewer": "craig legrande",
+      "issue": "Here are improvement areas that i noted during my review:  -\tVideo #1: can we call out the geographical/country differences in regulations and ensure that the legal team is knowledgeable about these d..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

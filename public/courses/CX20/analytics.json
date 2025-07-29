@@ -1,0 +1,48 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 4.0,
+    "critical_issues": 2
+  },
+  "rating_distribution": {
+    "4": 2
+  },
+  "modules": {
+    "Module 5": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Tasvir Hasan",
+          "issue": "\u2022\tSection 1 of 11: When KPI\u2019s are mentioned, it would be good to spell that out and also give context /explanations for non-subject matter experts. \u2022\tSection 2 of 11: I like the question posed, but can we also ask to give real life experiences they have gone through, and lessons learned, etc.? \u2022\tSection 2 of 11: Was the following supposed to be a hyperlink: \u201cArticle from CX University\u201d.  The placement makes me anticipate a hyperlink. Was it in relation to the article in the preceding bullet point?  \u2022\tSection 3 of 11: Specific examples of how CX has improved Revenue etc would be good.  To say it helps Revenue is a start, but to say it has shown to increase Revenue by 10% etc vs cost of 2% etc. would give good context on cost benefit analysis (e.g. incremental benefit of 8%). \u2022\tSection 3 of 11: I think net income is more common and understood than Net Return in ROI calcs (at least in the US). Showing an example that Net income is revenue from program minus program expenses would seem beneficial in my opinion.  Or showing the calcs to get to net returns may also get the same point across. \u2022\tSection 4 of 11:  Giving SWOT analysis in the qualitative measurables may be good to give some context in the summary paragraph. \u2022\tSection 4 of 11: the question posed is good, but can we also ask to give real life experiences they have gone through, and lessons learned, etc.? \u2022\t Section 5 of 11: If no copyright / infringement issues, can we incorporate the customer service metrics calculator from the article in section 4 of 11 as part of this assignment?  Perhaps it may get too complicated doing it, but just an idea\u2026 \u2022\tSection 7 of 11: Giving some potential examples of common Goals and Objectives would be helpful here via a dropdown or just notes.  If dropdown, allow Other with Text to be added options\u2026 \u2022\tSection 9 of 11: Blank, I suppose TBU? Questions related to calculations would be suggested here to make them better stick to users memory\u2026",
+          "details": "\u2022\tSection 9 of 11: Blank, I suppose TBU? Questions related to calculations would be suggested here to make them better stick to users memory\u2026  Other comments: \u2022\tSection 1 of 11: Good that Forrester\u2019s Customer Experience Index was mentioned.   o\tQuestion: does it give the appropriate level of details /info subsequently?  \u2022\tSection 1 of 11: In Conclusion Section; question: were there enough examples in the video?  How about the recap? \u2022\tSection 2 of 11: Another article worth considering if no copyright or other challenges w/ linking to other resources: https://www.salesforce.com/resources/articles/customer-service-training/ \t \u2022\tSection 2 of 11: Are we affiliated with CXUniversity?  If not, do we need permission and should we connect w/ them via an affiliate program for referrals?  Can work in both directions\u2019 w/ revenue share agreements?"
+        }
+      ]
+    },
+    "Module 6": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Tasvir Hasan",
+          "issue": "\u2022\tIntro: I found it ironic when this section on diversity had the most non diverse instructor (white male) you can have in most corporate workplaces.  I don\u2019t mean to sound cynical, but I probably wouldn\u2019t be the only person to think this. I think we may lose some credibility here, especially when we had a woman instruct module 5 (I was expecting her or another diverse person for the diversity module).  We used to get this type of feedback in different HR related training courses at my former company, so wanted to provide that reference point as well for context. Although, I must say the instructor was effective.  I personally believe we should have the best person fill the role even though it may not appear like it at face value i.e. white male talking about diversity; however, when it\u2019s a diversity section, I think this is a bit too much to ignore/overlook.  The presenter even mentions this in section 8 of 12 in terms of effective marketing by showing diversity in materials, etc.  \u2022\tSection 2 of 12:  Similar comments to intro.  Although it is a good article, it may be more impactful to choose articles on diversity where the author is diverse, even if it is for optics.   o\tOr give article or report from McKinsey, which was referenced before, such as this one: https://www.mckinsey.com/featured-insights/diversity-and-inclusion/diversity-matters-even-more-the-case-for-holistic-impact  \u2022\tSection 5 of 12:  Good questions, but I wonder if adding a more direct question to ask people to reflect on an experience when non diversity and inclusiveness led to some challenges, and reflections and opportunities for improvement, etc.   \u2022\tSection 7 of 12:  I think the score needs some context or a reference point by giving some more information on NPS, or CSAT, or CES., and/or at least should be at the bottom after the question what success looks like.   \u2022\tSection 9 of 12: link to article wasn\u2019t working when I tried to launch\u2026 \u2022\tSection 10 of 12: no questions loaded for review\u2026   \u2022\tSection 11 of 12: same planner as in section 5? Repeated?  Intentional?    \u2022\tSection 12 of 12: no hyperlink for course review. TBU?",
+          "details": ""
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 5",
+      "reviewer": "Tasvir Hasan",
+      "issue": "\u2022\tSection 1 of 11: When KPI\u2019s are mentioned, it would be good to spell that out and also give context /explanations for non-subject matter experts. \u2022\tSection 2 of 11: I like the question posed, but ca..."
+    },
+    {
+      "module": "Module 6",
+      "reviewer": "Tasvir Hasan",
+      "issue": "\u2022\tIntro: I found it ironic when this section on diversity had the most non diverse instructor (white male) you can have in most corporate workplaces.  I don\u2019t mean to sound cynical, but I probably wou..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

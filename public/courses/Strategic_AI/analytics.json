@@ -1,0 +1,53 @@
+{
+  "overview": {
+    "total_reviews": 11,
+    "average_rating": 4.82,
+    "critical_issues": 1
+  },
+  "rating_distribution": {
+    "4": 2,
+    "5": 9
+  },
+  "modules": {
+    "Module 1": {
+      "average_rating": 4.6,
+      "total_reviews": 5,
+      "critical_issues": []
+    },
+    "Module 2": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues": []
+    },
+    "Module 4": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 3": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues": [
+        {
+          "reviewer": "NILSA MORENO",
+          "issue": "The video numbered 6 out of 13 ended middesentence at 5:32 -- it seems like the last though of the speaker got cut off.",
+          "details": NaN
+        }
+      ]
+    },
+    "Module 8": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 3",
+      "reviewer": "NILSA MORENO",
+      "issue": "The video numbered 6 out of 13 ended middesentence at 5:32 -- it seems like the last though of the speaker got cut off."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

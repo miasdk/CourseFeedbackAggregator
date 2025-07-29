@@ -1,0 +1,48 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 5.0,
+    "critical_issues": 2
+  },
+  "rating_distribution": {
+    "5": 2
+  },
+  "modules": {
+    "Module 6": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Pavan Bakshi",
+          "issue": "1.  Suggestion 1. Module 6. Slide and spoken content do not match . (Please see screenshot attached) 2. Suggestion 2. Cut video from 3.21 to 3.29 since speaker is quite and does not speak ( Please see screenshot attached)",
+          "details": "Since give a bad experience."
+        }
+      ]
+    },
+    "Module 7": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Pavan Bakshi",
+          "issue": "This video is not working (please see screen-shot attached)",
+          "details": ""
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 6",
+      "reviewer": "Pavan Bakshi",
+      "issue": "1.  Suggestion 1. Module 6. Slide and spoken content do not match . (Please see screenshot attached) 2. Suggestion 2. Cut video from 3.21 to 3.29 since speaker is quite and does not speak ( Please see..."
+    },
+    {
+      "module": "Module 7",
+      "reviewer": "Pavan Bakshi",
+      "issue": "This video is not working (please see screen-shot attached)"
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

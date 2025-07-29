@@ -1,0 +1,74 @@
+{
+  "overview": {
+    "total_reviews": 21,
+    "average_rating": 4.67,
+    "critical_issues": 1
+  },
+  "rating_distribution": {
+    "5": 15,
+    "4": 5,
+    "3": 1
+  },
+  "modules": {
+    "Module 7": {
+      "average_rating": 5.0,
+      "total_reviews": 3,
+      "critical_issues": []
+    },
+    "Module 8": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues": []
+    },
+    "Module 5": {
+      "average_rating": 4.67,
+      "total_reviews": 3,
+      "critical_issues": []
+    },
+    "Module 6": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues": []
+    },
+    "Module 1": {
+      "average_rating": 4.33,
+      "total_reviews": 3,
+      "critical_issues": []
+    },
+    "Module 2": {
+      "average_rating": 4.5,
+      "total_reviews": 2,
+      "critical_issues": []
+    },
+    "Module 3": {
+      "average_rating": 4.5,
+      "total_reviews": 2,
+      "critical_issues": []
+    },
+    "Module 4": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues": []
+    },
+    "Course Overview": {
+      "average_rating": 4.0,
+      "total_reviews": 2,
+      "critical_issues": [
+        {
+          "reviewer": "Emily Lewis",
+          "issue": "We need to be teaching students how to develop an AI strategy for their respective business units.",
+          "details": "See above -- need to cover developing AI strategy and frameworks around implementation and piloting."
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Course Overview",
+      "reviewer": "Emily Lewis",
+      "issue": "We need to be teaching students how to develop an AI strategy for their respective business units."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

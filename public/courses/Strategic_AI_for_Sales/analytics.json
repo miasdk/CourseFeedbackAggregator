@@ -1,0 +1,59 @@
+{
+  "overview": {
+    "total_reviews": 4,
+    "average_rating": 3.5,
+    "critical_issues": 2
+  },
+  "rating_distribution": {
+    "3": 2,
+    "4": 2
+  },
+  "modules": {
+    "Module 4": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Gus Byleveld",
+          "issue": "The lecturer speaks very fast, and his delivery is quite monotonous. It feels like he is reading from a teleprompter.  It would be great to have a summary slide for each video. I am missing the \"how\" element. I realize this is a strategic overview and is, therefore, high-level by default. However, I feel I am not getting guidance on getting started or thinking about solving the challenges listed.",
+          "details": "The overview gives a landscape overview but does not prompt my thinking about how to address my challenges. Therefore, I am left with an \"okay, what now\" feeling."
+        }
+      ]
+    },
+    "Module 7": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Gus Byleveld",
+          "issue": "The term \"IA \"feels generic and overused. I understand that this module gives insight into the types of problems that could be solved by deploying AI, but it does not speak to what kind of IA could be used. For example, are we talking about NLP, Deep Learning, Machine Learning, Computer Vision, Generative IA, etc.?  Therefore, I am getting a sense of which project could be good for AI intervention, but no guidance on what type of IA could be used.",
+          "details": ""
+        }
+      ]
+    },
+    "Module 1": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 2": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 4",
+      "reviewer": "Gus Byleveld",
+      "issue": "The lecturer speaks very fast, and his delivery is quite monotonous. It feels like he is reading from a teleprompter.  It would be great to have a summary slide for each video. I am missing the \"how\" ..."
+    },
+    {
+      "module": "Module 7",
+      "reviewer": "Gus Byleveld",
+      "issue": "The term \"IA \"feels generic and overused. I understand that this module gives insight into the types of problems that could be solved by deploying AI, but it does not speak to what kind of IA could be..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}
