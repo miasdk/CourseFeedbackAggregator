@@ -1,0 +1,38 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 3.5,
+    "critical_issues": 1
+  },
+  "rating_distribution": {
+    "3": 1,
+    "4": 1
+  },
+  "modules": {
+    "Module 6": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Jen Noborikawa",
+          "issue": "For Course 1.0:   - Video 2 Continuous Learning and Growth: The examples of the tech leaders featured in this video (Bezos, Sandberg, and Musk) may not be considered admirable leaders by some because of their business practices that have negatively affected democracies, wealth inequality, etc. I wonder if there are one or two other examples of leaders that demonstrate the qualities of continuous learning and growth that are less polarizing?   - Examples: I believe students would benefit from learning about a more diverse group of leaders.",
+          "details": "More diverse examples of leaders is needed to ensure that we aren't encouraging stereotypes of leaders with our students."
+        }
+      ]
+    },
+    "Module 1": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 6",
+      "reviewer": "Jen Noborikawa",
+      "issue": "For Course 1.0:   - Video 2 Continuous Learning and Growth: The examples of the tech leaders featured in this video (Bezos, Sandberg, and Musk) may not be considered admirable leaders by some because ..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

@@ -1,0 +1,53 @@
+{
+  "name": "Women in Leadership in the Age of AI",
+  "total_reviews": 21,
+  "average_rating": 4.67,
+  "critical_issues_count": 1,
+  "modules": {
+    "Module 7": {
+      "average_rating": 5.0,
+      "total_reviews": 3,
+      "critical_issues_count": 0
+    },
+    "Module 8": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues_count": 0
+    },
+    "Module 5": {
+      "average_rating": 4.67,
+      "total_reviews": 3,
+      "critical_issues_count": 0
+    },
+    "Module 6": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues_count": 0
+    },
+    "Module 1": {
+      "average_rating": 4.33,
+      "total_reviews": 3,
+      "critical_issues_count": 0
+    },
+    "Module 2": {
+      "average_rating": 4.5,
+      "total_reviews": 2,
+      "critical_issues_count": 0
+    },
+    "Module 3": {
+      "average_rating": 4.5,
+      "total_reviews": 2,
+      "critical_issues_count": 0
+    },
+    "Module 4": {
+      "average_rating": 5.0,
+      "total_reviews": 2,
+      "critical_issues_count": 0
+    },
+    "Course Overview": {
+      "average_rating": 4.0,
+      "total_reviews": 2,
+      "critical_issues_count": 1
+    }
+  }
+}

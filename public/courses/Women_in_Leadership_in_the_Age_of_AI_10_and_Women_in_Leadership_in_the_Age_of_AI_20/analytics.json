@@ -1,0 +1,37 @@
+{
+  "overview": {
+    "total_reviews": 2,
+    "average_rating": 5.0,
+    "critical_issues": 1
+  },
+  "rating_distribution": {
+    "5": 2
+  },
+  "modules": {
+    "Module 1": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    },
+    "Module 2": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Joan Edwards",
+          "issue": "As I was reading this, I kept wondering how they would even out the playing field to have better data, could they have data just on women intersectionality and average it out with the men to keep the bias lower? How would they continually update when new data arrises. Another thing I don't see in here is cost and timing for doing this?  Companies need good reason to pay for all of this, it could be a different head count or an entire team.",
+          "details": ""
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 2",
+      "reviewer": "Joan Edwards",
+      "issue": "As I was reading this, I kept wondering how they would even out the playing field to have better data, could they have data just on women intersectionality and average it out with the men to keep the ..."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}

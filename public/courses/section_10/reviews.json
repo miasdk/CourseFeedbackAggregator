@@ -1,0 +1,40 @@
+[
+  {
+    "reviewer": {
+      "response_id": "X20Z1RGn",
+      "first_name": "gregg",
+      "last_name": "meiklejohn",
+      "email": "greggmeiklejohn@gmail.com",
+      "completion_time": "Apr 23, 2024 11:56:37 PM",
+      "time_taken": "11 mins 20 secs "
+    },
+    "course_name": "section 1.0",
+    "module_name": "Module 2",
+    "rating": 4,
+    "positive_comments": "nothing really",
+    "improvement_opportunities": "make it relevant for the millions of sme's out there  the copy written smells like a gen z, hr grad leaning heavily on chat gpt.  reads ok, but means little if anything",
+    "is_show_stopper": false,
+    "show_stopper_details": NaN,
+    "attachments": NaN,
+    "review_date": "Apr 23, 2024 11:56:37 PM"
+  },
+  {
+    "reviewer": {
+      "response_id": "X20Z1RGn",
+      "first_name": "gregg",
+      "last_name": "meiklejohn",
+      "email": "greggmeiklejohn@gmail.com",
+      "completion_time": "Apr 23, 2024 11:56:37 PM",
+      "time_taken": "11 mins 20 secs "
+    },
+    "course_name": "section 1.0",
+    "module_name": "Module 2",
+    "rating": 3,
+    "positive_comments": "reads well",
+    "improvement_opportunities": "constantly selling the need to use ai, in a leadership capacity seems messed. leadership is a deeply personal process, ai is a cheat   examples used were based on faang companies.massive cap table. horrible examples  what about servant leadership?  what about analogies, like first to run across the highway without getting pasted. something more relevant for the regular company",
+    "is_show_stopper": false,
+    "show_stopper_details": "",
+    "attachments": NaN,
+    "review_date": "Apr 23, 2024 11:56:37 PM"
+  }
+]
