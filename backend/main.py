@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 from core.database import get_db, init_database, get_db_stats, check_database_health
 from services.canvas_client import CanvasClient
 from services.scoring_engine import ScoringEngine, WeightConfig as ScoringWeights
+from services.weight_config_service import WeightConfigService
+from services.recommendation_engine import RecommendationEngine
 from models.database import Course, FeedbackItem, Recommendation, WeightConfig
 
 load_dotenv()
@@ -369,92 +371,244 @@ async def get_recommendation_details(recommendation_id: int, db: Session = Depen
         "evidence_count": len(feedback_items)
     }
 
-# Weight Configuration Endpoints
+# Weight Configuration Endpoints (Enhanced)
 @app.get("/api/weights")
-async def get_weight_configs(db: Session = Depends(get_db)):
-    """Get all weight configurations"""
-    configs = db.query(WeightConfig).order_by(desc(WeightConfig.created_at)).all()
-    
-    return {
-        "configs": [
-            {
-                "id": config.id,
-                "name": config.name,
-                "description": config.description,
-                "weights": {
-                    "impact": config.impact_weight,
-                    "urgency": config.urgency_weight,
-                    "effort": config.effort_weight,
-                    "strategic": config.strategic_weight,
-                    "trend": config.trend_weight
-                },
-                "is_active": config.is_active,
-                "created_at": config.created_at.isoformat() if config.created_at else None
-            }
-            for config in configs
-        ]
-    }
+async def get_weight_configs(include_inactive: bool = Query(True)):
+    """Get all weight configurations with advanced features"""
+    try:
+        service = WeightConfigService()
+        configs = service.list_weight_configs(include_inactive=include_inactive)
+        return {
+            "success": True,
+            "configs": configs,
+            "total_count": len(configs)
+        }
+    except Exception as e:
+        logger.error(f"Failed to get weight configs: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/weights/active")
+async def get_active_weight_config():
+    """Get the currently active weight configuration"""
+    try:
+        service = WeightConfigService()
+        config = service.get_active_config()
+        
+        if not config:
+            raise HTTPException(status_code=404, detail="No active weight configuration found")
+        
+        return {
+            "success": True,
+            "config": config
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get active config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/weights")
 async def create_weight_config(
     config_data: Dict[str, Any],
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db)
+    background_tasks: BackgroundTasks
 ):
-    """Create new weight configuration and optionally recompute scores"""
-    
-    # Validate weights sum to 1.0
-    weights = config_data.get("weights", {})
-    weight_sum = sum([
-        weights.get("impact", 0),
-        weights.get("urgency", 0), 
-        weights.get("effort", 0),
-        weights.get("strategic", 0),
-        weights.get("trend", 0)
-    ])
-    
-    if abs(weight_sum - 1.0) > 0.01:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Weights must sum to 1.0 (current sum: {weight_sum})"
+    """Create new weight configuration with full validation"""
+    try:
+        service = WeightConfigService()
+        
+        # Extract request data
+        name = config_data.get("name")
+        description = config_data.get("description", "")
+        weights = config_data.get("weights", {})
+        created_by = config_data.get("created_by", "api_user")
+        make_active = config_data.get("make_active", False)
+        recompute = config_data.get("recompute", False)
+        
+        if not name:
+            raise HTTPException(status_code=400, detail="Name is required")
+        
+        if not weights:
+            raise HTTPException(status_code=400, detail="Weights are required")
+        
+        result = service.create_weight_config(
+            name=name,
+            description=description,
+            weights=weights,
+            created_by=created_by,
+            make_active=make_active
         )
-    
-    # Create new configuration
-    new_config = WeightConfig(
-        name=config_data.get("name", f"config_{datetime.now().strftime('%Y%m%d_%H%M%S')}"),
-        description=config_data.get("description", ""),
-        impact_weight=weights.get("impact", 0.35),
-        urgency_weight=weights.get("urgency", 0.25),
-        effort_weight=weights.get("effort", 0.20),
-        strategic_weight=weights.get("strategic", 0.15),
-        trend_weight=weights.get("trend", 0.05),
-        is_active=config_data.get("make_active", False),
-        created_by=config_data.get("created_by", "api")
-    )
-    
-    # If making this active, deactivate others
-    if new_config.is_active:
-        db.query(WeightConfig).update({WeightConfig.is_active: False})
-    
-    db.add(new_config)
-    db.commit()
-    db.refresh(new_config)
-    
-    # Optionally trigger recomputation in background
-    if config_data.get("recompute", False):
-        background_tasks.add_task(recompute_priorities, new_config.id)
-    
-    return {
-        "success": True,
-        "config_id": new_config.id,
-        "message": "Weight configuration created successfully"
-    }
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        
+        # Optionally trigger recommendation regeneration
+        if recompute:
+            background_tasks.add_task(recompute_recommendations_with_new_weights, result["config_id"])
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to create weight config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-async def recompute_priorities(weight_config_id: int):
-    """Background task to recompute all priorities with new weights"""
-    # This would trigger a full recalculation of all course priorities
-    # Implementation depends on having actual data to process
-    logger.info(f"🔄 Recomputing priorities with config {weight_config_id}")
+@app.put("/api/weights/{config_id}")
+async def update_weight_config(
+    config_id: int, 
+    config_data: Dict[str, Any],
+    background_tasks: BackgroundTasks
+):
+    """Update an existing weight configuration"""
+    try:
+        service = WeightConfigService()
+        
+        result = service.update_weight_config(
+            config_id=config_id,
+            weights=config_data.get("weights"),
+            name=config_data.get("name"),
+            description=config_data.get("description"),
+            make_active=config_data.get("make_active")
+        )
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        
+        # Optionally trigger recommendation regeneration
+        if config_data.get("recompute", False):
+            background_tasks.add_task(recompute_recommendations_with_new_weights, config_id)
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to update weight config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/weights/{config_id}/activate")
+async def activate_weight_config(
+    config_id: int,
+    background_tasks: BackgroundTasks,
+    recompute: bool = Query(False)
+):
+    """Activate a weight configuration"""
+    try:
+        service = WeightConfigService()
+        result = service.activate_config(config_id)
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        
+        # Optionally trigger recommendation regeneration
+        if recompute:
+            background_tasks.add_task(recompute_recommendations_with_new_weights, config_id)
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to activate config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/weights/validate")
+async def validate_weights(config_data: Dict[str, Any]):
+    """Validate weight configuration without saving"""
+    try:
+        service = WeightConfigService()
+        weights = config_data.get("weights", {})
+        
+        if not weights:
+            raise HTTPException(status_code=400, detail="Weights are required")
+        
+        result = service.validate_weights(weights)
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to validate weights: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/weights/preview")
+async def preview_weight_impact(config_data: Dict[str, Any]):
+    """Preview how weight changes would affect existing recommendations"""
+    try:
+        service = WeightConfigService()
+        weights = config_data.get("weights", {})
+        sample_size = config_data.get("sample_size", 5)
+        
+        if not weights:
+            raise HTTPException(status_code=400, detail="Weights are required")
+        
+        result = service.get_config_impact_preview(weights, sample_size)
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to preview weight impact: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/weights/{config_id}")
+async def delete_weight_config(config_id: int):
+    """Delete a weight configuration (if not active and not used by recommendations)"""
+    try:
+        service = WeightConfigService()
+        result = service.delete_config(config_id)
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to delete weight config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def recompute_recommendations_with_new_weights(weight_config_id: int):
+    """Background task to regenerate recommendations with new weight configuration"""
+    logger.info(f"🔄 Regenerating recommendations with weight config {weight_config_id}")
+    
+    try:
+        # Use the specific weight configuration
+        engine = RecommendationEngine(weight_config_id=weight_config_id)
+        
+        # Add institutional context
+        context = {
+            "institutional_priorities": [
+                {
+                    "keywords": ["strategic", "ai", "artificial intelligence"],
+                    "weight": 20,
+                    "description": "AI and Strategic courses are institutional priorities"
+                },
+                {
+                    "keywords": ["women", "leadership"],
+                    "weight": 15,
+                    "description": "Leadership development programs"
+                }
+            ]
+        }
+        
+        result = engine.generate_all_recommendations(
+            force_refresh=True,
+            context=context
+        )
+        
+        if result["success"]:
+            logger.info(f"✅ Generated {result['total_recommendations']} recommendations with new weights")
+        else:
+            logger.error(f"❌ Failed to regenerate recommendations: {result['error']}")
+            
+    except Exception as e:
+        logger.error(f"❌ Background recommendation generation failed: {e}")
 
 # Canvas Integration Endpoints
 @app.get("/api/canvas/status")

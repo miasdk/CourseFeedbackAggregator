@@ -135,11 +135,21 @@ class ScoringEngine:
         if total_students == 0:
             return 0
         
-        # Count negative feedback
-        negative_feedback = [
-            f for f in feedback_data 
-            if f.get("sentiment_score", 0) < -0.2 or f.get("rating", 3) < 2.5
-        ]
+        # Count negative feedback (safely handle None values)
+        negative_feedback = []
+        for f in feedback_data:
+            sentiment = f.get("sentiment_score")
+            rating = f.get("rating")
+            
+            # Check sentiment (only if not None)
+            is_negative_sentiment = sentiment is not None and sentiment < -0.2
+            
+            # Check rating (only if not None)
+            is_negative_rating = rating is not None and rating < 2.5
+            
+            # Include if either condition is met
+            if is_negative_sentiment or is_negative_rating:
+                negative_feedback.append(f)
         
         # Calculate base impact from affected student ratio
         affected_ratio = len(negative_feedback) / max(len(feedback_data), 1)
@@ -149,11 +159,13 @@ class ScoringEngine:
         severity_multiplier = 1.0
         for feedback in negative_feedback:
             issues = feedback.get("issues_identified", [])
-            for issue in issues:
-                if issue.get("severity") == "high":
-                    severity_multiplier += 0.2
-                elif issue.get("category") in ["accessibility", "technical"]:
-                    severity_multiplier += 0.15
+            if issues and isinstance(issues, list):
+                for issue in issues:
+                    if isinstance(issue, dict):
+                        if issue.get("severity") == "high":
+                            severity_multiplier += 0.2
+                        elif issue.get("category") in ["accessibility", "technical"]:
+                            severity_multiplier += 0.15
         
         # Scale factor based on course size
         scale_factor = min(math.log10(total_students + 1) / 2, 1.5)
@@ -228,9 +240,10 @@ class ScoringEngine:
         critical_urgency = 0
         for feedback in feedback_data:
             issues = feedback.get("issues_identified", [])
-            for issue in issues:
-                if issue.get("category") in ["accessibility", "technical", "grading"]:
-                    critical_urgency += 15
+            if issues and isinstance(issues, list):
+                for issue in issues:
+                    if isinstance(issue, dict) and issue.get("category") in ["accessibility", "technical", "grading"]:
+                        critical_urgency += 15
         
         critical_urgency = min(critical_urgency, 50)
         
@@ -260,20 +273,22 @@ class ScoringEngine:
         for feedback in feedback_data:
             issues = feedback.get("issues_identified", [])
             
-            for issue in issues:
-                category = issue.get("category", "").lower()
-                
-                # Effort mapping based on issue type
-                if category in ["content", "clarity", "communication"]:
-                    effort_scores.append(80)  # Easy to fix
-                elif category in ["instruction", "assignment"]:
-                    effort_scores.append(60)  # Moderate effort
-                elif category in ["technical", "platform"]:
-                    effort_scores.append(40)  # Harder to fix
-                elif category in ["curriculum", "structure"]:
-                    effort_scores.append(20)  # Major effort
-                else:
-                    effort_scores.append(50)  # Unknown effort
+            if issues and isinstance(issues, list):
+                for issue in issues:
+                    if isinstance(issue, dict):
+                        category = issue.get("category", "").lower()
+                        
+                        # Effort mapping based on issue type
+                        if category in ["content", "clarity", "communication"]:
+                            effort_scores.append(80)  # Easy to fix
+                        elif category in ["instruction", "assignment"]:
+                            effort_scores.append(60)  # Moderate effort
+                        elif category in ["technical", "platform"]:
+                            effort_scores.append(40)  # Harder to fix
+                        elif category in ["curriculum", "structure"]:
+                            effort_scores.append(20)  # Major effort
+                        else:
+                            effort_scores.append(50)  # Unknown effort
         
         if not effort_scores:
             return 50
@@ -465,10 +480,17 @@ class ScoringEngine:
         # Build explanation
         course_name = course_data.get("name", "This course")
         total_students = course_data.get("total_students", 0)
-        negative_feedback_count = len([
-            f for f in feedback_data 
-            if f.get("sentiment_score", 0) < -0.2 or f.get("rating", 3) < 2.5
-        ])
+        # Count negative feedback safely
+        negative_feedback_count = 0
+        for f in feedback_data:
+            sentiment = f.get("sentiment_score")
+            rating = f.get("rating")
+            
+            is_negative_sentiment = sentiment is not None and sentiment < -0.2
+            is_negative_rating = rating is not None and rating < 2.5
+            
+            if is_negative_sentiment or is_negative_rating:
+                negative_feedback_count += 1
         
         explanation = {
             "priority_level": priority_level,
@@ -500,7 +522,12 @@ class ScoringEngine:
         """Get primary reason explanation for top contributing factor"""
         
         if factor == "impact":
-            affected_count = len([f for f in feedback_data if f.get("sentiment_score", 0) < -0.2])
+            # Count affected students safely
+            affected_count = 0
+            for f in feedback_data:
+                sentiment = f.get("sentiment_score")
+                if sentiment is not None and sentiment < -0.2:
+                    affected_count += 1
             total_students = course_data.get("total_students", 0)
             if total_students > 0:
                 return f"High impact: {affected_count} students affected out of {total_students} enrolled"
@@ -589,10 +616,10 @@ class ScoringEngine:
         
         evidence = []
         
-        # Most critical feedback items
+        # Most critical feedback items (handle None values in sorting)
         critical_feedback = sorted(
             feedback_data,
-            key=lambda x: x.get("sentiment_score", 0)
+            key=lambda x: x.get("sentiment_score") if x.get("sentiment_score") is not None else 0
         )[:3]
         
         for feedback in critical_feedback:
