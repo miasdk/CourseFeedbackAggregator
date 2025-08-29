@@ -1,0 +1,18 @@
+{
+  "name": "CX2.0",
+  "total_reviews": 2,
+  "average_rating": 4.0,
+  "critical_issues_count": 2,
+  "modules": {
+    "Module 5": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues_count": 1
+    },
+    "Module 6": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues_count": 1
+    }
+  }
+}

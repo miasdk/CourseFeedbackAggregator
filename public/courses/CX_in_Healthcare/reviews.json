@@ -1,0 +1,59 @@
+[
+  {
+    "reviewer": {
+      "response_id": "46D3ljL1",
+      "first_name": "Selen",
+      "last_name": "Turner",
+      "email": "selenturner@comcast.net",
+      "completion_time": "Jan 31, 2024 08:16:43 PM",
+      "time_taken": "1 hr 16 mins 48 secs "
+    },
+    "course_name": "CX in Healthcare",
+    "module_name": "Module 2",
+    "rating": 3,
+    "positive_comments": "The flow makes is easy to understand. The articles are relevant. Blend of video, articles and assignments makes it a rich learning experience.",
+    "improvement_opportunities": "Video's graphics are blurry which makes it hard to read. More visual representation can be added instead of the heavy written paragraphs that repeats what speaker already articulates. The videos also should have samples of the customer journey maps and other visual aid about the subject matter as the speaker talks about them. The knowledge check and feedback survey did not populate when clicked on  those sections.",
+    "is_show_stopper": true,
+    "show_stopper_details": "The blurry look of the video graphics and heavy written language that repeats the speaker makes the course look outdated.",
+    "attachments": NaN,
+    "review_date": "Jan 31, 2024 08:16:43 PM"
+  },
+  {
+    "reviewer": {
+      "response_id": "46D3ljL1",
+      "first_name": "Selen",
+      "last_name": "Turner",
+      "email": "selenturner@comcast.net",
+      "completion_time": "Jan 31, 2024 08:16:43 PM",
+      "time_taken": "1 hr 16 mins 48 secs "
+    },
+    "course_name": "CX in Healthcare",
+    "module_name": "Capstone",
+    "rating": 2,
+    "positive_comments": "The document is very comprehensive which is great. It brings all the pieces together from the modules.",
+    "improvement_opportunities": "The design should be clearer with blank spaces, fillable spaces and editable version to be able to modify to fit the needs. There could be two versions. One is the comprehensive document and the other one is the editable and customizable shorter more practical version.",
+    "is_show_stopper": true,
+    "show_stopper_details": "",
+    "attachments": NaN,
+    "review_date": "Jan 31, 2024 08:16:43 PM"
+  },
+  {
+    "reviewer": {
+      "response_id": "B1BqOPB8",
+      "first_name": "Margaret",
+      "last_name": "Pagnucco",
+      "email": "margee878@gmail.com",
+      "completion_time": "Jan 31, 2024 01:37:51 PM",
+      "time_taken": "8 mins 7 secs "
+    },
+    "course_name": "CX in Healthcare",
+    "module_name": "Module 4",
+    "rating": 4,
+    "positive_comments": "Important topic and skill for healthcare providers.  Enjoyed the video content and format.",
+    "improvement_opportunities": "Discussion questions do not relate to the article that was requested to be read.  Would be better if article content was thought-provoking to answering the discussion question.",
+    "is_show_stopper": false,
+    "show_stopper_details": NaN,
+    "attachments": NaN,
+    "review_date": "Jan 31, 2024 01:37:51 PM"
+  }
+]

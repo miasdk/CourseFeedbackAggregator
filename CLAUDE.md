@@ -9,7 +9,11 @@ Build a single, explainable prioritization system that pulls course feedback fro
 ## Technology Stack
 **Current (Phase 0 - MVP)**
 - **Frontend Framework**: React 18 with TypeScript
+<<<<<<< HEAD
 - **Styling**: Tailwind CSS with custom Apple-inspired design system, Shadcn 
+=======
+- **Styling**: Tailwind CSS with custom Apple-inspired design system
+>>>>>>> cdb0ff2f7a05c8ee79bac3a5bc40c1c2a7afeb4c
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
 - **State Management**: Zustand

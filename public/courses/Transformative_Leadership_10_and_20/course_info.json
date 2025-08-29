@@ -1,0 +1,18 @@
+{
+  "name": "Transformative Leadership 1.0 and 2.0",
+  "total_reviews": 4,
+  "average_rating": 4.75,
+  "critical_issues_count": 0,
+  "modules": {
+    "Course Overview": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues_count": 0
+    },
+    "Module 1": {
+      "average_rating": 4.67,
+      "total_reviews": 3,
+      "critical_issues_count": 0
+    }
+  }
+}

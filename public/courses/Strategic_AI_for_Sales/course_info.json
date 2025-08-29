@@ -1,0 +1,28 @@
+{
+  "name": "Strategic AI for Sales",
+  "total_reviews": 4,
+  "average_rating": 3.5,
+  "critical_issues_count": 2,
+  "modules": {
+    "Module 4": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues_count": 1
+    },
+    "Module 7": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues_count": 1
+    },
+    "Module 1": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues_count": 0
+    },
+    "Module 2": {
+      "average_rating": 4.0,
+      "total_reviews": 1,
+      "critical_issues_count": 0
+    }
+  }
+}

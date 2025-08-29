@@ -1,0 +1,40 @@
+[
+  {
+    "reviewer": {
+      "response_id": "ajDHc4Zp",
+      "first_name": "Joan",
+      "last_name": "Edwards",
+      "email": "joanegirl37@icloud.com",
+      "completion_time": "Apr 22, 2024 02:42:47 PM",
+      "time_taken": "24 mins 6 secs "
+    },
+    "course_name": "Women in Leadership in the Age of AI 1.0 and Women in Leadership in the Age of AI 2.0",
+    "module_name": "Module 1",
+    "rating": 5,
+    "positive_comments": "Showing the History is a great way to start this program. I've learned a lot about the history of how women are discriminated and why through different history aspects, through my own research. This one covers a lot including how women were leaders in many places earlier on and  the  reasons for the leaderships.",
+    "improvement_opportunities": "I really didn't see any big need for improvement here.",
+    "is_show_stopper": false,
+    "show_stopper_details": NaN,
+    "attachments": NaN,
+    "review_date": "Apr 22, 2024 02:42:47 PM"
+  },
+  {
+    "reviewer": {
+      "response_id": "ajDHc4Zp",
+      "first_name": "Joan",
+      "last_name": "Edwards",
+      "email": "joanegirl37@icloud.com",
+      "completion_time": "Apr 22, 2024 02:42:47 PM",
+      "time_taken": "24 mins 6 secs "
+    },
+    "course_name": "Women in Leadership in the Age of AI 1.0 and Women in Leadership in the Age of AI 2.0",
+    "module_name": "Module 2",
+    "rating": 5,
+    "positive_comments": "I really like the content and the subject over all.  I liked point 5,Community Engagement and Empowerment. along with the section about Transparency and accountability. This is key in any situation for all in leadership, it was how I did business and how I expected my team to do business, no matter the sex. In video 3, discussion on diversity when hiring. This has to happen, although it's not always as easy as it seems. training and awareness should be happening, although it has to be updated as data changes.",
+    "improvement_opportunities": "As I was reading this, I kept wondering how they would even out the playing field to have better data, could they have data just on women intersectionality and average it out with the men to keep the bias lower? How would they continually update when new data arrises. Another thing I don't see in here is cost and timing for doing this?  Companies need good reason to pay for all of this, it could be a different head count or an entire team.",
+    "is_show_stopper": true,
+    "show_stopper_details": "",
+    "attachments": NaN,
+    "review_date": "Apr 22, 2024 02:42:47 PM"
+  }
+]

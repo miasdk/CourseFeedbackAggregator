@@ -1,0 +1,55 @@
+{
+  "overview": {
+    "total_reviews": 4,
+    "average_rating": 4.25,
+    "critical_issues": 2
+  },
+  "rating_distribution": {
+    "3": 1,
+    "5": 2,
+    "4": 1
+  },
+  "modules": {
+    "Module 1": {
+      "average_rating": 3.0,
+      "total_reviews": 1,
+      "critical_issues": [
+        {
+          "reviewer": "Joyce Bedell",
+          "issue": "It is confusing whether this program is meant to be done independently, or within a team and with a mentor.  There are references to attending workshops with peers, assigning roles within your team, and weekly meetings with a mentor.  It appears the program is a collaborative effort and not an independent, asynchronous course.  Whichever format is planned, it needs to be clearly stated to set student expectations of whether they will be working with a team and mentor, or working independently.",
+          "details": "Attachments are referenced that are not included in the course (e.g., assignment worksheets, student examples of completed assignments)."
+        }
+      ]
+    },
+    "Module 3": {
+      "average_rating": 4.5,
+      "total_reviews": 2,
+      "critical_issues": [
+        {
+          "reviewer": "Joyce Bedell",
+          "issue": "Some of the referenced attachments/downloads are missing in the course (e.g., synthesis template, student examples).",
+          "details": ""
+        }
+      ]
+    },
+    "Module 2": {
+      "average_rating": 5.0,
+      "total_reviews": 1,
+      "critical_issues": []
+    }
+  },
+  "critical_issues": [
+    {
+      "module": "Module 1",
+      "reviewer": "Joyce Bedell",
+      "issue": "It is confusing whether this program is meant to be done independently, or within a team and with a mentor.  There are references to attending workshops with peers, assigning roles within your team, a..."
+    },
+    {
+      "module": "Module 3",
+      "reviewer": "Joyce Bedell",
+      "issue": "Some of the referenced attachments/downloads are missing in the course (e.g., synthesis template, student examples)."
+    }
+  ],
+  "top_positive_themes": [],
+  "improvement_areas": []
+}
