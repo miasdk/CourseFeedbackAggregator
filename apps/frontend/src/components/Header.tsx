@@ -38,9 +38,6 @@ const Header: React.FC<HeaderProps> = ({
             <div className="w-7 h-7 bg-blue-600 rounded-sm flex items-center justify-center">
               <span className="text-white font-bold text-sm">CF</span>
             </div>
-            <div>
-              <h1 className="text-lg font-semibold text-gray-900">Course Feedback Dashboard</h1>
-            </div>
           </div>
 
           {/* Search & Controls */}
