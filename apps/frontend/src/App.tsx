@@ -5,34 +5,8 @@ import Sidebar from './components/Sidebar';
 import CourseGrid from './components/CourseGrid';
 import PriorityRecommendations from './components/PriorityRecommendations';
 import UploadModal from './components/UploadModal';
-import APIService, { Feedback, Priority, Stats } from './services/api';
-
-export interface Course {
-  id: string;
-  title: string;
-  category: string;
-  rating: number;
-  reviewCount: number;
-  moduleCount: number;
-  lastUpdated: string;
-  lastUpdatedDate: Date;
-  criticalIssues: number;
-  description?: string;
-  instructor?: string;
-  duration?: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  issues?: string[];
-  priorityLevel?: 'urgent' | 'high' | 'medium' | 'low';
-  analyticsData?: {
-    averageRating: number;
-    totalReviews: number;
-    issueCount: number;
-    quickWinPotential: number;
-    priorityScore: number;
-    tags: string[];
-    lastUpdated: string;
-  };
-}
+import APIService from './services/api';
+import { Course, Feedback, Priority, Stats } from './types';
 
 function App() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -189,12 +163,6 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Dashboard Header */}
-              <div className="mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">Priority Recommendations</h2>
-                <p className="text-sm text-gray-600">Explainable course improvement suggestions ranked by impact</p>
-              </div>
-              
               <PriorityRecommendations />
             </motion.div>
             

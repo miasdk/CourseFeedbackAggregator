@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Star, Calendar, Users, BookOpen, AlertTriangle, MoreHorizontal } from 'lucide-react';
 import { Course } from './CourseGrid';
 
@@ -20,85 +19,77 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails }) => {
     return Array.from({ length: 5 }).map((_, i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${
+        className={`w-3 h-3 ${
           i < Math.floor(rating) 
-            ? 'text-yellow-400 fill-current' 
-            : 'text-apple-300'
+            ? 'text-gray-900 fill-gray-900' 
+            : 'text-gray-300'
         }`}
       />
     ));
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className="card-apple card-apple-hover p-6 h-full cursor-pointer"
-    >
+    <div className="border border-gray-200 bg-white p-4 h-full hover:border-gray-300 transition-colors cursor-pointer">
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div>
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-1">
-                {renderStars(course.rating)}
-              </div>
-              <span className="text-lg font-bold text-apple-900">
-                {course.rating.toFixed(1)}
-              </span>
-            </div>
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            {renderStars(course.rating)}
           </div>
+          <span className="text-sm font-semibold text-gray-900">
+            {course.rating.toFixed(1)}
+          </span>
         </div>
         
-        <button className="w-8 h-8 rounded-full hover:bg-apple-100 flex items-center justify-center transition-colors duration-200">
-          <MoreHorizontal className="w-5 h-5 text-apple-600" />
+        <button className="w-6 h-6 hover:bg-gray-100 flex items-center justify-center transition-colors">
+          <MoreHorizontal className="w-4 h-4 text-gray-500" />
         </button>
       </div>
 
       {/* Course Title */}
-      <h3 className="text-lg font-semibold text-apple-900 mb-2 line-clamp-2">
+      <h3 className="text-sm font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
         {course.title}
       </h3>
 
       {/* Category Badge */}
-      <div className="mb-4">
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(course.category)}`}>
+      <div className="mb-3">
+        <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700">
           {course.category}
         </span>
       </div>
 
       {/* Description */}
       {course.description && (
-        <p className="text-apple-600 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-600 text-xs mb-3 line-clamp-2 leading-relaxed">
           {course.description}
         </p>
       )}
 
       {/* Stats */}
-      <div className="space-y-3 mb-4">
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center space-x-1 text-apple-600">
-            <Calendar className="w-4 h-4" />
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center gap-1">
+            <Calendar className="w-3 h-3" />
             <span>Updated {course.lastUpdated}</span>
           </div>
         </div>
         
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center space-x-1 text-apple-600">
-            <Users className="w-4 h-4" />
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
             <span>{course.reviewCount} reviews</span>
           </div>
-          <div className="flex items-center space-x-1 text-apple-600">
-            <BookOpen className="w-4 h-4" />
+          <div className="flex items-center gap-1">
+            <BookOpen className="w-3 h-3" />
             <span>{course.moduleCount} modules</span>
           </div>
         </div>
 
         {/* Critical Issues */}
         {course.criticalIssues > 0 && (
-          <div className="flex items-center space-x-2 p-2 bg-red-50 rounded-lg">
-            <AlertTriangle className="w-4 h-4 text-red-500" />
-            <span className="text-red-700 text-sm font-medium">
+          <div className="flex items-center gap-2 p-2 border border-gray-300">
+            <AlertTriangle className="w-3 h-3 text-gray-700" />
+            <span className="text-gray-900 text-xs font-medium">
               {course.criticalIssues} critical issue{course.criticalIssues > 1 ? 's' : ''}
             </span>
           </div>
@@ -106,10 +97,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails }) => {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center space-x-2 pt-4 border-t border-apple-200">
+      <div className="flex items-center gap-2 pt-3 border-t border-gray-200">
         <button 
           onClick={onViewDetails}
-          className="btn-primary flex-1 text-sm py-2"
+          className="flex-1 text-xs py-2 px-3 bg-gray-900 text-white hover:bg-gray-700 transition-colors"
         >
           View Details
         </button>
@@ -130,12 +121,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails }) => {
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
           }}
-          className="btn-secondary px-4 py-2 text-sm"
+          className="px-3 py-2 text-xs border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
         >
           Export
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

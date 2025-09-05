@@ -1,21 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, X, File, CheckCircle, AlertCircle } from 'lucide-react';
-
-export interface Course {
-  id: string;
-  title: string;
-  category: string;
-  rating: number;
-  reviewCount: number;
-  moduleCount: number;
-  lastUpdated: string;
-  lastUpdatedDate: Date; // Add actual date for sorting
-  criticalIssues: number;
-  description?: string;
-  instructor?: string;
-  duration?: string;
-}
+import { Course } from '../types';
 
 interface UploadModalProps {
   isOpen: boolean;
