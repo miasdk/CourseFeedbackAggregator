@@ -1,21 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, Zap, TrendingUp, CheckCircle, ArrowRight, Clock, Target } from 'lucide-react';
-
-interface Course {
-  id: string;
-  title: string;
-  category: string;
-  rating: number;
-  reviewCount: number;
-  moduleCount: number;
-  lastUpdated: string;
-  lastUpdatedDate: Date; // Add actual date for sorting  
-  criticalIssues: number;
-  description?: string;
-  instructor?: string;
-  duration?: string;
-}
+import { Course } from '../types';
 
 interface ActionItem {
   type: 'critical' | 'quick-win' | 'improvement' | 'success';

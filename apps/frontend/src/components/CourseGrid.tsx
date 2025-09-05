@@ -4,26 +4,7 @@ import CourseCard from './CourseCard';
 import { X, Star, Users, BookOpen, Download, Filter, MessageCircle } from 'lucide-react';
 
 import { ActionItem, CourseIssueAnalysis } from '../services/issueAnalysis';
-
-export interface Course {
-  id: string;
-  title: string;
-  category: string;
-  rating: number;
-  reviewCount: number;
-  moduleCount: number;
-  lastUpdated: string;
-  lastUpdatedDate: Date; // Add actual date for sorting
-  criticalIssues: number;
-  description?: string;
-  instructor?: string;
-  duration?: string;
-  // Smart Filtering Extensions
-  issueAnalysis?: CourseIssueAnalysis;
-  actionItems?: ActionItem[];
-  issueCategories?: string[]; // Categories of issues found
-  priorityLevel?: 'urgent' | 'high' | 'medium' | 'low';
-}
+import { Course } from '../types';
 
 interface Review {
   reviewer: {

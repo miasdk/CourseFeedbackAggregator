@@ -66,7 +66,10 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onUploadComp
       criticalIssues: Math.floor(Math.random() * 3),
       description: `Course data imported from ${file.name}`,
       instructor: 'Imported Data',
-      duration: `${Math.floor(Math.random() * 8) + 4} weeks`
+      duration: `${Math.floor(Math.random() * 8) + 4} weeks`,
+      priority: 'medium' as const,
+      issues: [],
+      priorityLevel: 'medium'
     }));
 
     if (onUploadComplete) {

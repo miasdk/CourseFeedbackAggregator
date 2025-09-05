@@ -1,5 +1,6 @@
 // Minimal types - only what we're currently using
 
+// Core Course interface without circular dependencies
 export interface Course {
   id: string;
   title: string;
@@ -16,6 +17,10 @@ export interface Course {
   priority: 'low' | 'medium' | 'high' | 'critical';
   issues?: string[];
   priorityLevel?: 'urgent' | 'high' | 'medium' | 'low';
+  // Smart Filtering Extensions (optional, type-safe)
+  issueAnalysis?: any;
+  actionItems?: any[];
+  issueCategories?: string[];
   analyticsData?: {
     averageRating: number;
     totalReviews: number;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star, Calendar, Users, BookOpen, AlertTriangle, MoreHorizontal } from 'lucide-react';
-import { Course } from './CourseGrid';
+import { Course } from '../types';
 
 interface CourseCardProps {
   course: Course;

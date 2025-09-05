@@ -15,6 +15,7 @@ import {
   TrendingUp,
   Database
 } from 'lucide-react';
+import { Course } from '../types';
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -22,21 +23,6 @@ interface MenuItemProps {
   count?: number;
   active?: boolean;
   onClick?: () => void;
-}
-
-interface Course {
-  id: string;
-  title: string;
-  category: string;
-  rating: number;
-  reviewCount: number;
-  moduleCount: number;
-  lastUpdated: string;
-  lastUpdatedDate: Date; // Add actual date for sorting
-  criticalIssues: number;
-  description?: string;
-  instructor?: string;
-  duration?: string;
 }
 
 interface SidebarProps {
