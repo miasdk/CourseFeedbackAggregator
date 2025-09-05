@@ -5,13 +5,13 @@ import Sidebar from './components/Sidebar';
 import CourseGrid from './components/CourseGrid';
 import PriorityRecommendations from './components/PriorityRecommendations';
 import UploadModal from './components/UploadModal';
-import APIService from './services/api';
-import { Course, Feedback, Priority, Stats } from './types';
+import APIService, { Feedback as ApiFeedback, Priority as ApiPriority, Stats as ApiStats } from './services/api';
+import { Course } from './types';
 
 function App() {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [priorities, setPriorities] = useState<Priority[]>([]);
-  const [stats, setStats] = useState<Stats | null>(null);
+  const [priorities, setPriorities] = useState<ApiPriority[]>([]);
+  const [stats, setStats] = useState<ApiStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -32,7 +32,7 @@ function App() {
         // Convert feedback to courses format for our shadcn components
         const courseMap = new Map<string, Course>();
         
-        feedbackData.forEach((item, index) => {
+        feedbackData.forEach((item: ApiFeedback, index) => {
           const courseId = item.id || `course_${index}`;
           if (!courseMap.has(courseId)) {
             const lastUpdatedStr = item.date || '2025-08-29';
@@ -45,24 +45,24 @@ function App() {
               moduleCount: Math.floor(Math.random() * 8) + 4,
               lastUpdated: lastUpdatedStr,
               lastUpdatedDate: new Date(lastUpdatedStr),
-              criticalIssues: item.issues.filter(issue => 
+              criticalIssues: (item.issues || []).filter(issue => 
                 issue.toLowerCase().includes('critical') || 
                 issue.toLowerCase().includes('urgent') ||
                 issue.toLowerCase().includes('broken')
               ).length,
-              description: `${item.course_name} course with ${item.issues.length} reported issues`,
+              description: `${item.course_name} course with ${(item.issues || []).length} reported issues`,
               instructor: `Dr. ${item.course_name.split(' ')[0]}`,
               duration: `${Math.floor(Math.random() * 12) + 4} weeks`,
               priority: mapPriorityLevel(item.priority),
               priorityLevel: mapToPriorityLevel(item.priority),
-              issues: item.issues,
+              issues: item.issues || [],
               analyticsData: {
                 averageRating: item.rating,
                 totalReviews: item.students_affected || 15,
-                issueCount: item.issues.length,
+                issueCount: (item.issues || []).length,
                 quickWinPotential: item.effort_score ? (10 - item.effort_score) : Math.random() * 10,
                 priorityScore: item.total_score || Math.random() * 10,
-                tags: item.issues.slice(0, 3),
+                tags: (item.issues || []).slice(0, 3),
                 lastUpdated: lastUpdatedStr
               }
             });
@@ -77,6 +77,7 @@ function App() {
         // Fallback to empty data
         setCourses([]);
         setPriorities([]);
+        setStats(null);
       } finally {
         setLoading(false);
       }
