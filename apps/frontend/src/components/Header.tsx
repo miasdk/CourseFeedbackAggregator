@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Upload, Bell, ChevronDown } from 'lucide-react';
+import { Search, Upload, Bell, ChevronDown, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeaderProps {
@@ -42,8 +42,8 @@ const Header: React.FC<HeaderProps> = ({
               <span className="text-white font-bold text-lg">CA</span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">Course Feedback System</h1>
-              <p className="text-xs text-gray-600">Analytics Dashboard</p>
+              <h1 className="text-xl font-semibold text-gray-900">Feedback Intelligence</h1>
+              <p className="text-xs text-gray-600">Explainable Course Improvement Priorities</p>
             </div>
           </motion.div>
 
@@ -91,6 +91,16 @@ const Header: React.FC<HeaderProps> = ({
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
             </motion.button>
 
+            {/* Configure Weights Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-secondary flex items-center space-x-2 px-4 py-2 text-sm mr-3"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Configure Scoring</span>
+            </motion.button>
+
             {/* Upload Button */}
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -99,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({
               className="btn-primary flex items-center space-x-2 px-4 py-2 text-sm"
             >
               <Upload className="w-4 h-4" />
-              <span>Upload CSV</span>
+              <span>Ingest Data</span>
             </motion.button>
           </div>
         </div>

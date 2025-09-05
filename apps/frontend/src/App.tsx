@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import CourseGrid from './components/CourseGrid';
-import StatsCards from './components/StatsCards';
+import PriorityRecommendations from './components/PriorityRecommendations';
 import UploadModal from './components/UploadModal';
 import APIService, { Feedback, Priority, Stats } from './services/api';
 
@@ -188,9 +188,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <StatsCards 
-              courses={courses}
-            />
+            <PriorityRecommendations />
             
             <div className="mt-8">
               <CourseGrid

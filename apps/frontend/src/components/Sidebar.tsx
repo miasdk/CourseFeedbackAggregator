@@ -9,7 +9,11 @@ import {
   PieChart, 
   Heart, 
   Upload,
-  Settings 
+  Settings,
+  Target,
+  MessageSquare,
+  TrendingUp,
+  Database
 } from 'lucide-react';
 
 interface MenuItemProps {
@@ -49,14 +53,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
 
   const menuItems: MenuItemProps[] = [
     { 
-      icon: <BarChart3 className="w-5 h-5" />, 
-      label: 'Dashboard', 
+      icon: <Target className="w-5 h-5" />, 
+      label: 'Priority Queue', 
       active: selectedCategory === 'all',
       onClick: () => onCategoryChange('all')
     },
     { 
-      icon: <BookOpen className="w-5 h-5" />, 
-      label: 'All Courses', 
+      icon: <MessageSquare className="w-5 h-5" />, 
+      label: 'Feedback Sources', 
       count: getCategoryCount('all'),
       active: selectedCategory === 'all',
       onClick: () => onCategoryChange('all')
@@ -140,15 +144,22 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
           </nav>
         </div>
 
-        {/* Recent Section */}
+        {/* Data Sources */}
         <div className="mt-8">
-          <h3 className="text-xs font-medium text-apple-500 uppercase tracking-wider mb-3">
-            Recent
+          <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">
+            Data Sources
           </h3>
           <nav className="space-y-1">
-            {recentItems.map((item, index) => (
-              <MenuItem key={index} {...item} />
-            ))}
+            <MenuItem 
+              icon={<Database className="w-4 h-4" />}
+              label="Canvas LMS"
+              count={127}
+            />
+            <MenuItem 
+              icon={<TrendingUp className="w-4 h-4" />}
+              label="Zoho Surveys"
+              count={43}
+            />
           </nav>
         </div>
 
