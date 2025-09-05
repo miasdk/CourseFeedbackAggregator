@@ -6,20 +6,49 @@
 ### Mission Statement
 Build a single, explainable prioritization system that pulls course feedback from Canvas and Zoho into one database, scores what to "fix" first, and shows the "why" behind each recommendation in a live dashboard.
 
+## 🗂️ Current Repository Structure (Updated Sept 2, 2025)
+
+```
+CourseFeedbackAggregator/
+├── .claude/                   # Claude Code configuration  
+├── .env                       # API credentials (Canvas, Zoho)
+├── .gitignore                # Git ignore rules
+├── .vscode/                  # VSCode configuration
+├── CLAUDE.md                 # This project documentation
+├── README.md                 # Project overview
+├── apps/
+│   └── frontend/             # React frontend (preserved)
+│       ├── src/              # React source code
+│       ├── public/           # Static assets
+│       └── package.json      # Frontend dependencies
+└── dev-kit/                  # API testing & development tools
+    ├── testing/              # ✅ API test scripts
+    │   ├── canvas_api_live_test.py      # Canvas API testing
+    │   ├── zoho_oauth_simple.py        # Zoho OAuth setup
+    │   ├── canvas_live_test_results_*.json
+    │   └── README.md         # Testing documentation
+    ├── research/             # API research documentation
+    │   ├── canvas-lms.md     # Canvas API research
+    │   └── zoho-crm.md       # Zoho CRM research  
+    └── templates/            # Development templates
+```
+
+### ⚠️ Backend Removed (Sept 2, 2025)
+**Removed:** `apps/backend/` - Overengineered system built without real API access  
+**Reason:** Will rebuild from scratch after obtaining proper API access and discovering actual data structures  
+**Preserved:** Frontend, dev-kit testing framework, and API credentials
+
 ## Technology Stack
 **Current (Phase 0 - MVP)**
 - **Frontend Framework**: React 18 with TypeScript
-<<<<<<< HEAD
-- **Styling**: Tailwind CSS with custom Apple-inspired design system, Shadcn 
-=======
 - **Styling**: Tailwind CSS with custom Apple-inspired design system
->>>>>>> cdb0ff2f7a05c8ee79bac3a5bc40c1c2a7afeb4c
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
 - **State Management**: Zustand
 - **Testing**: Jest, React Testing Library
 - **Build Tool**: Create React App
 - **Data Source**: Static JSON files (MVP simulation)
+- **API Testing**: Python scripts in dev-kit/testing/
 
 **Target Architecture (Full Implementation)**
 - **Backend**: FastAPI with Python

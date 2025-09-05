@@ -159,8 +159,7 @@ function App() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading Canvas data...</p>
-          <p className="mt-2 text-sm text-gray-500">Connecting to live backend API...</p>
+          <p className="mt-4 text-gray-600">Loading data...</p>
         </div>
       </div>
     );
@@ -207,13 +206,6 @@ function App() {
         onClose={() => setIsUploadModalOpen(false)}
       />
       
-      {/* Live Data Indicator */}
-      <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-full px-4 py-2 border border-green-200">
-        <div className="flex items-center space-x-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-gray-700">Live Canvas Data</span>
-        </div>
-      </div>
     </div>
   );
 }

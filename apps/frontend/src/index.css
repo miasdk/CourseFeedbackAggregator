@@ -40,11 +40,11 @@
 @layer components {
   /* Apple-style buttons */
   .btn-primary {
-    @apply bg-blue-600 text-white px-6 py-3 rounded-xl font-medium shadow-apple hover:bg-blue-700 transition-all duration-200 hover:shadow-apple-lg;
+    @apply bg-gray-800 text-white px-6 py-3 rounded-lg font-medium shadow-sm hover:bg-gray-900 transition-all duration-200;
   }
   
   .btn-secondary {
-    @apply bg-white text-apple-700 px-6 py-3 rounded-xl font-medium shadow-apple hover:bg-apple-50 transition-all duration-200 hover:shadow-apple-lg border border-apple-200;
+    @apply bg-white text-gray-700 px-6 py-3 rounded-lg font-medium shadow-sm hover:bg-gray-50 transition-all duration-200 border border-gray-300;
   }
   
   /* Apple-style inputs */
@@ -54,10 +54,10 @@
   
   /* Apple-style cards */
   .card-apple {
-    @apply bg-white rounded-2xl shadow-apple hover:shadow-apple-lg transition-all duration-300 border border-apple-200;
+    @apply bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200;
   }
   
   .card-apple-hover {
-    @apply hover:scale-105 hover:-translate-y-1;
+    @apply hover:shadow-md;
   }
 }

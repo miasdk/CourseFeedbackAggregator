@@ -9,38 +9,11 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails }) => {
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'AI/ML':
-        return '🤖';
-      case 'Leadership':
-        return '👥';
-      case 'Design':
-        return '🎨';
-      case 'Healthcare':
-        return '🏥';
-      case 'Technology':
-        return '💻';
-      default:
-        return '📚';
-    }
-  };
+  // Removed emoji function - no longer needed
 
   const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'AI/ML':
-        return 'bg-blue-100 text-blue-800';
-      case 'Leadership':
-        return 'bg-purple-100 text-purple-800';
-      case 'Design':
-        return 'bg-pink-100 text-pink-800';
-      case 'Healthcare':
-        return 'bg-green-100 text-green-800';
-      case 'Technology':
-        return 'bg-indigo-100 text-indigo-800';
-      default:
-        return 'bg-apple-100 text-apple-800';
-    }
+    // Muted professional colors
+    return 'bg-gray-100 text-gray-700';
   };
 
   const renderStars = (rating: number) => {
@@ -65,7 +38,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails }) => {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <span className="text-2xl">{getCategoryIcon(course.category)}</span>
           <div>
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">

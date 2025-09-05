@@ -23,10 +23,10 @@ export interface SmartFiltersProps {
 }
 
 const PRIORITY_LEVELS = [
-  { id: 'urgent', name: 'Urgent', icon: '🔴', color: 'red' },
-  { id: 'high', name: 'High', icon: '🟡', color: 'orange' },
-  { id: 'medium', name: 'Medium', icon: '⚡', color: 'yellow' },
-  { id: 'low', name: 'Low', icon: '✅', color: 'green' }
+  { id: 'urgent', name: 'Urgent', icon: '', color: 'red' },
+  { id: 'high', name: 'High', icon: '', color: 'orange' },
+  { id: 'medium', name: 'Medium', icon: '', color: 'yellow' },
+  { id: 'low', name: 'Low', icon: '', color: 'green' }
 ];
 
 const ACTION_STATUS = [

@@ -56,40 +56,40 @@ const analyzeCourses = (courses: Course[]): ActionItem[] => {
   return [
     {
       type: 'critical',
-      title: 'URGENT ACTIONS',
+      title: 'Critical Issues',
       count: criticalCourses.length,
       courses: criticalCourses,
-      description: `${criticalCourses.length} courses need immediate attention`,
+      description: `${criticalCourses.length} courses with critical issues`,
       priority: 'high',
       effort: 'medium',
       impact: 'high'
     },
     {
       type: 'quick-win',
-      title: 'QUICK WINS',
+      title: 'Quick Fixes',
       count: quickWinCourses.length,
       courses: quickWinCourses,
-      description: `${quickWinCourses.length} easy improvements available`,
+      description: `${quickWinCourses.length} courses with minor fixes`,
       priority: 'medium',
       effort: 'low',
       impact: 'medium'
     },
     {
       type: 'improvement',
-      title: 'IMPROVEMENT OPPORTUNITIES',
+      title: 'Improvements',
       count: improvementCourses.length,
       courses: improvementCourses,
-      description: `${improvementCourses.length} courses with potential`,
+      description: `${improvementCourses.length} courses to improve`,
       priority: 'medium',
       effort: 'medium',
       impact: 'high'
     },
     {
       type: 'success',
-      title: 'PERFORMING WELL',
+      title: 'Performing Well',
       count: successCourses.length,
       courses: successCourses,
-      description: `${successCourses.length} courses exceeding expectations`,
+      description: `${successCourses.length} high-performing courses`,
       priority: 'low',
       effort: 'low',
       impact: 'low'
@@ -102,39 +102,39 @@ const getActionStyle = (type: ActionItem['type']) => {
   switch (type) {
     case 'critical':
       return {
-        bgColor: 'bg-red-50',
-        iconBg: 'bg-red-500',
-        textColor: 'text-red-700',
-        borderColor: 'border-red-200',
+        bgColor: 'bg-gray-50',
+        iconBg: 'bg-gray-700',
+        textColor: 'text-gray-700',
+        borderColor: 'border-gray-200',
         icon: AlertTriangle,
-        gradient: 'from-red-500 to-red-600'
+        gradient: 'from-gray-600 to-gray-700'
       };
     case 'quick-win':
       return {
-        bgColor: 'bg-yellow-50',
-        iconBg: 'bg-yellow-500',
-        textColor: 'text-yellow-700',
-        borderColor: 'border-yellow-200',
+        bgColor: 'bg-gray-50',
+        iconBg: 'bg-gray-600',
+        textColor: 'text-gray-700',
+        borderColor: 'border-gray-200',
         icon: Zap,
-        gradient: 'from-yellow-500 to-yellow-600'
+        gradient: 'from-gray-500 to-gray-600'
       };
     case 'improvement':
       return {
-        bgColor: 'bg-blue-50',
-        iconBg: 'bg-blue-500',
-        textColor: 'text-blue-700',
-        borderColor: 'border-blue-200',
+        bgColor: 'bg-gray-50',
+        iconBg: 'bg-gray-600',
+        textColor: 'text-gray-700',
+        borderColor: 'border-gray-200',
         icon: TrendingUp,
-        gradient: 'from-blue-500 to-blue-600'
+        gradient: 'from-gray-500 to-gray-600'
       };
     case 'success':
       return {
-        bgColor: 'bg-green-50',
-        iconBg: 'bg-green-500',
-        textColor: 'text-green-700',
-        borderColor: 'border-green-200',
+        bgColor: 'bg-gray-50',
+        iconBg: 'bg-gray-500',
+        textColor: 'text-gray-700',
+        borderColor: 'border-gray-200',
         icon: CheckCircle,
-        gradient: 'from-green-500 to-green-600'
+        gradient: 'from-gray-400 to-gray-500'
       };
     default:
       return {
@@ -151,9 +151,9 @@ const getActionStyle = (type: ActionItem['type']) => {
 // Priority Badge Component
 const PriorityBadge: React.FC<{ priority: ActionItem['priority'] }> = ({ priority }) => {
   const styles = {
-    high: 'bg-red-100 text-red-700 border-red-200',
-    medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-    low: 'bg-green-100 text-green-700 border-green-200'
+    high: 'bg-gray-200 text-gray-800 border-gray-300',
+    medium: 'bg-gray-100 text-gray-700 border-gray-200',
+    low: 'bg-gray-50 text-gray-600 border-gray-200'
   };
 
   return (

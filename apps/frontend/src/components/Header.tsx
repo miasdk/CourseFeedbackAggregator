@@ -38,12 +38,12 @@ const Header: React.FC<HeaderProps> = ({
             whileHover={{ scale: 1.05 }}
             className="flex items-center space-x-3"
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">CA</span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-apple-900">Course Analyzer</h1>
-              <p className="text-xs text-apple-600">Professional Review Platform</p>
+              <h1 className="text-xl font-semibold text-gray-900">Course Feedback System</h1>
+              <p className="text-xs text-gray-600">Analytics Dashboard</p>
             </div>
           </motion.div>
 
@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({
                 value={sortBy}
                 onChange={(e) => {
                   const newSortBy = e.target.value as typeof sortBy;
-                  console.log(`🔄 Sorting changed to: ${newSortBy}`); // Debug log
+                  console.log(`Sorting changed to: ${newSortBy}`); // Debug log
                   onSortChange(newSortBy);
                 }}
                 className="appearance-none bg-apple-50 border border-apple-200 rounded-xl px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm min-w-[140px]"
