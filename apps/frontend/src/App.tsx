@@ -166,7 +166,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Header 
         onUploadClick={() => setIsUploadModalOpen(true)}
         searchQuery={searchQuery}
@@ -175,27 +175,45 @@ function App() {
         onSortChange={handleSortChange}
       />
       
-      <div className="flex">
+      <div className="flex pt-16">
         <Sidebar 
           selectedCategory={selectedCategory}
           onCategoryChange={handleCategorySelect}
           courses={courses}
         />
         
-        <main className="flex-1 p-6 ml-64">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <PriorityRecommendations />
+        <main className="flex-1 ml-64">
+          <div className="p-4 space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Dashboard Header */}
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-1">Priority Recommendations</h2>
+                <p className="text-sm text-gray-600">Explainable course improvement suggestions ranked by impact</p>
+              </div>
+              
+              <PriorityRecommendations />
+            </motion.div>
             
-            <div className="mt-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              {/* Courses Section */}
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-1">All Courses</h2>
+                <p className="text-sm text-gray-600">Complete course catalog with feedback analysis</p>
+              </div>
+              
               <CourseGrid
                 courses={courses}
               />
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </main>
       </div>
 

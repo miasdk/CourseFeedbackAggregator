@@ -29,33 +29,29 @@ const Header: React.FC<HeaderProps> = ({
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-b border-apple-200 shadow-apple"
+      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm"
     >
-      <div className="px-6 py-3">
+      <div className="px-4 py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center space-x-3"
-          >
-            <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">CA</span>
+          <div className="flex items-center space-x-3">
+            <div className="w-7 h-7 bg-blue-600 rounded-sm flex items-center justify-center">
+              <span className="text-white font-bold text-sm">CF</span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">Feedback Intelligence</h1>
-              <p className="text-xs text-gray-600">Explainable Course Improvement Priorities</p>
+              <h1 className="text-lg font-semibold text-gray-900">Course Feedback Dashboard</h1>
             </div>
-          </motion.div>
+          </div>
 
           {/* Search & Controls */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-apple-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Search courses, instructors, topics..."
-                className="pl-9 pr-4 py-2 w-80 bg-apple-50 border border-apple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
+                placeholder="Search courses..."
+                className="pl-9 pr-4 py-1.5 w-64 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
               />
@@ -67,10 +63,9 @@ const Header: React.FC<HeaderProps> = ({
                 value={sortBy}
                 onChange={(e) => {
                   const newSortBy = e.target.value as typeof sortBy;
-                  console.log(`Sorting changed to: ${newSortBy}`); // Debug log
                   onSortChange(newSortBy);
                 }}
-                className="appearance-none bg-apple-50 border border-apple-200 rounded-xl px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm min-w-[140px]"
+                className="appearance-none bg-gray-50 border border-gray-200 rounded px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm min-w-[130px]"
               >
                 {sortOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -78,39 +73,23 @@ const Header: React.FC<HeaderProps> = ({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-apple-400 w-4 h-4 pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
             </div>
 
-            {/* Notifications */}
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative p-2 bg-apple-50 hover:bg-apple-100 rounded-xl transition-colors duration-200"
-            >
-              <Bell className="w-4 h-4 text-apple-600" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
-            </motion.button>
-
             {/* Configure Weights Button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-secondary flex items-center space-x-2 px-4 py-2 text-sm mr-3"
-            >
+            <button className="flex items-center space-x-2 px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors">
               <Settings className="w-4 h-4" />
-              <span>Configure Scoring</span>
-            </motion.button>
+              <span>Configure</span>
+            </button>
 
             {/* Upload Button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
               onClick={onUploadClick}
-              className="btn-primary flex items-center space-x-2 px-4 py-2 text-sm"
+              className="flex items-center space-x-2 px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
             >
               <Upload className="w-4 h-4" />
-              <span>Ingest Data</span>
-            </motion.button>
+              <span>Import</span>
+            </button>
           </div>
         </div>
       </div>
