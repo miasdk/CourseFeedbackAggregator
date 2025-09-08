@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { AlertTriangle, Users, MessageSquare, ExternalLink } from "lucide-react"
 import type { Course } from "../types"
