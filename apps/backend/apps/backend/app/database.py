@@ -1,7 +1,7 @@
 import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, relationship
-from sqlalchemy import Column, Integer, String, Float, Text, DateTime, Boolean, JSON, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Text, DateTime, Boolean, JSON, ForeignKey, text, select
 from datetime import datetime
 from typing import Optional, List
 from .config import settings
@@ -86,9 +86,35 @@ class Review(Base):
     def __repr__(self):
         return f"<Review(priority_id={self.priority_id}, validated={self.validated}, action='{self.action_taken}')>"
 
-# Async database engine and session
+# Convert postgresql:// to postgresql+asyncpg:// for async support
+if settings.database_url:
+    if settings.database_url.startswith("postgresql://"):
+        # Parse the URL and rebuild without sslmode parameters
+        from urllib.parse import urlparse, parse_qs, urlunparse
+        parsed = urlparse(settings.database_url)
+        
+        # Build asyncpg compatible URL
+        database_url = f"postgresql+asyncpg://{parsed.netloc}{parsed.path}"
+        
+        # Add non-SSL query parameters if any (asyncpg handles SSL differently)
+        if parsed.query:
+            # Filter out SSL parameters that asyncpg doesn't support as query parameters
+            excluded_params = {'sslmode', 'channel_binding', 'sslrootcert', 'sslcert', 'sslkey'}
+            query_params = parse_qs(parsed.query)
+            filtered_params = {k: v for k, v in query_params.items() if k not in excluded_params}
+            
+            if filtered_params:
+                import urllib.parse
+                query_string = urllib.parse.urlencode(filtered_params, doseq=True)
+                database_url += f"?{query_string}"
+    else:
+        database_url = settings.database_url
+else:
+    database_url = "sqlite+aiosqlite:///./feedback.db"  # Fallback to SQLite
+
+# Async database engine and session  
 engine = create_async_engine(
-    settings.database_url,
+    database_url,
     echo=settings.debug,
     pool_pre_ping=True,  # Verify connections before use
     pool_recycle=300     # Recycle connections every 5 minutes
@@ -103,13 +129,13 @@ async_session = async_sessionmaker(
 async def create_tables():
     """Create all database tables"""
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all, checkfirst=True)
         
     # Create default weight configuration if none exists
     async with async_session() as session:
         # Check if we have any weight configs
         result = await session.execute(
-            "SELECT COUNT(*) FROM weight_configs WHERE is_active = true"
+            text("SELECT COUNT(*) FROM weight_configs WHERE is_active = true")
         )
         count = result.scalar()
         
@@ -141,12 +167,11 @@ async def get_db():
 async def get_active_weights() -> WeightConfig:
     """Get the currently active weight configuration"""
     async with async_session() as session:
-        result = await session.execute(
-            "SELECT * FROM weight_configs WHERE is_active = true ORDER BY updated_at DESC LIMIT 1"
-        )
-        weights = result.first()
+        query = select(WeightConfig).where(WeightConfig.is_active == True).order_by(WeightConfig.updated_at.desc()).limit(1)
+        result = await session.execute(query)
+        weights = result.scalar_one_or_none()
         if weights:
-            return WeightConfig(**dict(weights))
+            return weights
         else:
             # Return default weights if none found
             return WeightConfig()

@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-09-09T14:21:07.331142",
+  "canvas": {
+    "success": true,
+    "courses_found": 1,
+    "feedback_extracted": 0
+  },
+  "zoho": {
+    "success": true,
+    "deals_found": 3,
+    "feedback_extracted": 0
+  },
+  "total_feedback": 0,
+  "ingestion_ready": false
+}

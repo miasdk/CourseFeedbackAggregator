@@ -11,6 +11,7 @@ from .api.feedback import router as feedback_router
 from .api.priorities import router as priorities_router
 from .api.ingest import router as ingest_router
 from .api.weights import router as weights_router
+from .api.mock import router as mock_router
 
 app = FastAPI(
     title="Course Feedback Aggregator API",
@@ -21,7 +22,7 @@ app = FastAPI(
 # CORS middleware for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://*.vercel.app"],
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "https://*.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,6 +38,7 @@ app.include_router(feedback_router, prefix="/api", tags=["feedback"])
 app.include_router(priorities_router, prefix="/api", tags=["priorities"])
 app.include_router(ingest_router, prefix="/api", tags=["ingestion"])
 app.include_router(weights_router, prefix="/api", tags=["weights"])
+app.include_router(mock_router, prefix="/api", tags=["mock"])
 
 # Health check endpoint
 @app.get("/health")
