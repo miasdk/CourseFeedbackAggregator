@@ -1,196 +1,220 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import CourseGrid from './components/CourseGrid';
-import PriorityRecommendations from './components/PriorityRecommendations';
-import UploadModal from './components/UploadModal';
-import APIService, { Feedback as ApiFeedback, Priority as ApiPriority, Stats as ApiStats } from './services/api';
-import { Course } from './types';
+import { useState } from 'react';
+import { Toaster } from 'sonner';
+import { ScoringControls } from './components/ScoringControls';
+import { DataSourceStatusComponent } from './components/DataSourceStatus';
+import { StatsOverview } from './components/StatsOverview';
+import { RecommendationCard } from './components/RecommendationCard';
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
+import { Button } from './components/ui/button';
+import { Badge } from './components/ui/badge';
+import { Search, Filter, RefreshCw, Settings, TrendingUp, AlertTriangle } from 'lucide-react';
+import { useRecommendations } from './hooks/useRecommendations';
+import { useDataSync } from './hooks/useDataSync';
 
 function App() {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [priorities, setPriorities] = useState<ApiPriority[]>([]);
-  const [stats, setStats] = useState<ApiStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    recommendations,
+    scoringWeights,
+    isLoading,
+    isRecomputing,
+    error,
+    stats,
+    updateWeights,
+    recomputeScores,
+    resetWeights,
+    validateRecommendation,
+    refresh
+  } = useRecommendations();
+
+  const {
+    dataSourceStatus,
+    isSyncing,
+    isRefreshing,
+    syncDataSource,
+    refreshDashboard
+  } = useDataSync();
+
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [sortBy, setSortBy] = useState<'rating' | 'date' | 'issues' | 'name'>('rating');
+  const [statusFilter, setStatusFilter] = useState('all');
 
-  // Load data from API
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const [feedbackData, prioritiesData, statsData] = await Promise.all([
-          APIService.getFeedback(),
-          APIService.getPriorities(), 
-          APIService.getStats()
-        ]);
+  // Filter recommendations based on search and status
+  const filteredRecommendations = recommendations.filter(rec => {
+    const matchesSearch = searchQuery === '' || [
+      rec.title,
+      rec.description,
+      rec.course_name
+    ].some(field => field.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesStatus = statusFilter === 'all' || rec.status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  }).sort((a, b) => {
+    // Sort by show stoppers first, then priority score
+    if (a.is_show_stopper && !b.is_show_stopper) return -1;
+    if (!a.is_show_stopper && b.is_show_stopper) return 1;
+    return b.priority_score - a.priority_score;
+  });
 
-        // Convert feedback to courses format for our shadcn components
-        const courseMap = new Map<string, Course>();
-        
-        feedbackData.forEach((item: ApiFeedback, index) => {
-          const courseId = item.id || `course_${index}`;
-          if (!courseMap.has(courseId)) {
-            const lastUpdatedStr = item.date || '2025-08-29';
-            courseMap.set(courseId, {
-              id: courseId,
-              title: item.course_name,
-              category: getCategoryFromName(item.course_name),
-              rating: item.rating,
-              reviewCount: item.students_affected || 15,
-              moduleCount: Math.floor(Math.random() * 8) + 4,
-              lastUpdated: lastUpdatedStr,
-              lastUpdatedDate: new Date(lastUpdatedStr),
-              criticalIssues: (item.issues || []).filter(issue => 
-                issue.toLowerCase().includes('critical') || 
-                issue.toLowerCase().includes('urgent') ||
-                issue.toLowerCase().includes('broken')
-              ).length,
-              description: `${item.course_name} course with ${(item.issues || []).length} reported issues`,
-              instructor: `Dr. ${item.course_name.split(' ')[0]}`,
-              duration: `${Math.floor(Math.random() * 12) + 4} weeks`,
-              priority: mapPriorityLevel(item.priority),
-              priorityLevel: mapToPriorityLevel(item.priority),
-              issues: item.issues || [],
-              analyticsData: {
-                averageRating: item.rating,
-                totalReviews: item.students_affected || 15,
-                issueCount: (item.issues || []).length,
-                quickWinPotential: item.effort_score ? (10 - item.effort_score) : Math.random() * 10,
-                priorityScore: item.total_score || Math.random() * 10,
-                tags: (item.issues || []).slice(0, 3),
-                lastUpdated: lastUpdatedStr
-              }
-            });
-          }
-        });
-
-        setCourses(Array.from(courseMap.values()));
-        setPriorities(prioritiesData);
-        setStats(statsData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-        // Fallback to empty data
-        setCourses([]);
-        setPriorities([]);
-        setStats(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  const getCategoryFromName = (name: string): string => {
-    const nameLower = name.toLowerCase();
-    if (nameLower.includes('ai') || nameLower.includes('artificial')) return 'AI/ML';
-    if (nameLower.includes('leadership') || nameLower.includes('transformative')) return 'Leadership';
-    if (nameLower.includes('design') || nameLower.includes('ux')) return 'Design';
-    if (nameLower.includes('healthcare') || nameLower.includes('health')) return 'Healthcare';
-    if (nameLower.includes('strategic') || nameLower.includes('business')) return 'Business';
-    if (nameLower.includes('customer') || nameLower.includes('experience')) return 'Customer Experience';
-    if (nameLower.includes('sustainability')) return 'Sustainability';
-    return 'Technology';
-  };
-
-  const mapPriorityLevel = (priority: string): 'low' | 'medium' | 'high' | 'critical' => {
-    switch (priority?.toLowerCase()) {
-      case 'urgent': return 'critical';
-      case 'high': return 'high';
-      case 'medium': return 'medium';
-      default: return 'low';
-    }
-  };
-
-  const mapToPriorityLevel = (priority: string): 'urgent' | 'high' | 'medium' | 'low' => {
-    switch (priority?.toLowerCase()) {
-      case 'urgent': 
-      case 'critical': return 'urgent';
-      case 'high': return 'high';
-      case 'medium': return 'medium';
-      default: return 'low';
-    }
-  };
-
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-  };
-
-  const handleSortChange = (newSort: 'rating' | 'date' | 'issues' | 'name') => {
-    setSortBy(newSort);
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading data...</p>
+          <p className="text-muted-foreground">Loading course feedback data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4 max-w-md">
+          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
+          <h2 className="text-xl font-semibold">Connection Error</h2>
+          <p className="text-muted-foreground">{error}</p>
+          <Button onClick={refresh}>Retry Connection</Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header 
-        onUploadClick={() => setIsUploadModalOpen(true)}
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        sortBy={sortBy}
-        onSortChange={handleSortChange}
-      />
-      
-      <div className="flex pt-16">
-        <Sidebar 
-          selectedCategory={selectedCategory}
-          onCategoryChange={handleCategorySelect}
-          courses={courses}
-        />
-        
-        <main className="flex-1 ml-64">
-          <div className="p-4 space-y-4">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <PriorityRecommendations />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
-              {/* Courses Section */}
-              <div className="mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">All Courses</h2>
-                <p className="text-sm text-gray-600">Complete course catalog with feedback analysis</p>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-background">
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <TrendingUp className="h-8 w-8 text-blue-600" />
+              <div>
+                <h1 className="text-2xl font-bold">Course Feedback Intelligence</h1>
+                <p className="text-sm text-muted-foreground">
+                  Explainable priority scoring for course improvements
+                </p>
               </div>
-              
-              <CourseGrid
-                courses={courses}
-              />
-            </motion.div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={refreshDashboard}
+                disabled={isRefreshing}
+              >
+                {isRefreshing ? (
+                  <RefreshCw className="h-4 w-4 animate-spin mr-1" />
+                ) : (
+                  <RefreshCw className="h-4 w-4 mr-1" />
+                )}
+                Refresh
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-80 border-r bg-background h-[calc(100vh-73px)] overflow-y-auto">
+          <div className="p-6 space-y-6">
+            <ScoringControls
+              weights={scoringWeights}
+              onWeightsChange={updateWeights}
+              onRecompute={recomputeScores}
+              onReset={resetWeights}
+              isRecomputing={isRecomputing}
+            />
+            
+            <DataSourceStatusComponent
+              status={dataSourceStatus}
+              onSync={syncDataSource}
+              isSyncing={isSyncing}
+            />
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 h-[calc(100vh-73px)] overflow-y-auto">
+          <div className="p-6 space-y-6">
+            {/* Stats Overview */}
+            <StatsOverview
+              totalRecommendations={stats.total}
+              showStoppers={stats.showStoppers}
+              pending={stats.pending}
+              validated={stats.validated}
+              averageScore={stats.averageScore}
+            />
+
+            {/* Filters */}
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg flex items-center justify-between">
+                  <span>Priority Recommendations</span>
+                  <Badge variant="outline">
+                    {filteredRecommendations.length} of {recommendations.length}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-4 mb-4">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <input
+                      type="text"
+                      placeholder="Search recommendations..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 pr-4 py-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="validated">Validated</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                  </select>
+                </div>
+
+                {/* Recommendations Grid */}
+                {filteredRecommendations.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Filter className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No recommendations match your current filters</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {filteredRecommendations.map((recommendation) => (
+                      <RecommendationCard
+                        key={recommendation.id}
+                        recommendation={recommendation}
+                        onValidate={(rec) => validateRecommendation(rec, 'Validated via dashboard')}
+                      />
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </main>
       </div>
 
-      <UploadModal
-        isOpen={isUploadModalOpen}
-        onClose={() => setIsUploadModalOpen(false)}
+      {/* Toast notifications */}
+      <Toaster 
+        position="bottom-right"
+        richColors
+        closeButton
+        expand
+        visibleToasts={5}
       />
-      
     </div>
   );
 }

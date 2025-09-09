@@ -1,96 +1,90 @@
-/**
- * API Service for Course Feedback Aggregator
- * Connects to FastAPI backend
- */
+import { ScoringWeights, Recommendation, DataSourceStatus } from '../types';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-export interface Feedback {
-  id: string;
-  course_name: string;
-  rating: number;
-  feedback: string;
-  issues: string[];
-  priority: string;
-  source: string;
-  impact_score?: number;
-  urgency_score?: number;
-  effort_score?: number;
-  total_score?: number;
-  students_affected?: number;
-  date?: string;
-}
+class ApiClient {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+    const url = `${API_BASE}${endpoint}`;
+    const config: RequestInit = {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    };
 
-export interface Priority {
-  id: string;
-  course: string;
-  recommendation: string;
-  priority_score: number;
-  impact: number;
-  urgency: number;
-  effort: number;
-  source: string;
-  why: string;
-  students_affected?: number;
-}
-
-export interface Stats {
-  total_courses: number;
-  total_feedback: number;
-  urgent_issues: number;
-  high_priority: number;
-  avg_rating: number;
-  sources: {
-    canvas: number;
-    zoho: number;
-  };
-}
-
-class APIService {
-  async getFeedback(): Promise<Feedback[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/feedback`);
-      if (!response.ok) throw new Error('Failed to fetch feedback');
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching feedback:', error);
-      return [];
+    const response = await fetch(url, config);
+    
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }
+
+    return response.json();
   }
 
-  async getPriorities(): Promise<Priority[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/priorities`);
-      if (!response.ok) throw new Error('Failed to fetch priorities');
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching priorities:', error);
-      return [];
-    }
+  // Priority/Recommendations endpoints
+  async getPriorities(): Promise<Recommendation[]> {
+    return this.request<Recommendation[]>('/api/priorities');
   }
 
-  async getStats(): Promise<Stats | null> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/stats`);
-      if (!response.ok) throw new Error('Failed to fetch stats');
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-      return null;
-    }
+  async recomputePriorities(): Promise<{ message: string }> {
+    return this.request('/api/priorities/recompute', { method: 'POST' });
   }
 
-  async recomputeScores(): Promise<boolean> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/recompute`, {
-        method: 'POST',
-      });
-      return response.ok;
-    } catch (error) {
-      console.error('Error recomputing scores:', error);
-      return false;
-    }
+  async validateRecommendation(id: string, notes: string, validator: string): Promise<{ message: string }> {
+    return this.request(`/api/priorities/${id}/validate`, {
+      method: 'POST',
+      body: JSON.stringify({ notes, validator })
+    });
+  }
+
+  // Weight configuration endpoints
+  async getWeights(): Promise<ScoringWeights> {
+    return this.request<ScoringWeights>('/api/weights');
+  }
+
+  async updateWeights(weights: ScoringWeights): Promise<{ message: string }> {
+    return this.request('/api/weights', {
+      method: 'PUT',
+      body: JSON.stringify(weights)
+    });
+  }
+
+  async resetWeights(): Promise<ScoringWeights> {
+    return this.request<ScoringWeights>('/api/weights/reset', { method: 'POST' });
+  }
+
+  // Data ingestion endpoints
+  async syncCanvas(): Promise<{ message: string; synced_items: number }> {
+    return this.request('/api/ingest/canvas', { method: 'POST' });
+  }
+
+  async syncZoho(): Promise<{ message: string; synced_items: number }> {
+    return this.request('/api/ingest/zoho', { method: 'POST' });
+  }
+
+  // Mock data source status (until backend implements this)
+  async getDataSourceStatus(): Promise<DataSourceStatus> {
+    return {
+      canvas: {
+        connected: true,
+        last_sync: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+        courses_synced: 12,
+        feedback_items: 156
+      },
+      zoho: {
+        connected: true,
+        last_sync: new Date(Date.now() - 600000).toISOString(), // 10 minutes ago
+        surveys_synced: 8,
+        responses: 689
+      }
+    };
+  }
+
+  // Health check
+  async healthCheck(): Promise<{ status: string; timestamp: string }> {
+    return this.request('/health');
   }
 }
 
-export default new APIService();
+export const apiClient = new ApiClient();
