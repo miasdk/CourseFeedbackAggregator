@@ -32,32 +32,27 @@ export function ScoringControls({
     impact: {
       label: "Impact",
       description: "How many students are affected by this issue",
-      color: "text-red-600",
-      icon: "👥"
+      color: "text-red-600"
     },
     urgency: {
       label: "Urgency", 
       description: "How time-critical is this issue",
-      color: "text-orange-600",
-      icon: "⚡"
+      color: "text-orange-600"
     },
     effort: {
       label: "Effort",
       description: "Implementation complexity (lower effort = higher priority)", 
-      color: "text-blue-600",
-      icon: "⚙️"
+      color: "text-blue-600"
     },
     strategic: {
       label: "Strategic",
       description: "Alignment with course learning objectives",
-      color: "text-green-600",
-      icon: "🎯"
+      color: "text-green-600"
     },
     trend: {
       label: "Trend",
       description: "Is this issue getting worse over time",
-      color: "text-purple-600",
-      icon: "📈"
+      color: "text-purple-600"
     }
   };
 
@@ -90,8 +85,7 @@ export function ScoringControls({
             return (
               <div key={factor} className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{config.icon}</span>
+                  <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
                       <Label className="text-sm font-medium">{config.label}</Label>
                       <Tooltip>
@@ -114,7 +108,7 @@ export function ScoringControls({
                 <div className="space-y-2">
                   <Slider
                     value={[weight]}
-                    onValueChange={(value) => handleWeightChange(factor as keyof ScoringWeights, value)}
+                    onValueChange={(value: number[]) => handleWeightChange(factor as keyof ScoringWeights, value)}
                     max={5}
                     min={1}
                     step={1}

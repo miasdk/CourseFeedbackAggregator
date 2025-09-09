@@ -1,6 +1,6 @@
 import { ScoringWeights, Recommendation, DataSourceStatus } from '../types';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
 class ApiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -24,7 +24,13 @@ class ApiClient {
 
   // Priority/Recommendations endpoints
   async getPriorities(): Promise<Recommendation[]> {
-    return this.request<Recommendation[]>('/api/priorities');
+    const response = await this.request<{
+      priorities: Recommendation[];
+      pagination: any;
+      current_weights: any;
+      filters_applied: any;
+    }>('/api/priorities');
+    return response.priorities;
   }
 
   async recomputePriorities(): Promise<{ message: string }> {
@@ -40,7 +46,14 @@ class ApiClient {
 
   // Weight configuration endpoints
   async getWeights(): Promise<ScoringWeights> {
-    return this.request<ScoringWeights>('/api/weights');
+    const response = await this.request<{
+      weights: ScoringWeights;
+      weight_details: any;
+      updated_at: string;
+      updated_by: string;
+      total: number;
+    }>('/api/weights');
+    return response.weights;
   }
 
   async updateWeights(weights: ScoringWeights): Promise<{ message: string }> {

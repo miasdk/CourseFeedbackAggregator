@@ -1,20 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BarChart3, 
-  BookOpen, 
-  FolderOpen, 
-  Brain, 
-  Users, 
-  PieChart, 
-  Heart, 
-  Upload,
-  Settings,
-  Target,
-  MessageSquare,
-  TrendingUp,
-  Database
-} from 'lucide-react';
 import { Course } from '../types';
 
 interface MenuItemProps {
@@ -39,13 +24,13 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
 
   const menuItems: MenuItemProps[] = [
     { 
-      icon: <Target className="w-5 h-5" />, 
+      icon: null, 
       label: 'Priority Queue', 
       active: selectedCategory === 'all',
       onClick: () => onCategoryChange('all')
     },
     { 
-      icon: <MessageSquare className="w-5 h-5" />, 
+      icon: null, 
       label: 'Feedback Sources', 
       count: getCategoryCount('all'),
       active: selectedCategory === 'all',
@@ -55,42 +40,42 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
 
   const categoryItems: MenuItemProps[] = [
     { 
-      icon: <Brain className="w-5 h-5" />, 
+      icon: null, 
       label: 'AI/ML', 
       count: getCategoryCount('AI/ML'),
       active: selectedCategory === 'AI/ML',
       onClick: () => onCategoryChange('AI/ML')
     },
     { 
-      icon: <Users className="w-5 h-5" />, 
+      icon: null, 
       label: 'Leadership', 
       count: getCategoryCount('Leadership'),
       active: selectedCategory === 'Leadership',
       onClick: () => onCategoryChange('Leadership')
     },
     { 
-      icon: <PieChart className="w-5 h-5" />, 
+      icon: null, 
       label: 'Design', 
       count: getCategoryCount('Design'),
       active: selectedCategory === 'Design',
       onClick: () => onCategoryChange('Design')
     },
     { 
-      icon: <Heart className="w-5 h-5" />, 
+      icon: null, 
       label: 'Healthcare', 
       count: getCategoryCount('Healthcare'),
       active: selectedCategory === 'Healthcare',
       onClick: () => onCategoryChange('Healthcare')
     },
     { 
-      icon: <Users className="w-4 h-4" />, 
+      icon: null, 
       label: 'Customer Experience', 
       count: getCategoryCount('Customer Experience'),
       active: selectedCategory === 'Customer Experience',
       onClick: () => onCategoryChange('Customer Experience')
     },
     { 
-      icon: <BookOpen className="w-4 h-4" />, 
+      icon: null, 
       label: 'Technology', 
       count: getCategoryCount('Technology'),
       active: selectedCategory === 'Technology',
@@ -99,8 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
   ];
 
   const recentItems: MenuItemProps[] = [
-    { icon: <Upload className="w-4 h-4" />, label: 'Latest Upload' },
-    { icon: <FolderOpen className="w-4 h-4" />, label: 'Recent Analysis' },
+    { icon: null, label: 'Latest Upload' },
+    { icon: null, label: 'Recent Analysis' },
   ];
 
   return (
@@ -137,12 +122,12 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
           </h3>
           <nav className="space-y-1">
             <MenuItem 
-              icon={<Database className="w-4 h-4" />}
+              icon={null}
               label="Canvas LMS"
               count={127}
             />
             <MenuItem 
-              icon={<TrendingUp className="w-4 h-4" />}
+              icon={null}
               label="Zoho Surveys"
               count={43}
             />
@@ -152,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onCategoryChange, c
         {/* Settings */}
         <div className="mt-8 pt-8 border-t border-apple-200">
           <MenuItem 
-            icon={<Settings className="w-5 h-5" />}
+            icon={null}
             label="Settings"
           />
         </div>
@@ -174,7 +159,6 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, label, count, active = false,
       }`}
     >
       <div className="flex items-center space-x-3">
-        {icon}
         <span className="font-medium">{label}</span>
       </div>
       {count !== undefined && count > 0 && (
