@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { RefreshCw, Database, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { DataSourceStatus } from "../types";
 
 interface DataSourceStatusProps {
@@ -25,11 +24,11 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
     return `${days}d ago`;
   };
 
-  const getStatusIcon = (connected: boolean) => {
+  const getStatusIndicator = (connected: boolean) => {
     return connected ? (
-      <CheckCircle className="h-4 w-4 text-green-500" />
+      <span className="w-2 h-2 bg-green-500 rounded-full inline-block" />
     ) : (
-      <AlertCircle className="h-4 w-4 text-red-500" />
+      <span className="w-2 h-2 bg-red-500 rounded-full inline-block" />
     );
   };
 
@@ -44,8 +43,7 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
   return (
     <Card>
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Database className="h-5 w-5 text-blue-600" />
+        <CardTitle className="text-lg">
           Data Sources
         </CardTitle>
       </CardHeader>
@@ -55,7 +53,7 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {getStatusIcon(status.canvas.connected)}
+              {getStatusIndicator(status.canvas.connected)}
               <span className="font-medium">Canvas LMS</span>
               {getStatusBadge(status.canvas.connected)}
             </div>
@@ -65,20 +63,14 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
               onClick={() => onSync('canvas')}
               disabled={isSyncing.canvas}
             >
-              {isSyncing.canvas ? (
-                <RefreshCw className="h-3 w-3 animate-spin mr-1" />
-              ) : (
-                <RefreshCw className="h-3 w-3 mr-1" />
-              )}
-              Sync
+              {isSyncing.canvas ? "Syncing..." : "Sync"}
             </Button>
           </div>
           
           <div className="text-sm text-muted-foreground space-y-1">
             <div className="flex justify-between">
               <span>Last sync:</span>
-              <span className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />
+              <span>
                 {formatLastSync(status.canvas.last_sync)}
               </span>
             </div>
@@ -98,7 +90,7 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {getStatusIcon(status.zoho.connected)}
+                {getStatusIndicator(status.zoho.connected)}
                 <span className="font-medium">Zoho CRM</span>
                 {getStatusBadge(status.zoho.connected)}
               </div>
@@ -108,20 +100,14 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
                 onClick={() => onSync('zoho')}
                 disabled={isSyncing.zoho}
               >
-                {isSyncing.zoho ? (
-                  <RefreshCw className="h-3 w-3 animate-spin mr-1" />
-                ) : (
-                  <RefreshCw className="h-3 w-3 mr-1" />
-                )}
-                Sync
+                {isSyncing.zoho ? "Syncing..." : "Sync"}
               </Button>
             </div>
             
             <div className="text-sm text-muted-foreground space-y-1">
               <div className="flex justify-between">
                 <span>Last sync:</span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
+                <span>
                   {formatLastSync(status.zoho.last_sync)}
                 </span>
               </div>

@@ -3,7 +3,6 @@ import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Info, RotateCcw, Calculator, TrendingUp } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { ScoringWeights } from "../types";
 
@@ -65,12 +64,11 @@ export function ScoringControls({
     <Card className="w-full">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-blue-600" />
+          <CardTitle className="text-lg">
             Priority Scoring Weights
           </CardTitle>
-          <Button variant="ghost" size="sm" onClick={onReset} className="h-8 w-8 p-0">
-            <RotateCcw className="h-3 w-3" />
+          <Button variant="ghost" size="sm" onClick={onReset}>
+            Reset
           </Button>
         </div>
         <p className="text-sm text-muted-foreground">
@@ -90,7 +88,7 @@ export function ScoringControls({
                       <Label className="text-sm font-medium">{config.label}</Label>
                       <Tooltip>
                         <TooltipTrigger>
-                          <Info className="h-3 w-3 text-muted-foreground hover:text-foreground transition-colors" />
+                          <span className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-help">[?]</span>
                         </TooltipTrigger>
                         <TooltipContent side="right" className="max-w-64">
                           <p className="text-xs">{config.description}</p>
@@ -135,15 +133,9 @@ export function ScoringControls({
             size="sm"
           >
             {isRecomputing ? (
-              <>
-                <Calculator className="h-4 w-4 mr-2 animate-pulse" />
-                Recomputing Scores...
-              </>
+              <>Recomputing Scores...</>
             ) : (
-              <>
-                <Calculator className="h-4 w-4 mr-2" />
-                Apply New Weights
-              </>
+              <>Apply New Weights</>
             )}
           </Button>
           

@@ -1,12 +1,5 @@
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { 
-  Bell, 
-  Settings, 
-  Moon, 
-  Sun,
-  BarChart3
-} from "lucide-react";
 
 interface HeaderNavProps {
   onToggleTheme?: () => void;
@@ -30,11 +23,8 @@ export function HeaderNav({ onToggleTheme, isDarkMode = false }: HeaderNavProps)
         {/* Brand Section */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center">
-              <BarChart3 className="h-4 w-4 text-primary-foreground" />
-            </div>
             <div>
-              <h1 className="text-base font-medium">Course Feedback Intelligence</h1>
+              <h1 className="text-lg font-semibold">Course Feedback Intelligence</h1>
             </div>
           </div>
         </div>
@@ -43,16 +33,16 @@ export function HeaderNav({ onToggleTheme, isDarkMode = false }: HeaderNavProps)
         <div className="flex items-center gap-2">
           {/* Theme toggle */}
           <Button variant="ghost" size="sm" onClick={onToggleTheme}>
-            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {isDarkMode ? "Light" : "Dark"}
           </Button>
 
           {/* Notifications */}
           <Button variant="ghost" size="sm" className="relative" onClick={handleNotificationClick}>
-            <Bell className="h-4 w-4" />
+            Notifications
             {unreadNotifications > 0 && (
               <Badge 
                 variant="destructive" 
-                className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 text-xs flex items-center justify-center"
+                className="ml-1 h-4 px-1 text-xs"
               >
                 {unreadNotifications}
               </Badge>
@@ -61,7 +51,7 @@ export function HeaderNav({ onToggleTheme, isDarkMode = false }: HeaderNavProps)
 
           {/* Settings */}
           <Button variant="ghost" size="sm" onClick={handleSettingsClick}>
-            <Settings className="h-4 w-4" />
+            Settings
           </Button>
         </div>
       </div>
