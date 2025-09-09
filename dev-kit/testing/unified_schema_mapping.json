@@ -1,0 +1,470 @@
+{
+  "unified_course_feedback_schema": {
+    "version": "1.0",
+    "created": "2025-09-08",
+    "description": "Unified schema for course feedback from Canvas LMS and Zoho CRM",
+    "core_fields": {
+      "course_id": {
+        "description": "Unique identifier for the course",
+        "type": "string",
+        "required": true,
+        "example": "canvas_847"
+      },
+      "course_name": {
+        "description": "Human readable course name",
+        "type": "string", 
+        "required": true,
+        "example": "Strategic AI Program at University of North Georgia"
+      },
+      "student_id": {
+        "description": "Unique identifier for student/participant",
+        "type": "string",
+        "required": false,
+        "example": "student_12345"
+      },
+      "student_email": {
+        "description": "Student email address",
+        "type": "string",
+        "required": false,
+        "example": "student@company.com"
+      },
+      "student_name": {
+        "description": "Full name of student/participant",
+        "type": "string",
+        "required": false,
+        "example": "John Smith"
+      },
+      "feedback_text": {
+        "description": "Open-ended feedback comments",
+        "type": "text",
+        "required": false,
+        "example": "Great content, needs more examples"
+      },
+      "rating": {
+        "description": "Numerical rating (1-10 scale normalized)",
+        "type": "float",
+        "required": false,
+        "range": "1.0-10.0",
+        "example": 8.5
+      },
+      "feedback_date": {
+        "description": "When feedback was submitted",
+        "type": "datetime",
+        "required": true,
+        "format": "ISO 8601",
+        "example": "2025-09-08T15:30:00Z"
+      },
+      "source_system": {
+        "description": "Which system the feedback came from",
+        "type": "string",
+        "required": true,
+        "enum": ["Canvas LMS", "Zoho CRM"],
+        "example": "Canvas LMS"
+      },
+      "source_module": {
+        "description": "Specific module/section within source system",
+        "type": "string",
+        "required": true,
+        "example": "course_evaluations"
+      },
+      "source_id": {
+        "description": "Original ID in source system",
+        "type": "string",
+        "required": true,
+        "example": "847_submission_123"
+      },
+      "priority": {
+        "description": "Calculated priority score (1-10)",
+        "type": "float",
+        "required": false,
+        "range": "1.0-10.0",
+        "example": 7.2
+      },
+      "issue_category": {
+        "description": "Categorized type of issue/feedback",
+        "type": "string",
+        "required": false,
+        "enum": ["content", "instructor", "technical", "logistics", "general"],
+        "example": "content"
+      },
+      "severity": {
+        "description": "Impact severity level",
+        "type": "string", 
+        "required": false,
+        "enum": ["low", "medium", "high", "critical"],
+        "example": "high"
+      },
+      "is_actionable": {
+        "description": "Whether feedback requires action",
+        "type": "boolean",
+        "required": false,
+        "example": true
+      },
+      "tags": {
+        "description": "Array of relevant tags",
+        "type": "array",
+        "required": false,
+        "example": ["video-quality", "engagement", "quick-win"]
+      }
+    }
+  },
+  "canvas_lms_mapping": {
+    "description": "Mapping from Canvas LMS API responses to unified schema",
+    "api_version": "v1",
+    "base_url": "https://executiveeducation.instructure.com/api/v1",
+    "endpoints": {
+      "courses": "/courses",
+      "analytics": "/courses/{course_id}/analytics",
+      "assignments": "/courses/{course_id}/assignments",
+      "quizzes": "/courses/{course_id}/quizzes",
+      "discussion_topics": "/courses/{course_id}/discussion_topics",
+      "submissions": "/courses/{course_id}/assignments/{assignment_id}/submissions"
+    },
+    "field_mappings": {
+      "course_id": {
+        "source_field": "id",
+        "transform": "canvas_{id}",
+        "example": "canvas_847"
+      },
+      "course_name": {
+        "source_field": "name",
+        "transform": "direct",
+        "example": "IT Leadership Course"
+      },
+      "student_id": {
+        "source_field": "user_id",
+        "transform": "canvas_user_{user_id}",
+        "example": "canvas_user_12345"
+      },
+      "student_email": {
+        "source_field": "user.email",
+        "transform": "direct",
+        "notes": "Available via Users API"
+      },
+      "student_name": {
+        "source_field": "user.name",
+        "transform": "direct",
+        "notes": "Available via Users API"
+      },
+      "feedback_text": {
+        "source_fields": [
+          "assignments.submissions.body",
+          "discussion_topics.entries.message",
+          "quizzes.quiz_submissions.quiz_submission_questions.answer"
+        ],
+        "transform": "concatenate_with_context",
+        "notes": "Multiple sources of text feedback"
+      },
+      "rating": {
+        "source_fields": [
+          "assignments.submissions.score",
+          "quizzes.quiz_submissions.score"
+        ],
+        "transform": "normalize_to_10_scale",
+        "notes": "Convert assignment scores to 1-10 rating"
+      },
+      "feedback_date": {
+        "source_field": "submitted_at",
+        "transform": "iso_8601",
+        "example": "2025-09-05T14:30:00Z"
+      },
+      "source_system": {
+        "value": "Canvas LMS",
+        "static": true
+      },
+      "source_module": {
+        "source_field": "submission_type",
+        "transform": "direct",
+        "example": "assignment_submission"
+      },
+      "source_id": {
+        "source_field": "id",
+        "transform": "canvas_{course_id}_{type}_{id}",
+        "example": "canvas_847_submission_456"
+      }
+    },
+    "data_sources": {
+      "assignments": {
+        "description": "Course assignments and submissions",
+        "feedback_types": ["text_submission", "file_upload_comments", "rubric_assessments"]
+      },
+      "quizzes": {
+        "description": "Quiz responses and feedback",
+        "feedback_types": ["open_ended_responses", "essay_questions"]
+      },
+      "discussions": {
+        "description": "Discussion forum posts",
+        "feedback_types": ["discussion_posts", "replies"]
+      },
+      "course_evaluations": {
+        "description": "End-of-course evaluations",
+        "feedback_types": ["evaluation_responses"]
+      }
+    }
+  },
+  "zoho_crm_mapping": {
+    "description": "Mapping from Zoho CRM API responses to unified schema",
+    "api_version": "v2",
+    "base_url": "https://www.zohoapis.com/crm/v2",
+    "accessible_modules": ["Contacts", "Deals", "Accounts", "Leads"],
+    "modules": {
+      "Contacts": {
+        "description": "Student/participant contact records",
+        "field_mappings": {
+          "course_name": {
+            "source_fields": [
+              "Official_Program_Name",
+              "Program_Name",
+              "Programs"
+            ],
+            "transform": "first_non_null",
+            "example": "Customer Experience Certificate Program at Seton Hall University"
+          },
+          "student_email": {
+            "source_field": "Email",
+            "transform": "direct"
+          },
+          "student_name": {
+            "source_field": "Full_Name",
+            "transform": "direct"
+          },
+          "rating": {
+            "source_fields": [
+              "Visitor_Score",
+              "Board_Member_Rating"
+            ],
+            "transform": "first_non_null_normalize",
+            "notes": "Convert to 1-10 scale if needed"
+          },
+          "feedback_date": {
+            "source_field": "Modified_Time",
+            "transform": "iso_8601"
+          },
+          "course_metadata": {
+            "source_fields": [
+              "Type_of_Program",
+              "Program_Location",
+              "Program_Date"
+            ],
+            "transform": "metadata_object"
+          }
+        },
+        "feedback_fields": [
+          "Visitor_Score",
+          "Board_Member_Rating", 
+          "IC_Reviewed"
+        ],
+        "course_fields": [
+          "Official_Program_Name",
+          "Program_Name",
+          "Programs",
+          "Type_of_Program",
+          "Program_Location",
+          "Program_Date",
+          "Course_Completed"
+        ]
+      },
+      "Deals": {
+        "description": "Course enrollments and program deals",
+        "field_mappings": {
+          "course_name": {
+            "source_fields": [
+              "Course_Name",
+              "Program",
+              "Custom_Program_Group"
+            ],
+            "transform": "first_non_null",
+            "example": "UNG ORPO"
+          },
+          "feedback_text": {
+            "source_fields": [
+              "Feedback_on_the_Content",
+              "Feedback_on_the_Faculty", 
+              "Feedback_on_the_Activities_and_Exercises",
+              "Houston_Review"
+            ],
+            "transform": "concatenate_with_labels",
+            "example": "Content: Great material | Faculty: Excellent instructor"
+          },
+          "rating": {
+            "source_field": "Board_Member_Rating",
+            "transform": "normalize_to_10_scale"
+          },
+          "feedback_date": {
+            "source_field": "Modified_Time",
+            "transform": "iso_8601"
+          },
+          "course_metadata": {
+            "source_fields": [
+              "Course_Term",
+              "Course_Number",
+              "Course_Completed"
+            ],
+            "transform": "metadata_object"
+          }
+        },
+        "feedback_fields": [
+          "Feedback_on_the_Activities_and_Exercises",
+          "Board_Member_Rating",
+          "Instructor_Review_Process", 
+          "Completed_Course_Review",
+          "Houston_Review",
+          "Feedback_on_the_Content",
+          "Feedback_on_the_Faculty"
+        ],
+        "course_fields": [
+          "Course_Name",
+          "Program",
+          "Course_Number",
+          "Course_Term",
+          "Custom_Program_Group",
+          "Workshop",
+          "Course_Completed"
+        ]
+      },
+      "Accounts": {
+        "description": "Organizations/companies taking courses",
+        "field_mappings": {
+          "course_name": {
+            "source_field": "ProgramName",
+            "transform": "direct"
+          },
+          "rating": {
+            "source_field": "Rating",
+            "transform": "normalize_to_10_scale"
+          },
+          "organization": {
+            "source_field": "Account_Name",
+            "transform": "direct",
+            "example": "Invest Newark"
+          }
+        },
+        "feedback_fields": ["Rating"],
+        "course_fields": [
+          "Course_URL",
+          "Course_Number", 
+          "ProgramName",
+          "Operational_Readiness_Program"
+        ]
+      },
+      "Leads": {
+        "description": "Prospective students/participants",
+        "field_mappings": {
+          "course_name": {
+            "source_field": "Program",
+            "transform": "direct"
+          },
+          "student_email": {
+            "source_field": "Email",
+            "transform": "direct"
+          },
+          "student_name": {
+            "source_field": "Full_Name",
+            "transform": "direct"
+          },
+          "rating": {
+            "source_field": "Visitor_Score",
+            "transform": "normalize_to_10_scale"
+          }
+        },
+        "feedback_fields": ["Visitor_Score"],
+        "course_fields": [
+          "Program",
+          "Class_Type_Qualifier",
+          "Class"
+        ]
+      }
+    },
+    "common_fields": {
+      "source_system": {
+        "value": "Zoho CRM",
+        "static": true
+      },
+      "source_id": {
+        "source_field": "id",
+        "transform": "zoho_{module}_{id}",
+        "example": "zoho_contacts_123456"
+      }
+    }
+  },
+  "priority_scoring_factors": {
+    "description": "Factors used to calculate feedback priority scores",
+    "algorithm_version": "1.0",
+    "factors": {
+      "impact": {
+        "weight": 0.3,
+        "description": "Number of students affected and severity",
+        "calculation": "affected_students * severity_multiplier",
+        "range": "1.0-10.0"
+      },
+      "urgency": {
+        "weight": 0.25,
+        "description": "Time sensitivity based on course timeline",
+        "calculation": "course_timeline_factor * feedback_recency",
+        "range": "1.0-10.0"
+      },
+      "effort": {
+        "weight": 0.2,
+        "description": "Estimated effort to address (inverse - quick wins score higher)",
+        "calculation": "10.0 - estimated_effort_score",
+        "range": "1.0-10.0"
+      },
+      "strategic": {
+        "weight": 0.15,
+        "description": "Alignment with institutional priorities",
+        "calculation": "strategic_alignment_score",
+        "range": "1.0-10.0"
+      },
+      "trend": {
+        "weight": 0.1,
+        "description": "Issue trajectory (getting worse/better)",
+        "calculation": "trend_analysis_score",
+        "range": "1.0-10.0"
+      }
+    },
+    "final_score": "weighted_sum_of_factors",
+    "thresholds": {
+      "critical": 8.5,
+      "high": 6.5,
+      "medium": 4.5,
+      "low": 0.0
+    }
+  },
+  "data_quality_indicators": {
+    "description": "Indicators of data completeness and quality",
+    "metrics": {
+      "completeness": {
+        "required_fields_filled": "percentage",
+        "student_identification": "email_or_name_present"
+      },
+      "recency": {
+        "feedback_age": "days_since_submission",
+        "course_activity": "days_since_last_activity"
+      },
+      "reliability": {
+        "source_system_health": "api_response_success_rate",
+        "data_consistency": "cross_system_matching_rate"
+      }
+    }
+  },
+  "integration_recommendations": {
+    "canvas_lms": {
+      "primary_endpoints": [
+        "/courses/{course_id}/analytics/assignments",
+        "/courses/{course_id}/discussion_topics",
+        "/courses/{course_id}/quizzes"
+      ],
+      "polling_frequency": "daily",
+      "data_volume_estimate": "medium",
+      "implementation_priority": "high"
+    },
+    "zoho_crm": {
+      "primary_modules": ["Contacts", "Deals"],
+      "secondary_modules": ["Accounts", "Leads"],
+      "polling_frequency": "weekly", 
+      "data_volume_estimate": "low",
+      "implementation_priority": "medium",
+      "notes": "Most feedback fields currently empty, but course data is rich"
+    }
+  }
+}

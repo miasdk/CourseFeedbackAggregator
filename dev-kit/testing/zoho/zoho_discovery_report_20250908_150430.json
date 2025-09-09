@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-09-08T15:04:28.298105",
+  "api_version": "v8",
+  "modules_analyzed": [],
+  "feedback_modules": [],
+  "recommended_integration": {},
+  "field_mappings": {},
+  "sample_data": {},
+  "error": "Could not retrieve modules"
+}

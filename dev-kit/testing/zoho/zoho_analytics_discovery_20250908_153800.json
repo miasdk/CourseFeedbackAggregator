@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-09-08T15:37:56.159077",
+  "api_connection": false,
+  "workspaces_found": 0,
+  "course_workspaces": [],
+  "workspace_details": {},
+  "sample_data": {},
+  "existing_analytics": {},
+  "recommendations": [],
+  "error": "Could not connect to Analytics API - check scopes"
+}

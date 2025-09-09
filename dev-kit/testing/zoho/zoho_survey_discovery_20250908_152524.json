@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-09-08T15:25:24.116347",
+  "api_connection": false,
+  "surveys_found": 0,
+  "course_surveys": [],
+  "survey_details": {},
+  "response_data": {},
+  "recommendations": [],
+  "error": "Could not connect to Survey API - check scopes"
+}
