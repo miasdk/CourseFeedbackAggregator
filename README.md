@@ -316,7 +316,7 @@ CourseFeedbackAggregator/
 └── README.md                     # This file
 ```
 
-## 🔧 Development Setup
+## Development Setup
 
 ### Prerequisites
 - Python 3.9+
@@ -382,3 +382,4 @@ npm start
 **Status**: Core backend foundation with priority tuning system ready for development  
 
 **Next Phase**: Implement scoring engine and API endpoints
+
