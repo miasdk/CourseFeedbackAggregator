@@ -4,11 +4,11 @@
 
 A comprehensive platform that unifies course feedback from Canvas LMS and Zoho surveys into a single database with intelligent 5-point prioritization scoring. The system provides explainable recommendations for course improvements with full traceability back to original feedback sources.
 
-## 🎯 Mission Statement
+## Mission Statement
 
 Build a single, explainable prioritization system that pulls course feedback from Canvas and Zoho into one database, scores what to "fix" first using a 5-point scale, and shows the "why" behind each recommendation in a live dashboard.
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -43,7 +43,7 @@ Build a single, explainable prioritization system that pulls course feedback fro
           └─────────────────────────────────────────────┘
 ```
 
-## 🎛️ Priority Tuning System
+## Priority Tuning System
 
 ### **Dynamic Weight Configuration**
 The system allows administrators to tune priority calculations in real-time based on their current context and institutional needs.
@@ -107,7 +107,7 @@ Result: Simple fixes that make students happy get prioritized
 4. **Recompute Scores**: Save new weights and apply to all recommendations
 5. **Review Changes**: See how the priority list reordered
 
-## 📊 Database Schema & ERD
+## Database Schema & ERD
 
 ### Core Tables
 
@@ -209,7 +209,7 @@ CREATE TABLE reviews (
                           └─────────────┘
 ```
 
-## 🔄 Data Flow Process
+## Data Flow Process
 
 ### 1. **Data Ingestion**
 ```python
@@ -286,7 +286,7 @@ PRIORITY_LEVELS = {
 - **Canvas LMS API**: Course evaluations, discussions, assignments
 - **Zoho CRM API**: Survey responses, course ratings
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 CourseFeedbackAggregator/
@@ -344,7 +344,7 @@ npm install
 npm start
 ```
 
-## 📈 API Endpoints
+## API Endpoints
 
 ### Core Endpoints
 - `GET /health` - System health check
@@ -358,7 +358,7 @@ npm start
 - `PUT /admin/weights` - Update scoring weights
 - `GET /admin/debug/{priority_id}` - Debug priority calculation
 
-## 🎯 Success Metrics
+## Success Metrics
 
 - [ ] Dashboard runs on real Canvas + Zoho data
 - [ ] 5-point scoring system with tunable weights via UI
@@ -368,7 +368,7 @@ npm start
 - [ ] Real-time weight adjustment with instant priority reordering
 - [ ] Production deployment with monitoring
 
-## 🔐 Security & Privacy
+## Security & Privacy
 
 - API tokens stored securely in backend environment only
 - Student PII handling with anonymization options
@@ -380,4 +380,5 @@ npm start
 
 **Last Updated**: September 9, 2025  
 **Status**: Core backend foundation with priority tuning system ready for development  
+
 **Next Phase**: Implement scoring engine and API endpoints
