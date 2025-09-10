@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 import { ApplicationLayout } from './components/ApplicationLayout';
 import { RecommendationsList } from './components/RecommendationsList';
 import { DashboardOverview } from './components/DashboardOverview';
+import MockModeIndicator from './components/MockModeIndicator';
 import { useRecommendations } from './hooks/useRecommendations';
 import { useDataSync } from './hooks/useDataSync';
 
@@ -91,6 +92,9 @@ function App() {
           onValidate={handleValidateRecommendation}
         />
       </ApplicationLayout>
+
+      {/* Mock Mode Indicator */}
+      <MockModeIndicator />
 
       {/* Global Toast Notifications */}
       <Toaster 

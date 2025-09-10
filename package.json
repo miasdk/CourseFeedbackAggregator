@@ -1,0 +1,16 @@
+{
+  "name": "course-feedback-aggregator",
+  "version": "1.0.0",
+  "description": "Course Feedback Aggregation & Priority Intelligence System",
+  "scripts": {
+    "dev": "./scripts/switch-env.sh dev",
+    "prod": "./scripts/switch-env.sh prod",
+    "build": "./scripts/switch-env.sh prod",
+    "status": "./scripts/switch-env.sh status",
+    "switch:dev": "./scripts/dev.sh",
+    "switch:prod": "./scripts/prod.sh"
+  },
+  "keywords": ["course", "feedback", "analytics", "canvas", "zoho"],
+  "author": "Course Feedback Team",
+  "license": "MIT"
+}
