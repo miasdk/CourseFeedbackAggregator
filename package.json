@@ -10,7 +10,16 @@
     "switch:dev": "./scripts/dev.sh",
     "switch:prod": "./scripts/prod.sh"
   },
-  "keywords": ["course", "feedback", "analytics", "canvas", "zoho"],
+  "keywords": [
+    "course",
+    "feedback",
+    "analytics",
+    "canvas",
+    "zoho"
+  ],
   "author": "Course Feedback Team",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4"
+  }
 }

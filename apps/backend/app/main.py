@@ -5,8 +5,8 @@ import uvicorn
 from datetime import datetime
 import os
 
-from .database import create_tables
-from .config import settings
+from .config.database import create_tables
+from .config.config import settings
 from .api.feedback import router as feedback_router
 from .api.priorities import router as priorities_router
 from .api.ingest import router as ingest_router
