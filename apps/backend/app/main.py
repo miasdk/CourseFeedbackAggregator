@@ -5,7 +5,7 @@ import uvicorn
 from datetime import datetime
 import os
 
-from .config.database import create_tables
+from .config.database import init_database
 from .config.config import settings
 from .api.feedback import router as feedback_router
 from .api.priorities import router as priorities_router
@@ -28,10 +28,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize database on startup
+# Initialize database with seeding on startup
 @app.on_event("startup")
 async def startup_event():
-    await create_tables()
+    await init_database(seed_data=True)
 
 # Include API routers
 app.include_router(feedback_router, prefix="/api", tags=["feedback"])

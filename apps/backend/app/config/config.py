@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic_settings import BaseSettings
 
 # Find the .env file in the backend root directory
-backend_root = Path(__file__).parent.parent.parent.parent  # Go up to apps/backend/
+backend_root = Path(__file__).parent.parent.parent  # Go up to apps/backend/
 env_file = backend_root / ".env"
 
 class Settings(BaseSettings):
