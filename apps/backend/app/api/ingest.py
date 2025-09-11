@@ -41,7 +41,7 @@ async def ingest_zoho_program(
 async def get_ingestion_status(db: AsyncSession = Depends(get_db)) -> Dict[str, Any]:
     """Get current ingestion status and statistics."""
     from sqlalchemy import select, func
-    from ..config.database import Feedback, Course
+    from ..models import Feedback, Course
     
     # Count feedback by source
     feedback_query = select(

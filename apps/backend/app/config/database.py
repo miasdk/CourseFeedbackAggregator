@@ -1,116 +1,12 @@
 import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase, relationship
-from sqlalchemy import Column, Integer, String, Float, Text, DateTime, Boolean, JSON, ForeignKey, text, select
+from sqlalchemy import text, select, func
 from datetime import datetime
 from typing import Optional, List
 from .config import settings
 
-class Base(DeclarativeBase):
-    pass
-
-class Feedback(Base):
-    __tablename__ = "feedback"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    course_id = Column(String(50), ForeignKey('courses.course_id'), index=True, nullable=False)
-    course_name = Column(String(255), nullable=False)
-    student_email = Column(String(255))
-    student_name = Column(String(255))
-    feedback_text = Column(Text)
-    rating = Column(Float)  # 1-5 scale normalized
-    severity = Column(String(20))  # critical/high/medium/low
-    source = Column(String(10), nullable=False, index=True)  # "canvas" or "zoho"
-    source_id = Column(String(100))  # Original ID for provenance
-    created_at = Column(DateTime, default=datetime.utcnow)
-    last_modified = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    is_active = Column(Boolean, default=True)
-    
-    # Relationship back to course
-    course = relationship("Course", back_populates="feedback")
-
-    def __repr__(self):
-        return f"<Feedback(course_id='{self.course_id}', source='{self.source}', rating={self.rating})>"
-
-class Priority(Base):
-    __tablename__ = "priorities"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    course_id = Column(String(50), ForeignKey('courses.course_id'), nullable=False, index=True)
-    issue_summary = Column(Text, nullable=False)
-    priority_score = Column(Integer, nullable=False)  # 1-5 scale
-    impact_score = Column(Float, nullable=False)  # 1-5
-    urgency_score = Column(Float, nullable=False)  # 1-5
-    effort_score = Column(Float, nullable=False)  # 1-5
-    strategic_score = Column(Float, default=3.0)  # 1-5
-    trend_score = Column(Float, default=3.0)  # 1-5
-    students_affected = Column(Integer, default=0)
-    feedback_ids = Column(JSON)  # Array of contributing feedback IDs
-    evidence = Column(JSON)  # Student quotes and source links
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    # Relationships
-    course = relationship("Course", back_populates="priorities")
-    reviews = relationship("Review", back_populates="priority", cascade="all, delete-orphan")
-
-    def __repr__(self):
-        return f"<Priority(course_id='{self.course_id}', score={self.priority_score}, students={self.students_affected})>"
-
-class WeightConfig(Base):
-    __tablename__ = "weight_configs"
-    
-    id = Column(Integer, primary_key=True)
-    impact_weight = Column(Float, default=0.40, nullable=False)  # Student impact focus
-    urgency_weight = Column(Float, default=0.35, nullable=False)  # Time-sensitive issues
-    effort_weight = Column(Float, default=0.25, nullable=False)  # Quick wins preference
-    strategic_weight = Column(Float, default=0.15, nullable=False)  # Course goal alignment
-    trend_weight = Column(Float, default=0.10, nullable=False)  # Issue trajectory
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    updated_by = Column(String(255))  # Admin who changed weights
-    is_active = Column(Boolean, default=True)  # Only one active config at a time
-
-    def __repr__(self):
-        return f"<WeightConfig(impact={self.impact_weight}, urgency={self.urgency_weight}, effort={self.effort_weight})>"
-
-class Review(Base):
-    __tablename__ = "reviews"
-    
-    id = Column(Integer, primary_key=True)
-    priority_id = Column(Integer, ForeignKey('priorities.id'), nullable=False)
-    reviewer_name = Column(String(255), nullable=False)
-    validated = Column(Boolean, default=False)
-    action_taken = Column(String(50))  # "implemented", "rejected", "deferred"
-    notes = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    
-    # Relationship back to priority
-    priority = relationship("Priority", back_populates="reviews")
-
-    def __repr__(self):
-        return f"<Review(priority_id={self.priority_id}, validated={self.validated}, action='{self.action_taken}')>"
-
-class Course(Base):
-    __tablename__ = "courses"
-    
-    course_id = Column(String(50), primary_key=True, index=True)  # "canvas_847", "zoho_ai_program"
-    course_name = Column(String(255), nullable=False)
-    instructor_name = Column(String(255))
-    canvas_id = Column(String(100), unique=True, index=True)
-    zoho_program_id = Column(String(100), unique=True, index=True)
-    start_date = Column(DateTime)
-    end_date = Column(DateTime)
-    status = Column(String(20), default='active')  # active/completed/archived
-    course_metadata = Column(JSON)  # Additional course info
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    # Relationships
-    feedback = relationship("Feedback", back_populates="course")
-    priorities = relationship("Priority", back_populates="course")
-
-    def __repr__(self):
-        return f"<Course(course_id='{self.course_id}', name='{self.course_name}', status='{self.status}')>"
+# Import all models from models directory
+from ..models import Base, Course, Feedback, Priority, WeightConfig, Review
 
 # Convert postgresql:// to postgresql+asyncpg:// for async support
 if settings.database_url:

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
 from .base_controller import BaseController
-from ..config.database import WeightConfig
+from ..models import WeightConfig
 
 
 class WeightController(BaseController):

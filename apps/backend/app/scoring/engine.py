@@ -5,7 +5,7 @@ from collections import Counter
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
-from ..config.database import Feedback, Priority, WeightConfig
+from ..models import Feedback, Priority, WeightConfig
 from ..config.config import settings
 
 class PriorityScoring:

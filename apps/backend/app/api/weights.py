@@ -6,7 +6,8 @@ from typing import Optional
 import logging
 from datetime import datetime
 
-from ..config.database import get_db, WeightConfig, get_active_weights
+from ..config.database import get_db, get_active_weights
+from ..models import WeightConfig
 from ..config.config import settings
 
 logger = logging.getLogger(__name__)

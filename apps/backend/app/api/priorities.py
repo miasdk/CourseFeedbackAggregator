@@ -4,7 +4,8 @@ from sqlalchemy import select, func, delete
 from typing import List, Optional
 import logging
 
-from ..config.database import get_db, Priority, WeightConfig, get_active_weights
+from ..config.database import get_db, get_active_weights
+from ..models import Priority, WeightConfig
 from ..scoring.engine import PriorityScoring, group_similar_feedback, generate_issue_summary
 from ..config.config import settings
 

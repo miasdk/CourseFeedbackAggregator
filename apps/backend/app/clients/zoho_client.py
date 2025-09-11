@@ -7,7 +7,7 @@ import json
 import re
 
 from ..config.config import settings
-from ..config.database import Feedback
+from ..models import Feedback
 
 logger = logging.getLogger(__name__)
 

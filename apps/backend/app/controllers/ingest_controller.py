@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .base_controller import BaseController
 from .feedback_controller import FeedbackController  
 from .priority_controller import PriorityController
-from ..config.database import Course
+from ..models import Course
 from ..config.config import settings
 
 

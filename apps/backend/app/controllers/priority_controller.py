@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 
 from .base_controller import BaseController
-from ..config.database import Priority, Feedback, WeightConfig
+from ..models import Priority, Feedback, WeightConfig
 
 
 class PriorityController(BaseController):
