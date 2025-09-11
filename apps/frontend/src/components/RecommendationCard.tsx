@@ -1,33 +1,32 @@
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { Eye, CheckCircle, AlertTriangle, Users, Clock } from "lucide-react";
+import { Eye, CheckCircle, AlertTriangle, Users, Clock, MessageSquare } from "lucide-react";
 import { Recommendation } from "../types";
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
   onViewDetails?: (recommendation: Recommendation) => void;
+  onViewComments?: (recommendation: Recommendation) => void;
   onValidate?: (recommendation: Recommendation) => void;
 }
 
 export function RecommendationCard({ 
   recommendation, 
   onViewDetails,
+  onViewComments,
   onValidate 
 }: RecommendationCardProps) {
   
   const getPriorityColor = (score: number) => {
-    if (score >= 5) return "bg-red-500 text-white";
-    if (score >= 4) return "bg-orange-500 text-white";
-    if (score >= 3) return "bg-yellow-500 text-black";
-    return "bg-green-500 text-white";
+    return "bg-slate-100 text-slate-700 border border-slate-200";
   };
 
   const getPriorityLabel = (score: number) => {
-    if (score >= 5) return "CRITICAL";
-    if (score >= 4) return "HIGH";
-    if (score >= 3) return "MEDIUM";
-    return "LOW";
+    if (score >= 5) return "Critical";
+    if (score >= 4) return "High";
+    if (score >= 3) return "Medium";
+    return "Low";
   };
 
   const getStatusColor = (status: string) => {
@@ -46,7 +45,7 @@ export function RecommendationCard({
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Badge className={`${getPriorityColor(recommendation.priority_score)} text-xs font-bold`}>
-                {getPriorityLabel(recommendation.priority_score)} {recommendation.priority_score}/5
+                {getPriorityLabel(recommendation.priority_score)} {recommendation.priority_score}
               </Badge>
               {recommendation.is_show_stopper && (
                 <Badge variant="destructive" className="text-xs">
@@ -54,9 +53,6 @@ export function RecommendationCard({
                   SHOW STOPPER
                 </Badge>
               )}
-              <Badge className={getStatusColor(recommendation.status)} variant="secondary">
-                {recommendation.status.toUpperCase()}
-              </Badge>
             </div>
             <h3 className="font-semibold text-sm leading-tight mb-1">
               {recommendation.title}
@@ -84,43 +80,20 @@ export function RecommendationCard({
           </div>
         </div>
 
-        {/* Score breakdown */}
-        <div className="grid grid-cols-5 gap-2 mb-4 text-xs">
-          <div className="text-center">
-            <div className="font-medium text-red-600">{recommendation.impact_score}</div>
-            <div className="text-muted-foreground">Impact</div>
-          </div>
-          <div className="text-center">
-            <div className="font-medium text-orange-600">{recommendation.urgency_score}</div>
-            <div className="text-muted-foreground">Urgency</div>
-          </div>
-          <div className="text-center">
-            <div className="font-medium text-blue-600">{recommendation.effort_score}</div>
-            <div className="text-muted-foreground">Effort</div>
-          </div>
-          <div className="text-center">
-            <div className="font-medium text-green-600">{recommendation.strategic_score}</div>
-            <div className="text-muted-foreground">Strategic</div>
-          </div>
-          <div className="text-center">
-            <div className="font-medium text-purple-600">{recommendation.trend_score}</div>
-            <div className="text-muted-foreground">Trend</div>
-          </div>
-        </div>
         
         <div className="flex gap-2">
-          {onViewDetails && (
+          {onViewComments && (
             <Button 
               variant="outline" 
               size="sm" 
-              onClick={() => onViewDetails(recommendation)}
+              onClick={() => onViewComments(recommendation)}
               className="flex-1"
             >
-              <Eye className="h-3 w-3 mr-1" />
-              View Details
+              <MessageSquare className="h-3 w-3 mr-1" />
+              Comments
             </Button>
           )}
-          {onValidate && recommendation.status === 'pending' && (
+          {onValidate && (
             <Button 
               variant="default" 
               size="sm" 

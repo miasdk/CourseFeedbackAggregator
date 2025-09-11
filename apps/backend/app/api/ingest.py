@@ -37,6 +37,38 @@ async def ingest_zoho_program(
     
     return result
 
+@router.post("/ingest/canvas")
+async def sync_canvas_data(db: AsyncSession = Depends(get_db)) -> Dict[str, Any]:
+    """Sync all Canvas course data and feedback."""
+    from ..controllers.course_controller import CourseController
+    
+    controller = CourseController()
+    result = await controller.sync_canvas_courses(db)
+    
+    if not result.get('success'):
+        raise HTTPException(status_code=500, detail=result.get('error'))
+    
+    return {
+        "message": f"Canvas sync completed successfully",
+        "synced_items": result.get('courses_synced', 0)
+    }
+
+@router.post("/ingest/zoho")
+async def sync_zoho_data(db: AsyncSession = Depends(get_db)) -> Dict[str, Any]:
+    """Sync all Zoho survey data and programs."""
+    from ..controllers.course_controller import CourseController
+    
+    controller = CourseController()
+    result = await controller.sync_zoho_surveys_and_programs(db)
+    
+    if not result.get('success'):
+        raise HTTPException(status_code=500, detail=result.get('error'))
+    
+    return {
+        "message": f"Zoho sync completed successfully",
+        "synced_items": result.get('programs_synced', 0)
+    }
+
 @router.get("/ingest/status")
 async def get_ingestion_status(db: AsyncSession = Depends(get_db)) -> Dict[str, Any]:
     """Get current ingestion status and statistics."""

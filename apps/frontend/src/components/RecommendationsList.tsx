@@ -7,6 +7,7 @@ import type { Recommendation } from "../hooks/useRecommendations";
 interface RecommendationsListProps {
   recommendations: Recommendation[];
   onViewDetails: (recommendation: Recommendation) => void;
+  onViewComments?: (recommendation: Recommendation) => void;
   onValidate: (recommendation: Recommendation) => void;
   hasActiveFilters?: boolean;
   onClearFilters?: () => void;
@@ -15,6 +16,7 @@ interface RecommendationsListProps {
 export function RecommendationsList({
   recommendations,
   onViewDetails,
+  onViewComments,
   onValidate,
   hasActiveFilters = false,
   onClearFilters
@@ -51,7 +53,7 @@ export function RecommendationsList({
   return (
     <div className="space-y-6">
       {/* Results summary */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-4">
         <h2 className="text-lg font-medium">
           Course Improvement Recommendations
         </h2>
@@ -66,6 +68,7 @@ export function RecommendationsList({
           <RecommendationCard
             key={recommendation.id}
             recommendation={recommendation}
+            onViewComments={onViewComments ? (rec) => onViewComments(rec) : undefined}
             onValidate={(rec) => onValidate(rec)}
           />
         ))}

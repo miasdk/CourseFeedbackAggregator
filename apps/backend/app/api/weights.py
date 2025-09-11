@@ -329,3 +329,46 @@ async def get_weights_history(
     except Exception as e:
         logger.error(f"Error fetching weights history: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve weight configuration history")
+
+@router.post("/weights/reset")
+async def reset_weights_to_default(
+    updated_by: str = "admin",
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Reset weight configuration to default balanced values
+    """
+    try:
+        # Default balanced weights (must sum to 1.0)
+        default_weights = {
+            "impact": 0.35,
+            "urgency": 0.30,
+            "effort": 0.20,
+            "strategic": 0.10,
+            "trend": 0.05
+        }
+        
+        # Apply default weights
+        weight_update = WeightUpdate(
+            impact_weight=default_weights["impact"],
+            urgency_weight=default_weights["urgency"],
+            effort_weight=default_weights["effort"],
+            strategic_weight=default_weights["strategic"],
+            trend_weight=default_weights["trend"],
+            updated_by=f"{updated_by} (reset to defaults)"
+        )
+        
+        # Use the existing update weights function
+        result = await update_weights(weight_update, db)
+        
+        return {
+            "impact": default_weights["impact"],
+            "urgency": default_weights["urgency"],
+            "effort": default_weights["effort"],
+            "strategic": default_weights["strategic"],
+            "trend": default_weights["trend"]
+        }
+        
+    except Exception as e:
+        logger.error(f"Error resetting weights: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to reset weights: {str(e)}")

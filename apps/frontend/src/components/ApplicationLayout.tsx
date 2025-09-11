@@ -1,12 +1,11 @@
 import React from 'react';
+import { Navbar } from './Navbar';
 import { HeaderNav } from './HeaderNav';
 import { ScoringControls } from './ScoringControls';
 import { DataSourceStatusComponent } from './DataSourceStatus';
 import { ScoringWeights, DataSourceStatus } from '../types';
 
 interface ApplicationLayoutProps {
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
   children: React.ReactNode;
   // Scoring weights props
   scoringWeights: ScoringWeights;
@@ -21,8 +20,6 @@ interface ApplicationLayoutProps {
 }
 
 export const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({
-  isDarkMode,
-  onToggleTheme,
   children,
   scoringWeights,
   onWeightsChange,
@@ -35,12 +32,14 @@ export const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({
 }) => {
   return (
     <div className="h-screen w-full flex flex-col bg-background">
-      {/* Full Width Header Nav - Fixed at Top */}
+      {/* Navbar - Fixed at Top */}
+      <div className="w-full bg-background flex-shrink-0">
+        <Navbar />
+      </div>
+      
+      {/* Header Nav - Below Navbar */}
       <div className="w-full border-b bg-background flex-shrink-0">
-        <HeaderNav 
-          onToggleTheme={onToggleTheme} 
-          isDarkMode={isDarkMode}
-        />
+        <HeaderNav />
       </div>
       
       {/* Main Layout Area - Sidebar Left, Content Right */}

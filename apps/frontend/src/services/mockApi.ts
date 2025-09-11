@@ -101,6 +101,59 @@ const MOCK_RECOMMENDATIONS: Recommendation[] = [
   }
 ];
 
+const MOCK_COURSES = [
+  {
+    course_id: 'course-it-leadership',
+    course_name: 'IT Leadership',
+    instructor_name: 'Dr. Sarah Johnson',
+    status: 'active',
+    start_date: '2024-08-15T00:00:00Z',
+    end_date: '2024-12-15T00:00:00Z',
+    feedback_count: 23,
+    priority_issues: 2
+  },
+  {
+    course_id: 'course-customer-exp',
+    course_name: 'Customer Experience Program',
+    instructor_name: 'Prof. Michael Chen',
+    status: 'active',
+    start_date: '2024-09-01T00:00:00Z',
+    end_date: '2024-12-20T00:00:00Z',
+    feedback_count: 45,
+    priority_issues: 1
+  },
+  {
+    course_id: 'course-data-analytics',
+    course_name: 'Data Analytics Fundamentals',
+    instructor_name: 'Dr. Lisa Wang',
+    status: 'active',
+    start_date: '2024-08-20T00:00:00Z',
+    end_date: '2024-11-30T00:00:00Z',
+    feedback_count: 31,
+    priority_issues: 1
+  },
+  {
+    course_id: 'course-project-mgmt',
+    course_name: 'Project Management Essentials',
+    instructor_name: 'John Rodriguez',
+    status: 'active',
+    start_date: '2024-07-15T00:00:00Z',
+    end_date: '2024-11-15T00:00:00Z',
+    feedback_count: 67,
+    priority_issues: 1
+  },
+  {
+    course_id: 'course-digital-marketing',
+    course_name: 'Digital Marketing Strategy',
+    instructor_name: 'Emma Thompson',
+    status: 'active',
+    start_date: '2024-09-05T00:00:00Z',
+    end_date: '2024-12-25T00:00:00Z',
+    feedback_count: 12,
+    priority_issues: 1
+  }
+];
+
 const MOCK_WEIGHTS: ScoringWeights = {
   impact: 0.25,
   urgency: 0.25,
@@ -127,6 +180,12 @@ const MOCK_DATA_SOURCE_STATUS: DataSourceStatus = {
 export class MockApiClient {
   private delay(ms: number = 500): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // Courses endpoints
+  async getCourses(): Promise<any[]> {
+    await this.delay();
+    return MOCK_COURSES;
   }
 
   // Priority/Recommendations endpoints

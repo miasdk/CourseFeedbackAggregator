@@ -1,12 +1,11 @@
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { useAuth } from "../contexts/AuthContext";
 
-interface HeaderNavProps {
-  onToggleTheme?: () => void;
-  isDarkMode?: boolean;
-}
+interface HeaderNavProps {}
 
-export function HeaderNav({ onToggleTheme, isDarkMode = false }: HeaderNavProps) {
+export function HeaderNav({}: HeaderNavProps) {
+  const { user } = useAuth();
   const unreadNotifications = 2;
 
   const handleNotificationClick = () => {
@@ -24,35 +23,37 @@ export function HeaderNav({ onToggleTheme, isDarkMode = false }: HeaderNavProps)
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <div>
-              <h1 className="text-lg font-semibold">Course Feedback Intelligence</h1>
+              <h1 className="text-xl font-semibold">
+                Course Feedback Intelligence
+              </h1>
             </div>
           </div>
         </div>
 
         {/* User Actions */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle */}
-          <Button variant="ghost" size="sm" onClick={onToggleTheme}>
-            {isDarkMode ? "Light" : "Dark"}
-          </Button>
+          {user && (
+            // Authenticated user menu
+            <>
+              {/* Notifications */}
+              <Button variant="ghost" size="sm" className="relative" onClick={handleNotificationClick}>
+                Notifications
+                {unreadNotifications > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="ml-1 h-4 px-1 text-xs"
+                  >
+                    {unreadNotifications}
+                  </Badge>
+                )}
+              </Button>
 
-          {/* Notifications */}
-          <Button variant="ghost" size="sm" className="relative" onClick={handleNotificationClick}>
-            Notifications
-            {unreadNotifications > 0 && (
-              <Badge 
-                variant="destructive" 
-                className="ml-1 h-4 px-1 text-xs"
-              >
-                {unreadNotifications}
-              </Badge>
-            )}
-          </Button>
-
-          {/* Settings */}
-          <Button variant="ghost" size="sm" onClick={handleSettingsClick}>
-            Settings
-          </Button>
+              {/* Settings */}
+              <Button variant="ghost" size="sm" onClick={handleSettingsClick}>
+                Settings
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

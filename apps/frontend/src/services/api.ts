@@ -1,8 +1,8 @@
 import { ScoringWeights, Recommendation, DataSourceStatus } from '../types';
 import { mockApiClient } from './mockApi';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-const USE_MOCK_DATA = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true' || import.meta.env.NODE_ENV === 'development';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const USE_MOCK_DATA = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true';
 
 class ApiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -24,6 +24,22 @@ class ApiClient {
     return response.json();
   }
 
+  // Courses endpoints
+  async getCourses(): Promise<any[]> {
+    if (USE_MOCK_DATA) {
+      console.log('🎭 Using mock data for courses');
+      return mockApiClient.getCourses();
+    }
+    
+    const response = await this.request<{
+      success: boolean;
+      count: number;
+      courses: any[];
+    }>('/api/courses');
+    
+    return response.courses;
+  }
+
   // Priority/Recommendations endpoints
   async getPriorities(): Promise<Recommendation[]> {
     if (USE_MOCK_DATA) {
@@ -32,12 +48,54 @@ class ApiClient {
     }
     
     const response = await this.request<{
-      priorities: Recommendation[];
+      priorities: any[];
       pagination: any;
       current_weights: any;
       filters_applied: any;
     }>('/api/priorities');
-    return response.priorities;
+    
+    // Transform backend data structure to match frontend expectations
+    return response.priorities.map(priority => ({
+      id: priority.id?.toString() || '',
+      course_id: priority.course_id || '',
+      course_name: this.extractCourseName(priority.course_id) || 'Unknown Course',
+      title: priority.issue_summary || 'No title',
+      description: priority.evidence?.[0]?.quote || 'No description available',
+      category: this.categorizeIssue(priority.issue_summary || '') as 'content' | 'technical' | 'navigation' | 'assessment' | 'other',
+      priority_score: priority.priority_score || 0,
+      impact_score: priority.factor_scores?.impact || 0,
+      urgency_score: priority.factor_scores?.urgency || 0,
+      effort_score: priority.factor_scores?.effort || 0,
+      strategic_score: priority.factor_scores?.strategic || 0,
+      trend_score: priority.factor_scores?.trend || 0,
+      affected_students: priority.students_affected || 0,
+      feedback_count: priority.feedback_ids?.length || 0,
+      is_show_stopper: priority.priority_score >= 5,
+      created_at: priority.created_at || new Date().toISOString(),
+      status: 'pending' as const,
+      validator: undefined,
+      validation_notes: undefined
+    }));
+  }
+
+  private extractCourseName(courseId: string): string {
+    // Extract readable course name from course_id
+    if (courseId.includes('canvas')) {
+      return `Canvas Course (${courseId.replace('canvas_', '')})`;
+    }
+    if (courseId.includes('zoho')) {
+      return `Zoho Program (${courseId.replace('zoho_', '')})`;
+    }
+    return courseId;
+  }
+
+  private categorizeIssue(summary: string): 'content' | 'technical' | 'navigation' | 'assessment' | 'other' {
+    const lowerSummary = summary.toLowerCase();
+    if (lowerSummary.includes('video') || lowerSummary.includes('content')) return 'content';
+    if (lowerSummary.includes('technical') || lowerSummary.includes('platform')) return 'technical';
+    if (lowerSummary.includes('navigation') || lowerSummary.includes('menu')) return 'navigation';
+    if (lowerSummary.includes('assignment') || lowerSummary.includes('assessment')) return 'assessment';
+    return 'other';
   }
 
   async recomputePriorities(): Promise<{ message: string }> {
@@ -124,7 +182,23 @@ class ApiClient {
       return mockApiClient.getDataSourceStatus();
     }
     
-    return this.request('/api/data-sources/status');
+    const response = await this.request<any>('/api/data-sources/status');
+    
+    // Transform backend data structure to match frontend expectations
+    return {
+      canvas: {
+        connected: response.canvas?.status === 'connected',
+        last_sync: response.canvas?.last_sync || '',
+        courses_synced: response.canvas?.courses_synced || 0,
+        feedback_items: response.canvas?.feedback_count || 0
+      },
+      zoho: {
+        connected: response.zoho?.status === 'connected',
+        last_sync: response.zoho?.last_sync || '',
+        surveys_synced: response.zoho?.programs_synced || 0,
+        responses: response.zoho?.feedback_count || 0
+      }
+    };
   }
 
   // Health check

@@ -40,91 +40,51 @@ export function DataSourceStatusComponent({ status, onSync, isSyncing }: DataSou
     );
   };
 
+  const totalFeedback = status.canvas.feedback_items + status.zoho.responses;
+  const connectedSources = (status.canvas.connected ? 1 : 0) + (status.zoho.connected ? 1 : 0);
+
   return (
     <Card>
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg">
-          Data Sources
-        </CardTitle>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg">Data Sources</CardTitle>
+          <Badge variant="outline" className="text-xs">
+            {connectedSources}/2 Connected
+          </Badge>
+        </div>
       </CardHeader>
       
       <CardContent className="space-y-4">
-        {/* Canvas LMS Status */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {getStatusIndicator(status.canvas.connected)}
-              <span className="font-medium">Canvas LMS</span>
-              {getStatusBadge(status.canvas.connected)}
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onSync('canvas')}
-              disabled={isSyncing.canvas}
-            >
-              {isSyncing.canvas ? "Syncing..." : "Sync"}
-            </Button>
+        <div className="grid grid-cols-2 gap-4 text-center">
+          <div>
+            <div className="text-2xl font-bold text-muted-foreground">{totalFeedback}</div>
+            <div className="text-xs text-muted-foreground">Total Feedback</div>
           </div>
-          
-          <div className="text-sm text-muted-foreground space-y-1">
-            <div className="flex justify-between">
-              <span>Last sync:</span>
-              <span>
-                {formatLastSync(status.canvas.last_sync)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Courses:</span>
-              <span>{status.canvas.courses_synced}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Feedback items:</span>
-              <span>{status.canvas.feedback_items}</span>
-            </div>
+          <div>
+            <div className="text-2xl font-bold text-muted-foreground">{status.canvas.courses_synced}</div>
+            <div className="text-xs text-muted-foreground">Courses</div>
           </div>
         </div>
 
-        <div className="border-t pt-4">
-          {/* Zoho CRM Status */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {getStatusIndicator(status.zoho.connected)}
-                <span className="font-medium">Zoho CRM</span>
-                {getStatusBadge(status.zoho.connected)}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onSync('zoho')}
-                disabled={isSyncing.zoho}
-              >
-                {isSyncing.zoho ? "Syncing..." : "Sync"}
-              </Button>
-            </div>
-            
-            <div className="text-sm text-muted-foreground space-y-1">
-              <div className="flex justify-between">
-                <span>Last sync:</span>
-                <span>
-                  {formatLastSync(status.zoho.last_sync)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span>Surveys:</span>
-                <span>{status.zoho.surveys_synced}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Responses:</span>
-                <span>{status.zoho.responses}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-4 border-t text-xs text-muted-foreground">
-          <p>Data is automatically synced every 15 minutes. Manual sync available above.</p>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onSync('canvas')}
+            disabled={isSyncing.canvas}
+            className="flex-1"
+          >
+            {isSyncing.canvas ? "Syncing..." : "Sync Canvas"}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onSync('zoho')}
+            disabled={isSyncing.zoho}
+            className="flex-1"
+          >
+            {isSyncing.zoho ? "Syncing..." : "Sync Zoho"}
+          </Button>
         </div>
       </CardContent>
     </Card>

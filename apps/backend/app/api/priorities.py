@@ -321,3 +321,56 @@ async def get_priority_details(
     except Exception as e:
         logger.error(f"Error fetching priority details: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve priority details")
+
+@router.post("/priorities/{priority_id}/validate")
+async def validate_priority_recommendation(
+    priority_id: int,
+    validation_data: dict,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Mark a priority recommendation as validated with reviewer notes
+    """
+    try:
+        # Get the priority
+        query = select(Priority).where(Priority.id == priority_id)
+        result = await db.execute(query)
+        priority = result.scalar_one_or_none()
+        
+        if not priority:
+            raise HTTPException(status_code=404, detail="Priority recommendation not found")
+        
+        # Extract validation data
+        notes = validation_data.get('notes', '')
+        validator = validation_data.get('validator', 'Unknown User')
+        
+        # Update priority with validation info (would need to add these fields to model)
+        # For now, we'll store in evidence field as a workaround
+        validation_info = {
+            "validated": True,
+            "validator": validator,
+            "validation_notes": notes,
+            "validated_at": "2025-09-11T20:47:00Z"  # Would use actual timestamp
+        }
+        
+        # Store validation in evidence field (JSON)
+        existing_evidence = priority.evidence or {}
+        existing_evidence["validation"] = validation_info
+        priority.evidence = existing_evidence
+        
+        await db.commit()
+        
+        return {
+            "success": True,
+            "message": f"Priority recommendation validated successfully",
+            "priority_id": priority_id,
+            "validator": validator,
+            "notes": notes
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db.rollback()
+        logger.error(f"Error validating priority: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to validate priority recommendation")

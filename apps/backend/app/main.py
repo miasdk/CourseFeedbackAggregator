@@ -12,6 +12,8 @@ from .api.priorities import router as priorities_router
 from .api.ingest import router as ingest_router
 from .api.weights import router as weights_router
 from .api.mock import router as mock_router
+from .api.courses import router as courses_router
+from .api.data_sources import router as data_sources_router
 
 app = FastAPI(
     title="Course Feedback Aggregator API",
@@ -34,10 +36,12 @@ async def startup_event():
     await init_database(seed_data=True)
 
 # Include API routers
+app.include_router(courses_router, prefix="/api", tags=["courses"])
 app.include_router(feedback_router, prefix="/api", tags=["feedback"])
 app.include_router(priorities_router, prefix="/api", tags=["priorities"])
 app.include_router(ingest_router, prefix="/api", tags=["ingestion"])
 app.include_router(weights_router, prefix="/api", tags=["weights"])
+app.include_router(data_sources_router, prefix="/api", tags=["data-sources"])
 app.include_router(mock_router, prefix="/api", tags=["mock"])
 
 # Health check endpoint

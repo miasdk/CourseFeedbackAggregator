@@ -22,8 +22,18 @@ export function ScoringControls({
   isRecomputing 
 }: ScoringControlsProps) {
   
+  // Convert decimal weight (0-1) to 1-5 scale and vice versa
+  const weightToScale = (weight: number): number => {
+    return Math.round(weight * 4) + 1; // 0.0 -> 1, 0.25 -> 2, 0.5 -> 3, 0.75 -> 4, 1.0 -> 5
+  };
+
+  const scaleToWeight = (scale: number): number => {
+    return (scale - 1) / 4; // 1 -> 0.0, 2 -> 0.25, 3 -> 0.5, 4 -> 0.75, 5 -> 1.0
+  };
+
   const handleWeightChange = (factor: keyof ScoringWeights, value: number[]) => {
-    const newWeights = { ...weights, [factor]: value[0] };
+    const weightValue = scaleToWeight(value[0]);
+    const newWeights = { ...weights, [factor]: weightValue };
     onWeightsChange(newWeights);
   };
 
@@ -55,9 +65,9 @@ export function ScoringControls({
     }
   };
 
-  const getScaleLabel = (value: number): string => {
-    const labels = ['', 'Low', 'Below Avg', 'Average', 'Above Avg', 'High'];
-    return labels[value] || '';
+  const getScaleLabel = (scale: number): string => {
+    const labels = ['', 'Very Low', 'Low', 'Medium', 'High', 'Very High'];
+    return labels[scale] || '';
   };
 
   return (
@@ -80,32 +90,23 @@ export function ScoringControls({
         <TooltipProvider>
           {Object.entries(weights).map(([factor, weight]) => {
             const config = factorConfig[factor as keyof typeof factorConfig];
+            const scaleValue = weightToScale(weight);
             return (
               <div key={factor} className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2">
-                      <Label className="text-sm font-medium">{config.label}</Label>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-help">[?]</span>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="max-w-64">
-                          <p className="text-xs">{config.description}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
+                    <Label className="text-sm font-medium">{config.label}</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-xs min-w-16 justify-center">
-                      {weight}/5
+                      {scaleValue}/5
                     </Badge>
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <Slider
-                    value={[weight]}
+                    value={[scaleValue]}
                     onValueChange={(value: number[]) => handleWeightChange(factor as keyof ScoringWeights, value)}
                     max={5}
                     min={1}
@@ -113,11 +114,11 @@ export function ScoringControls({
                     className="flex-1"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Low Priority</span>
+                    <span>1 Low</span>
                     <span className="text-xs font-medium text-foreground">
-                      {getScaleLabel(weight)}
+                      {getScaleLabel(scaleValue)}
                     </span>
-                    <span>High Priority</span>
+                    <span>5 High</span>
                   </div>
                 </div>
               </div>
