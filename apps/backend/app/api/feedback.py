@@ -4,8 +4,8 @@ from sqlalchemy import select, func
 from typing import List, Optional
 import logging
 
-from ..database import get_db, Feedback
-from ..config import settings
+from ..config.database import get_db, Feedback
+from ..config.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

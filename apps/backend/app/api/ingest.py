@@ -5,10 +5,10 @@ from typing import List, Dict, Any
 import logging
 from datetime import datetime
 
-from ..database import get_db, Feedback
+from ..config.database import get_db, Feedback
 from ..clients.canvas_client import CanvasClient
 from ..clients.zoho_client import ZohoClient
-from ..config import settings
+from ..config.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

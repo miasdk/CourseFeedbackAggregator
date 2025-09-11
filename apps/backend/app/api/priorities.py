@@ -4,9 +4,9 @@ from sqlalchemy import select, func, delete
 from typing import List, Optional
 import logging
 
-from ..database import get_db, Priority, WeightConfig, get_active_weights
+from ..config.database import get_db, Priority, WeightConfig, get_active_weights
 from ..scoring.engine import PriorityScoring, group_similar_feedback, generate_issue_summary
-from ..config import settings
+from ..config.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

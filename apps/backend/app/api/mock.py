@@ -4,7 +4,7 @@ from typing import Dict, Any
 import logging
 from datetime import datetime
 
-from ..database import get_db, Feedback
+from ..config.database import get_db, Feedback
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

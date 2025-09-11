@@ -6,8 +6,8 @@ from typing import Optional
 import logging
 from datetime import datetime
 
-from ..database import get_db, WeightConfig, get_active_weights
-from ..config import settings
+from ..config.database import get_db, WeightConfig, get_active_weights
+from ..config.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
