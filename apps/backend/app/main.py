@@ -21,17 +21,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS middleware for frontend
+# CORS middleware for frontend - must be first middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "http://localhost:3001", 
-        "http://localhost:3002",
-        "https://course-feedback-aggregator.vercel.app"
-    ],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -48,6 +43,11 @@ app.include_router(ingest_router, prefix="/api", tags=["ingestion"])
 app.include_router(weights_router, prefix="/api", tags=["weights"])
 app.include_router(data_sources_router, prefix="/api", tags=["data-sources"])
 app.include_router(mock_router, prefix="/api", tags=["mock"])
+
+# CORS preflight handler
+@app.options("/{path:path}")
+async def options_handler(path: str):
+    return {"message": "OK"}
 
 # Health check endpoint
 @app.get("/health")
