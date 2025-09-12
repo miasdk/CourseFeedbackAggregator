@@ -8,17 +8,17 @@ from .config import settings
 # Import all models from models directory
 from ..models import Base, Course, Feedback, Priority, WeightConfig, Review
 
-# Convert postgresql:// to postgresql+asyncpg:// for async support
+# Convert postgresql:// to postgresql+psycopg:// for async support
 if settings.database_url:
     if settings.database_url.startswith("postgresql://"):
-        # Parse the URL and rebuild for asyncpg compatibility
+        # Parse the URL and rebuild for psycopg compatibility
         from urllib.parse import urlparse, parse_qs, urlunparse
         parsed = urlparse(settings.database_url)
         
-        # Build asyncpg compatible URL without SSL query parameters
-        database_url = f"postgresql+asyncpg://{parsed.netloc}{parsed.path}"
+        # Build psycopg compatible URL without SSL query parameters
+        database_url = f"postgresql+psycopg://{parsed.netloc}{parsed.path}"
         
-        # For asyncpg, SSL is handled automatically for Neon and other cloud providers
+        # For psycopg, SSL is handled automatically for Neon and other cloud providers
         # We don't need to pass sslmode parameters in the URL
     else:
         database_url = settings.database_url
