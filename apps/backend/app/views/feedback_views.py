@@ -21,9 +21,9 @@ class FeedbackResponse(BaseModel):
     last_modified: datetime = Field(..., description="Last update timestamp")
     is_active: bool = Field(..., description="Active status")
 
-    class Config:
-        from_attributes = True
-        json_schema_extra = {
+    model_config = {
+        "from_attributes": True,
+        "json_schema_extra": {
             "example": {
                 "id": 123,
                 "course_id": "canvas_847",
@@ -39,6 +39,8 @@ class FeedbackResponse(BaseModel):
                 "is_active": True
             }
         }
+    }
+    }
 
 
 class FeedbackCreateRequest(BaseModel):
@@ -53,8 +55,8 @@ class FeedbackCreateRequest(BaseModel):
     source: str = Field(..., description="canvas|zoho")
     source_id: Optional[str] = Field(None, description="Original platform ID")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "course_id": "canvas_847",
                 "course_name": "IT Leadership Certificate", 
@@ -66,6 +68,7 @@ class FeedbackCreateRequest(BaseModel):
                 "source_id": "quiz_submission_789"
             }
         }
+    }
 
 
 class FeedbackListResponse(BaseModel):
@@ -73,8 +76,8 @@ class FeedbackListResponse(BaseModel):
     feedback: List[FeedbackResponse] = Field(..., description="List of feedback items")
     pagination: Dict[str, Any] = Field(..., description="Pagination information")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "feedback": [
                     {
@@ -100,6 +103,7 @@ class FeedbackListResponse(BaseModel):
                 }
             }
         }
+    }
 
 
 class FeedbackStatsResponse(BaseModel):
@@ -109,8 +113,8 @@ class FeedbackStatsResponse(BaseModel):
     severity_distribution: Dict[str, int] = Field(..., description="Feedback by severity")
     average_rating: Optional[float] = Field(None, description="Average rating")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "total_feedback": 245,
                 "source_distribution": {
@@ -126,3 +130,4 @@ class FeedbackStatsResponse(BaseModel):
                 "average_rating": 3.7
             }
         }
+    }

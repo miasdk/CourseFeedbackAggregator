@@ -33,8 +33,9 @@ class ReviewResponse(BaseModel):
     notes: Optional[str] = Field(None, description="Reviewer notes")
     created_at: datetime = Field(..., description="Review timestamp")
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class PriorityResponse(BaseModel):
@@ -51,9 +52,9 @@ class PriorityResponse(BaseModel):
     created_at: datetime = Field(..., description="Creation timestamp")
     updated_at: datetime = Field(..., description="Last update timestamp")
 
-    class Config:
-        from_attributes = True
-        json_schema_extra = {
+    model_config = {
+        "from_attributes": True,
+        "json_schema_extra": {
             "example": {
                 "id": 456,
                 "course_id": "canvas_847",
@@ -98,14 +99,15 @@ class PriorityResponse(BaseModel):
                 "updated_at": "2025-09-10T09:15:00Z"
             }
         }
+    }
 
 
 class PriorityListResponse(BaseModel):
     """Response schema for list of priorities."""
     priorities: List[PriorityResponse] = Field(..., description="List of priority recommendations")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "priorities": [
                     {
@@ -119,6 +121,7 @@ class PriorityListResponse(BaseModel):
                 ]
             }
         }
+    }
 
 
 class PriorityRecomputeRequest(BaseModel):
@@ -126,13 +129,14 @@ class PriorityRecomputeRequest(BaseModel):
     course_ids: Optional[List[str]] = Field(None, description="Specific course IDs to recompute")
     force_refresh: bool = Field(False, description="Force recalculation even if recent")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "course_ids": ["canvas_847", "zoho_ai_program"],
                 "force_refresh": True
             }
         }
+    }
 
 
 class PriorityRecomputeResponse(BaseModel):
@@ -141,8 +145,8 @@ class PriorityRecomputeResponse(BaseModel):
     priorities_updated: int = Field(..., description="Number of priorities updated")
     weight_config_used: Dict[str, float] = Field(..., description="Weight configuration used")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "courses_processed": 10,
                 "priorities_updated": 8,
@@ -155,6 +159,7 @@ class PriorityRecomputeResponse(BaseModel):
                 }
             }
         }
+    }
 
 
 class ReviewCreateRequest(BaseModel):
@@ -164,8 +169,8 @@ class ReviewCreateRequest(BaseModel):
     action_taken: Optional[str] = Field(None, description="Action taken")
     notes: Optional[str] = Field(None, description="Reviewer notes")
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "reviewer_name": "Dr. Sarah Johnson",
                 "validated": True,
@@ -173,3 +178,4 @@ class ReviewCreateRequest(BaseModel):
                 "notes": "Video quality has been upgraded. Issue resolved."
             }
         }
+    }

@@ -11,8 +11,8 @@ class SuccessResponse(BaseModel):
     data: Any = Field(..., description="Response data")
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
     
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "success": True,
                 "data": {"id": 1, "message": "Operation completed"},
@@ -22,6 +22,7 @@ class SuccessResponse(BaseModel):
                 }
             }
         }
+    }
 
 
 class ErrorResponse(BaseModel):
@@ -30,8 +31,8 @@ class ErrorResponse(BaseModel):
     error: Dict[str, Any] = Field(..., description="Error details")
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Error timestamp")
     
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "success": False,
                 "error": {
@@ -45,6 +46,7 @@ class ErrorResponse(BaseModel):
                 "timestamp": "2025-09-10T12:00:00Z"
             }
         }
+    }
 
 
 class HealthResponse(BaseModel):
@@ -54,8 +56,8 @@ class HealthResponse(BaseModel):
     database: str = Field(..., description="Database connection status")
     version: str = Field(default="1.0.0", description="API version")
     
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "status": "healthy",
                 "timestamp": "2025-09-10T12:00:00Z",
@@ -63,3 +65,4 @@ class HealthResponse(BaseModel):
                 "version": "1.0.0"
             }
         }
+    }

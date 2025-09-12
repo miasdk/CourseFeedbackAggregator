@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from typing import Optional
 import logging
 from datetime import datetime
@@ -21,7 +21,8 @@ class WeightUpdate(BaseModel):
     trend_weight: Optional[float] = None
     updated_by: str = "admin"
     
-    @validator('impact_weight', 'urgency_weight', 'effort_weight', 'strategic_weight', 'trend_weight')
+    @field_validator('impact_weight', 'urgency_weight', 'effort_weight', 'strategic_weight', 'trend_weight')
+    @classmethod
     def validate_weight_range(cls, v):
         if v is not None and (v < 0.0 or v > 1.0):
             raise ValueError('Weight must be between 0.0 and 1.0')
