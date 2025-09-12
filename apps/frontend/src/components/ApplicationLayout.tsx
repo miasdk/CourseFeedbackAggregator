@@ -31,23 +31,23 @@ export const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({
   isSyncing
 }) => {
   return (
-    <div className="h-screen w-full flex flex-col bg-background">
-      {/* Navbar - Fixed at Top */}
-      <div className="w-full bg-background flex-shrink-0">
+    <div className="h-screen w-full flex flex-col bg-gray-50">
+      {/* Navbar - Fixed at Top with White Background */}
+      <div className="w-full flex-shrink-0 z-50">
         <Navbar />
       </div>
       
       {/* Header Nav - Below Navbar */}
-      <div className="w-full border-b bg-background flex-shrink-0">
+      <div className="w-full border-b bg-white flex-shrink-0 shadow-sm">
         <HeaderNav />
       </div>
       
       {/* Main Layout Area - Sidebar Left, Content Right */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* Left Sidebar - Fixed Width */}
-        <div className="w-80 border-r bg-background flex-shrink-0 overflow-y-auto">
-          <div className="p-6">
+        {/* Left Sidebar - Fixed Width with Better Styling */}
+        <div className="w-80 bg-white border-r border-gray-200 flex-shrink-0 overflow-y-auto">
+          <div className="p-6 space-y-6">
             <div className="space-y-6">
               <ScoringControls
                 weights={scoringWeights}

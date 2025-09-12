@@ -52,25 +52,37 @@ export function RecommendationsList({
 
   return (
     <div className="space-y-6">
-      {/* Results summary */}
-      <div className="flex items-center justify-between pt-4">
-        <h2 className="text-lg font-medium">
-          Course Improvement Recommendations
-        </h2>
-        <span className="text-sm text-muted-foreground">
-          {recommendations.length} recommendation{recommendations.length !== 1 ? 's' : ''}
-        </span>
+      {/* Results summary with improved styling */}
+      <div className="flex items-center justify-between py-6 border-b border-gray-100">
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            Course Improvement Recommendations
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            AI-powered insights to enhance course quality and student experience
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm font-medium rounded-full">
+            {recommendations.length} recommendation{recommendations.length !== 1 ? 's' : ''}
+          </span>
+        </div>
       </div>
 
-      {/* 2-column grid layout */}
+      {/* 2-column grid layout with improved spacing */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {recommendations.map((recommendation) => (
-          <RecommendationCard
+        {recommendations.map((recommendation, index) => (
+          <div
             key={recommendation.id}
-            recommendation={recommendation}
-            onViewComments={onViewComments ? (rec) => onViewComments(rec) : undefined}
-            onValidate={(rec) => onValidate(rec)}
-          />
+            className="animate-fade-in"
+            style={{ animationDelay: `${index * 50}ms` }}
+          >
+            <RecommendationCard
+              recommendation={recommendation}
+              onViewComments={onViewComments ? (rec) => onViewComments(rec) : undefined}
+              onValidate={(rec) => onValidate(rec)}
+            />
+          </div>
         ))}
       </div>
     </div>
