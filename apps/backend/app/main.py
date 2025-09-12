@@ -18,7 +18,7 @@ from .api.data_sources import router as data_sources_router
 app = FastAPI(
     title="Course Feedback Aggregator API",
     description="Intelligent course feedback prioritization system",
-    version="1.0.0"
+    version="1.0.1"
 )
 
 # CORS middleware for frontend - must be first middleware
