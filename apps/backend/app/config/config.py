@@ -1,48 +1,28 @@
 import os
-from pathlib import Path
-from typing import Optional
 from pydantic_settings import BaseSettings
 
-# Find the .env file in the backend root directory
-backend_root = Path(__file__).parent.parent.parent  # Go up to apps/backend/
-env_file = backend_root / ".env"
-
 class Settings(BaseSettings):
-    # Database - From .env file
-    database_url: Optional[str] = None
-    
-    # Canvas API - From existing .env
-    canvas_access_token: Optional[str] = None
-    canvas_api_url: str = "https://executiveeducation.instructure.com"
-    canvas_base_url: str = "https://executiveeducation.instructure.com"
-    canvas_developer_key: Optional[str] = None  
-    canvas_account_id: Optional[str] = None
-    
-    # Zoho API - From existing .env
-    zoho_client_id: Optional[str] = None
-    zoho_client_secret: Optional[str] = None
-    zoho_access_token: Optional[str] = None
-    zoho_refresh_token: Optional[str] = None
-    scope: Optional[str] = None
-    api_domain: str = "https://www.zohoapis.com"
-    zoho_api_domain: str = "https://www.zohoapis.com"
-    token_type: Optional[str] = None
-    
-    # Application Settings
     environment: str = "development"
     debug: bool = True
-    log_level: str = "INFO"
-    
-    @property
-    def canvas_token(self) -> Optional[str]:
-        """Alias for canvas_access_token"""
-        return self.canvas_access_token
-    
-    model_config = {
-        "env_file": str(env_file),
-        "case_sensitive": False,
-        "extra": "allow"
-    }
+    canvas_token: str = os.getenv("CANVAS_API_TOKEN", "")
+    canvas_base_url: str = os.getenv("CANVAS_BASE_URL", "")
+    zoho_access_token: str = os.getenv("ZOHO_ACCESS_TOKEN", "")
 
-# Global settings instance
+    # Accept all the extra fields from .env file
+    canvas_access_token: str = ""
+    canvas_api_url: str = ""
+    canvas_developer_key: str = ""
+    canvas_account_id: str = ""
+    zoho_client_id: str = ""
+    zoho_client_secret: str = ""
+    zoho_refresh_token: str = ""
+    scope: str = ""
+    api_domain: str = ""
+    token_type: str = ""
+    database_url: str = ""
+
+    class Config:
+        env_file = ".env"
+        extra = "allow"  # Allow extra fields
+
 settings = Settings()

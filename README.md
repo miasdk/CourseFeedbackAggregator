@@ -4,61 +4,30 @@
 
 A comprehensive platform that unifies course feedback from Canvas LMS and Zoho CRM into a single PostgreSQL database with intelligent prioritization scoring. The system provides explainable recommendations for course improvements with full traceability back to original feedback sources.
 
-## 🎯 Mission Statement
+## Mission Statement
 
 Build a single, explainable prioritization system that pulls course feedback from Canvas and Zoho into one database, scores what to "fix" first, and shows the "why" behind each recommendation in a live dashboard.
 
-## 📋 Project Status: **✅ BACKEND COMPLETE - FULLY OPERATIONAL**
+## Project Status
 
-### ✅ **Implementation Complete**
-- **Backend**: ✅ Full FastAPI system with proper MVC architecture
-- **Database**: ✅ PostgreSQL with complete schema and relationships
-- **Canvas Integration**: ✅ Live API calls successful - real data ingested
-- **Zoho Integration**: ✅ OAuth framework implemented (token refresh ready)
-- **Priority Scoring**: ✅ Multi-factor algorithm operational with configurable weights
-- **API Endpoints**: ✅ Full RESTful API with explainable recommendations
+**Backend Complete - Fully Operational**
 
-### 🚀 **System Operational**
+### Implementation Complete
+- **Backend**: Full FastAPI system with proper MVC architecture
+- **Database**: PostgreSQL with complete schema and relationshipszx
+- **Canvas Integration**: Live API calls successful - real data ingestxzed
+- **Zoho Integration**: OAuth framework implemented (token refresh ready)
+- **Priority Scoring**: Multi-factor algorithm operational with configurable weights
+- **API Endpoints**: Full RESTful API with explainable recommendations
+
+### System Operational
 - **Server Running**: Port 8003 with successful Canvas API integration
 - **Database Populated**: Real course data from Canvas LMS
 - **Priority Engine**: Working with Impact (0.4), Urgency (0.35), Effort (0.25), Strategic (0.15), Trend (0.1)
 - **MVC Architecture**: Models properly abstracted to `/models/` directory
 - **Ready for Production**: Can deploy to Railway/Vercel immediately
 
-## 🏗️ System Architecture
-
-![System Architecture](./SYSTEM_ARCHITECTURE.md)
-
-```mermaid
-graph TB
-    %% External APIs
-    A1[Canvas LMS API] --> C5[Canvas API Client]
-    A2[Zoho CRM API] --> C6[Zoho API Client]
-    
-    %% Backend - Railway
-    subgraph "FastAPI Backend - Railway"
-        C5 --> C8[Data Ingestion Service]
-        C6 --> C8
-        C8 --> D1[(Neon PostgreSQL)]
-        
-        subgraph "MVC Architecture"
-            C1[Controllers - API Routes]
-            C2[Services - Business Logic]  
-            C3[Models - Database Layer]
-            C4[Views - Response Schemas]
-        end
-        
-        C7[Priority Scoring Engine]
-    end
-    
-    %% Frontend - Vercel
-    B1[React Frontend] --> C1
-    
-    %% Database
-    D1 --> C3
-    C3 --> C7
-    C7 --> D1
-```
+## System Architecture
 
 **Tech Stack**:
 - **Frontend**: React 18 + TypeScript + Vercel
@@ -66,9 +35,7 @@ graph TB
 - **Database**: PostgreSQL 15 + Neon (Cloud)
 - **APIs**: Canvas LMS + Zoho CRM
 
-## 📊 Database Schema
-
-![Database ERD](./DATABASE_SCHEMA.md)
+## Database Schema
 
 ### Core Tables
 - **FEEDBACK**: Unified feedback from Canvas/Zoho
@@ -82,7 +49,7 @@ graph TB
 - **PRIORITIES** → **REVIEWS** (one-to-many)
 - **WEIGHT_CONFIGS** → **PRIORITIES** (active configuration)
 
-## 🔧 API Documentation
+## API Documentation
 
 **Base URL**: `https://coursefeedback-api.railway.app/api/v1`
 
@@ -98,9 +65,7 @@ POST   /api/v1/ingest/canvas             # Trigger Canvas sync
 POST   /api/v1/ingest/zoho               # Trigger Zoho sync
 ```
 
-[**Full API Documentation →**](./API_DOCUMENTATION.md)
-
-## 🗄️ 5-Factor Priority Scoring
+## 5-Factor Priority Scoring
 
 The system uses an explainable 5-factor algorithm with tunable weights:
 
@@ -117,35 +82,31 @@ priority_score = (
 **Score Range**: 1-5 (Critical, High, Medium, Low)  
 **Explainable**: Full factor breakdown with evidence tracing
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 CourseFeedbackAggregator/
-├── 📄 DATABASE_SCHEMA.md          # Complete ERD documentation
-├── 📄 SYSTEM_ARCHITECTURE.md      # System design diagrams  
-├── 📄 API_DOCUMENTATION.md        # Full API specification
-├── 📄 CLAUDE.md                   # Project configuration
-├── 📄 README.md                   # This file
-├── 🎯 apps/
-│   ├── 🎨 frontend/               # React TypeScript app
+├── README.md                      # This file
+├── CLAUDE.md                      # Project configuration
+├── apps/
+│   ├── frontend/                  # React TypeScript app
 │   │   ├── src/components/        # UI components
 │   │   ├── src/services/          # API clients
 │   │   └── package.json
-│   └── 🔧 backend/                # FastAPI backend  
+│   └── backend/                   # FastAPI backend  
 │       ├── app/                   # MVC structure
 │       │   ├── models/            # Database models
 │       │   ├── controllers/       # API route handlers
 │       │   ├── services/          # Business logic
-│       │   ├── views/             # Response schemas
 │       │   └── main.py            # Application entry
 │       ├── .env                   # API credentials
 │       └── requirements.txt
-└── 🧪 dev-kit/                   # API testing framework
+└── dev-kit/                       # API testing framework
     ├── testing/canvas/            # Canvas API tests
     └── testing/zoho/              # Zoho API tests
 ```
 
-## 🔑 Environment Configuration
+## Environment Configuration
 
 ### Backend (.env)
 ```bash
@@ -167,7 +128,7 @@ ZOHO_REFRESH_TOKEN=1000.9ff551d11cb5e78d0826e63b2bf89105.08927c8f50fc656aed714f3
 VITE_API_BASE_URL=https://coursefeedback-api.railway.app
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Development Setup
 ```bash
@@ -198,7 +159,7 @@ npm run dev
 - PostgreSQL ready with connection string
 - Automated backups enabled
 
-## 🧪 Testing Framework
+## Testing Framework
 
 ### API Testing (dev-kit/)
 ```bash
@@ -223,29 +184,29 @@ curl https://coursefeedback-api.railway.app/api/v1/feedback
 curl https://coursefeedback-api.railway.app/api/v1/priorities
 ```
 
-## 🎯 Success Criteria
+## Success Criteria
 
-### ✅ **Phase 1: Documentation & Architecture** - **COMPLETE**
-- [x] Database schema with ERD diagrams
-- [x] System architecture documentation  
-- [x] Complete API specification
-- [x] Deployment strategy defined
+### Phase 1: Documentation & Architecture - Complete
+- Database schema with ERD diagrams
+- System architecture documentation  
+- Complete API specification
+- Deployment strategy defined
 
-### 🔄 **Phase 2: Implementation** - **IN PROGRESS**
-- [ ] MVC backend refactoring
-- [ ] Real Canvas API integration
-- [ ] Real Zoho API integration  
-- [ ] Neon database configuration
-- [ ] End-to-end data flow testing
+### Phase 2: Implementation - In Progress
+- MVC backend refactoring
+- Real Canvas API integration
+- Real Zoho API integration  
+- Neon database configuration
+- End-to-end data flow testing
 
-### 📊 **Phase 3: Production** - **PENDING**
-- [ ] Dashboard runs on real Canvas + Zoho data
-- [ ] Scoring system is explainable and tunable
-- [ ] At least 3 recommendations reviewed and validated
-- [ ] Full provenance tracking implemented
-- [ ] Production deployment with monitoring
+### Phase 3: Production - Pending
+- Dashboard runs on real Canvas + Zoho data
+- Scoring system is explainable and tunable
+- At least 3 recommendations reviewed and validated
+- Full provenance tracking implemented
+- Production deployment with monitoring
 
-## 🔍 Key Features
+## Key Features
 
 ### Explainable AI Recommendations
 - **Factor Breakdown**: Impact, Urgency, Effort, Strategic, Trend scoring
@@ -263,14 +224,14 @@ curl https://coursefeedback-api.railway.app/api/v1/priorities
 - **Normalized Schema**: Consistent data format across sources
 - **Real-Time Scoring**: Dynamic recalculation on new data
 
-## 📈 Monitoring & Analytics
+## Monitoring & Analytics
 
 - **Health Endpoints**: Service status monitoring
 - **Performance Metrics**: API response times and throughput
 - **Error Tracking**: Structured logging for debugging
 - **Usage Analytics**: Dashboard interaction patterns
 
-## 🤝 Contributing
+## Contributing
 
 This is a private project for Executive Education course improvement. All API credentials and database access are restricted to authorized personnel.
 

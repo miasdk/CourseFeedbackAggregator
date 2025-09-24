@@ -1,19 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 import uvicorn
 from datetime import datetime
-import os
 
-from .config.database import init_database
 from .config.config import settings
-from .api.feedback import router as feedback_router
-from .api.priorities import router as priorities_router
-from .api.ingest import router as ingest_router
-from .api.weights import router as weights_router
-from .api.mock import router as mock_router
-from .api.courses import router as courses_router
-from .api.data_sources import router as data_sources_router
+from .api.webhooks import router as webhooks_router
 
 app = FastAPI(
     title="Course Feedback Aggregator API",
@@ -30,20 +21,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize database with seeding on startup
-@app.on_event("startup")
-async def startup_event():
-    await init_database(seed_data=True)
-
-# Include API routers
-app.include_router(courses_router, prefix="/api", tags=["courses"])
-app.include_router(feedback_router, prefix="/api", tags=["feedback"])
-app.include_router(priorities_router, prefix="/api", tags=["priorities"])
-app.include_router(ingest_router, prefix="/api", tags=["ingestion"])
-app.include_router(weights_router, prefix="/api", tags=["weights"])
-app.include_router(data_sources_router, prefix="/api", tags=["data-sources"])
-app.include_router(mock_router, prefix="/api", tags=["mock"])
-
+# Include webhook router (MVP focus)
+app.include_router(webhooks_router, prefix="/api", tags=["webhooks"])
 # CORS preflight handler
 @app.options("/{path:path}")
 async def options_handler(path: str):
@@ -56,10 +35,10 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
+        "phase": "webhook_mvp",
         "services": {
-            "database": "connected",
-            "canvas_api": "configured" if settings.canvas_token else "missing_token",
-            "zoho_api": "configured" if settings.zoho_access_token else "missing_token"
+            "webhook_endpoint": "active",
+            "zoho_oauth": "configured" if settings.zoho_client_id else "missing_config"
         }
     }
 
@@ -67,17 +46,15 @@ async def health_check():
 @app.get("/")
 async def root():
     return {
-        "message": "Course Feedback Aggregator API",
-        "version": "1.0.0",
+        "message": "Course Feedback Aggregator API - Webhook MVP",
+        "version": "1.0.1",
+        "phase": "webhook_development",
         "environment": settings.environment,
-        "endpoints": [
+        "active_endpoints": [
             "/health",
-            "/api/feedback",
-            "/api/priorities", 
-            "/api/weights",
-            "/api/ingest/canvas",
-            "/api/ingest/zoho"
-        ]
+            "/api/webhooks/zoho-survey"
+        ],
+        "status": "Ready for Zoho webhook integration"
     }
 
 if __name__ == "__main__":

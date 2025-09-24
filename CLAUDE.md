@@ -1,541 +1,362 @@
-# Course Feedback Aggregator - Claude Code Configuration
+# Course Feedback Aggregator - Project Documentation
 
 ## Project Overview
-**Course Feedback Aggregation & Priority Intelligence System** - A comprehensive platform that unifies course feedback from Canvas LMS and Zoho surveys into a single database with intelligent prioritization scoring. The system provides explainable recommendations for course improvements with full traceability back to original feedback sources.
+**Course Feedback Aggregation & Priority Intelligence System** - A platform that unifies course feedback from Canvas LMS and Zoho Surveys into a single database with intelligent prioritization scoring and explainable recommendations.
 
-### Mission Statement
-Build a single, explainable prioritization system that pulls course feedback from Canvas and Zoho into one database, scores what to "fix" first, and shows the "why" behind each recommendation in a live dashboard.
+### Core Mission
+Build an explainable prioritization system that pulls course feedback from Canvas and Zoho into one database, scores what to "fix" first, and shows the "why" behind each recommendation in a live dashboard.
 
-## 🗂️ Current Repository Structure (Updated Sept 10, 2025)
+## Current Repository Structure
 
 ```
 CourseFeedbackAggregator/
-├── .claude/                   # Claude Code configuration  
-├── .env                       # API credentials (Canvas, Zoho)
-├── .gitignore                # Git ignore rules
-├── .vscode/                  # VSCode configuration
-├── CLAUDE.md                 # This project documentation
-├── README.md                 # Project overview
 ├── apps/
-│   ├── frontend/             # React frontend (preserved)
-│   │   ├── src/              # React source code
-│   │   ├── public/           # Static assets
-│   │   └── package.json      # Frontend dependencies
-│   └── backend/              # ✅ FastAPI backend (COMPLETE)
-│       ├── app/              # Main application code
-│       │   ├── api/          # HTTP endpoints (View layer)
-│       │   ├── models/       # ✅ Database models (proper MVC)
-│       │   ├── controllers/  # Business logic controllers
-│       │   ├── services/     # Service layer
-│       │   ├── clients/      # External API clients
-│       │   ├── config/       # Database & app configuration
-│       │   └── scoring/      # Priority scoring engine
-│       ├── venv/             # Python virtual environment
-│       ├── requirements.txt  # Python dependencies
-│       └── main.py           # Application entry point
-└── dev-kit/                  # API testing & development tools
-    ├── testing/              # ✅ API test scripts (organized)
-    │   ├── canvas/           # Canvas LMS API testing
-    │   │   ├── canvas_api_live_test.py
-    │   │   ├── canvas_feedback_extractor.py
-    │   │   └── canvas_test_results_*.json
-    │   ├── zoho/             # Zoho CRM API testing  
-    │   │   ├── zoho_crm_test.py
-    │   │   ├── zoho_dummy_redirect.py
-    │   │   ├── zoho_self_client.py
-    │   │   └── zoho_test_results_*.json
-    │   └── README.md         # Testing documentation
-    ├── research/             # API research documentation
-    │   ├── canvas-lms-integration-guide.md
-    │   └── zoho-crm-integration-guide.md
-    └── templates/            # Development templates
+│   ├── frontend/                 # React 18 + TypeScript Dashboard
+│   │   ├── src/
+│   │   │   ├── components/       # UI Components
+│   │   │   │   ├── ui/          # shadcn/ui components
+│   │   │   │   ├── ApplicationLayout.tsx
+│   │   │   │   ├── CoursesList.tsx
+│   │   │   │   ├── DashboardOverview.tsx
+│   │   │   │   ├── PriorityRecommendations.tsx
+│   │   │   │   ├── RecommendationCard.tsx
+│   │   │   │   └── ScoringControls.tsx
+│   │   │   ├── services/        # API clients & utilities
+│   │   │   ├── hooks/           # Custom React hooks
+│   │   │   └── lib/             # Utilities & helpers
+│   │   └── package.json
+│   │
+│   └── backend/                  # FastAPI Backend
+│       ├── app/
+│       │   ├── api/             # API endpoints
+│       │   │   ├── courses.py
+│       │   │   ├── feedback.py
+│       │   │   ├── priorities.py
+│       │   │   ├── ingest.py
+│       │   │   ├── weights.py
+│       │   │   └── mock.py
+│       │   ├── services/        # Business logic (296 lines zoho_auth, 243 lines scoring)
+│       │   │   ├── zoho_auth.py
+│       │   │   ├── scoring_service.py
+│       │   │   ├── priority_service.py
+│       │   │   └── feedback_service.py
+│       │   ├── clients/         # External API integrations (empty)
+│       │   ├── config/          # Configuration (empty files)
+│       │   ├── controllers/     # Controllers (empty)
+│       │   ├── views/           # View layer (empty)
+│       │   └── utils/           # Utilities (empty)
+│       └── main.py              # FastAPI app entry (86 lines)
+│
+└── dev-kit/                     # Development & Testing Tools
+    ├── testing/
+    │   ├── canvas/              # Canvas LMS API testing
+    │   └── zoho/                # Zoho OAuth & API testing
+    └── research/                # API integration guides
 ```
 
-### ✅ Backend Implemented (Sept 10, 2025)
-**Added:** `apps/backend/` - Complete FastAPI system with proper MVC architecture  
-**Features:** Real Canvas/Zoho API integration, PostgreSQL database, priority scoring engine  
-**Status:** Fully operational - server running on port 8003 with successful data ingestion
+## 🔄 Current Implementation Status
 
-## 📈 Recent Progress (September 10, 2025)
+### Frontend (React Dashboard) - FUNCTIONAL
+- **Status**: Working MVP with mock data
+- **Components**:
+  - PriorityRecommendations with explainable scoring
+  - CoursesList with filtering and sorting
+  - DashboardOverview with metrics
+  - ScoringControls for weight adjustment
+- **Data Source**: Currently using mock API endpoints
+- **Deployment Ready**: Can deploy to Vercel immediately
 
-### ✅ **API Integration Framework Completed**
-**Comprehensive Testing Infrastructure Built:**
-- **Canvas LMS Integration**: ✅ Working API client with live data extraction
+### Backend (FastAPI) - WEBHOOK MVP OPERATIONAL
+- **Status**: Webhook infrastructure functional, database layer pending
+- **✅ Working Components**:
+  - FastAPI application with CORS configured
+  - **Zoho webhook endpoint** (`/api/webhooks/zoho-survey`) receiving real survey data
+  - Service layer with scoring logic (243 lines)
+  - Zoho OAuth token management (296 lines)
+  - Priority calculation service (154 lines)
+  - Mock API endpoints for frontend testing
+  - **Real-time webhook payload logging and display**
+- **🔄 Missing/Empty Components**:
+  - Database models (no ORM implementation)
+  - Database configuration (minimal placeholder implementation)
+  - Controllers (0 lines in all controller files)
+  - Views layer (0 lines)
+  - Canvas client implementation
+  - Persistent data storage (webhooks stored temporarily)
+
+### API Integrations
+- **Canvas LMS**: Testing scripts functional, production client not implemented
   - Token: `15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY`
   - Base URL: `https://executiveeducation.instructure.com`
-  - Successfully extracting course data, analytics, and quiz responses
-  
-- **Zoho CRM OAuth Implementation**: 🔄 In Progress
+- **Zoho Surveys**: ✅ **Webhook implementation ACTIVE**
   - Client ID: `1000.LFJC5W9CC2VV5A0VBHZBI8HFY0OWYH`
-  - Multiple OAuth methods implemented:
-    - ✅ Self Client method (recommended)
-    - ✅ Dummy redirect URI method  
-    - ✅ Standard OAuth flow
-  - **Current Status**: Waiting for rate limit reset (10 minutes)
+  - **✅ Webhook URL**: `https://unilluminant-marion-severally.ngrok-free.dev/api/webhooks/zoho-survey`
+  - **✅ Real survey data flowing**: Course feedback from "Women In Leadership" and other courses
+  - **🎯 Focus**: Course feedback surveys only (instructor evals and program feedback excluded)
 
-### ✅ **Development Environment Organized**
-**Clean Testing Structure:**
-- **Canvas Testing**: Dedicated `/canvas/` directory with live API scripts
-- **Zoho Testing**: Dedicated `/zoho/` directory with multiple OAuth methods
-- **Research Documentation**: Updated integration guides for both APIs
-- **Removed**: Legacy scattered test files and duplicated scripts
+## Updated Engineering Plan
 
-### ✅ **Technical Architecture Validated**
-**API Access Confirmed:**
-- Canvas LMS: ✅ Active connection with course data access
-- Zoho CRM: ⏳ OAuth setup in final stage (refresh token acquisition)
-- Both APIs provide the data needed for course feedback aggregation
+### Phase 1: Complete Backend Infrastructure (Priority 1)
+**Goal**: Establish database and complete backend foundation
 
-### ✅ **Backend Implementation Completed**
-**Full FastAPI System Built:**
-- **MVC Architecture**: Proper models abstracted to `/models/` directory
-- **Canvas Integration**: ✅ Live API calls successful - course 847 data ingested
-- **Zoho Integration**: ✅ OAuth framework implemented (token refresh needed)
-- **PostgreSQL Database**: ✅ Complete schema with foreign keys and proper relationships
-- **Priority Scoring Engine**: ✅ Multi-factor algorithm (Impact, Urgency, Effort, Strategic, Trend)
-- **RESTful API**: ✅ Full CRUD operations with explainable priority recommendations
-- **Real Data Ingestion**: ✅ Server successfully populated database with Canvas feedback
+**Tasks**:
+- [ ] Implement SQLAlchemy models for courses, feedback, recommendations
+- [ ] Configure Neon PostgreSQL connection in config files
+- [ ] Build database initialization and migration system
+- [ ] Complete controller implementations
+- [ ] Remove mock endpoints after real implementation
 
-**Key Achievements:**
-- Server running on port 8003 with successful Canvas API calls
-- Priority scoring working with configurable weights (Impact: 0.4, Urgency: 0.35, etc.)
-- Database seeded with real course data from Canvas LMS
-- Automatic priority calculation and recommendation generation
+### Phase 2: Zoho Webhook Integration (Priority 2) - ✅ **MVP COMPLETE**
+**Goal**: Capture survey feedback via webhooks
+
+**Tasks**:
+- [x] **Create webhook receiver endpoint** `/api/webhooks/zoho-survey` - OPERATIONAL
+- [x] **Real-time payload processing** - receiving course feedback data
+- [x] **Survey response parser** - extracting course names, ratings, feedback sections
+- [ ] Implement webhook signature validation (security enhancement)
+- [ ] Create attribution engine for course mapping (Canvas ID correlation)
+- [ ] Handle historical data import from "Untried" section
+- [ ] **Persistent data storage** (currently logging only)
+
+**🎯 Current Webhook Data Structure**:
+```json
+{
+  "course_name": "Women In Leadership",
+  "reviewer_email": "enterprise.ecandassociates@gmail.com",
+  "response_id": "CGC4SCMP",
+  "section_1_area": "Module 1",
+  "section_1_overall_rating": "4",
+  "section_1_positive": "feedback text...",
+  "section_1_improvements": "improvement suggestions...",
+  "section_1_showstopper": "No - they can work around it, or NA.",
+  "section_2_area": "Module 2",
+  "section_2_overall_rating": "4",
+  "section_2_positive": "feedback text...",
+  "section_2_improvements": "improvement suggestions...",
+  "section_2_showstopper": "No - they can work around it, or NA."
+}
+```
+
+**📋 Unified Schema Strategy (Canvas ↔ Zoho Mapping)**:
+```python
+# Unified Feedback Record
+{
+    "id": "uuid",
+    "source": "zoho_survey",  # or "canvas_discussion"
+    "source_id": "response_id",  # Zoho: CGC4SCMP, Canvas: assignment_id
+    "course_id": "canvas_course_id",  # Primary key from Canvas
+    "course_name": "Women In Leadership",  # Normalized from both sources
+    "reviewer_identifier": "email_hash",  # Privacy-safe reviewer ID
+    "feedback_sections": [
+        {
+            "section_type": "module_1",
+            "rating": 4,
+            "positive_feedback": "text...",
+            "improvement_areas": "text...",
+            "is_showstopper": false,
+            "showstopper_details": null
+        }
+    ],
+    "metadata": {
+        "submission_date": "2025-02-16T13:59:28",
+        "processing_timestamp": "2025-09-23T19:50:08Z",
+        "canvas_mapped": true,
+        "confidence_score": 0.95
+    }
+}
+```
+
+**🎯 Course Feedback Survey Scope**:
+- **Primary Focus**: Module-level course feedback for content improvement
+- **Exclusions**: Instructor evaluations, program-wide feedback, technical support
+- **Key Metrics**: Section ratings, improvement suggestions, show-stopper identification
+- **Attribution**: Map Zoho course names to Canvas course IDs for unified reporting
+
+### Phase 3: Canvas API Integration (Priority 3)
+**Goal**: Pull course data and feedback from Canvas
+
+**Tasks**:
+- [ ] Implement Canvas client in `clients/canvas_client.py`
+- [ ] Build course synchronization logic
+- [ ] Extract feedback from discussions/assignments
+- [ ] Create incremental sync mechanism
+
+### Phase 4: Attribution & Scoring Engine (Priority 4)
+**Goal**: Intelligent feedback processing and prioritization
+
+**Tasks**:
+- [ ] Build course identification from survey text
+- [ ] Implement confidence scoring for attributions
+- [ ] Complete multi-factor scoring system
+- [ ] Create explainable recommendation generation
+
+### Phase 5: Frontend-Backend Integration (Priority 5)
+**Goal**: Connect real backend to React dashboard
+
+**Tasks**:
+- [ ] Replace mock API calls with real endpoints
+- [ ] Implement real-time score updates
+- [ ] Add authentication if needed
+- [ ] Test end-to-end workflows
+
+### Phase 6: Production Deployment (Priority 6)
+**Goal**: Deploy complete system
+
+**Tasks**:
+- [ ] Deploy backend to Railway/Render
+- [ ] Configure Neon PostgreSQL production
+- [ ] Deploy frontend to Vercel
+- [ ] Set up monitoring and logging
+- [ ] Configure webhook URLs for production
 
 ## Technology Stack
-**Current (Phase 0 - MVP)**
-- **Frontend Framework**: React 18 with TypeScript
-- **Styling**: Tailwind CSS with custom Apple-inspired design system
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **State Management**: Zustand
-- **Testing**: Jest, React Testing Library
-- **Build Tool**: Create React App
-- **Data Source**: Static JSON files (MVP simulation)
-- **API Testing**: Python scripts in dev-kit/testing/
 
-**Current Production Architecture**
-- **Backend**: ✅ FastAPI with Python (IMPLEMENTED)
-- **Database**: ✅ PostgreSQL with async SQLAlchemy (OPERATIONAL)
-- **Authentication**: ✅ Token-based for Canvas/Zoho APIs (WORKING)
-- **API Endpoints**: ✅ RESTful API with explainable priority scoring
-- **External APIs**: ✅ Canvas LMS API integrated, Zoho CRM API framework ready
-- **Deployment Ready**: 
-  - Frontend: Vercel
-  - Backend: Railway/Render (can deploy immediately)
+### Frontend
+- React 18 with TypeScript
+- Tailwind CSS + shadcn/ui components
+- React Query for API state management
+- Recharts for data visualization
+- Vite as build tool
 
-## Engineering Plan & Implementation Roadmap
+### Backend
+- FastAPI (Python 3.11+)
+- SQLAlchemy for ORM (to be implemented)
+- Neon PostgreSQL for database (to be configured)
+- Pydantic for data validation
+- httpx for external API calls
 
-### Success Criteria
-- [x] Dashboard runs on real Canvas + Zoho data via API integration
-- [x] Scoring system is **explainable** and **tunable** (weights adjustable via UI with factor breakdowns)
-- [ ] At least three recommendations reviewed and validated with reviewer notes in the app
-- [x] Unified schema with full provenance (every feedback item links back to source)
-- [x] Production deployment with secure environment variable handling
-
-### Phase 1: Backend Foundation & Database (Week 1-2)
-**Objective**: Establish FastAPI service with core infrastructure
-
-**Tasks:**
-- [ ] Set up FastAPI project structure with Poetry/pip requirements
-- [ ] Implement core API routes:
-  - `/health` - Service health check
-  - `/api/feedback` - Retrieve aggregated feedback data
-  - `/api/priorities` - Get prioritized recommendations
-  - `/api/recompute` - Trigger scoring recalculation
-- [ ] Design unified database schema:
-  - `courses` - Course metadata and identifiers
-  - `feedback` - Normalized feedback entries with source provenance
-  - `weight_configs` - Tunable scoring weights and parameters  
-  - `recommendations` - Generated priority recommendations with explanations
-- [ ] Set up SQLite for local development, prepare PostgreSQL configuration
-- [ ] Seed database with current static JSON data for testing
-- [ ] Implement basic CRUD operations and data models
-
-### Phase 2: Data Ingestion MVP (Week 3-4)
-**Objective**: Real data integration from Canvas and Zoho
-
-**Tasks:**
-- [ ] Implement Zoho Survey API client:
-  - Token-based authentication
-  - Survey data retrieval and normalization
-  - `/api/ingest/zoho` endpoint for manual/scheduled ingestion
-- [ ] Implement Canvas LMS API client:
-  - Canvas API token authentication (token: `15908~kJrH3tCwaXwc7HZtGtzY64mXxnN6mk2vFVV236VcHuL3KvMTwc4LH9fvnzKzaVu8`)
-  - Course evaluation data extraction
-  - `/api/ingest/canvas` endpoint with course/instructor ID normalization
-- [ ] Build data mapping layer:
-  - Handle different course/instructor ID formats across systems
-  - Maintain source provenance for all feedback entries
-  - Implement conflict resolution for duplicate data
-- [ ] Create ingestion monitoring and error handling
-
-### Phase 3: Intelligent Scoring & Frontend Integration (Week 5-6)
-**Objective**: Implement explainable scoring algorithm with UI integration
-
-**Tasks:**
-- [ ] Develop server-side scoring engine:
-  - **Impact Score**: Frequency and severity of reported issues
-  - **Urgency Score**: Time-sensitivity based on course timeline
-  - **Effort Score**: Quick-win potential assessment
-  - **Strategic Score**: Alignment with institutional priorities
-  - **Trend Score**: Issue trajectory analysis
-- [ ] Implement scoring explanation system:
-  - Factor breakdown for each recommendation
-  - Evidence linking back to original feedback sources
-  - Confidence intervals and data quality indicators
-- [ ] Frontend API integration:
-  - Replace static JSON with API calls
-  - Add weight configuration sliders in admin panel
-  - Implement "Why This Priority?" explanation drawer
-  - Real-time scoring updates on weight changes
-- [ ] Enhanced UI features:
-  - Source evidence viewer with Canvas/Zoho links
-  - Recommendation validation workflow
-  - Reviewer notes and action tracking
-
-### Phase 4: Production Deployment (Week 7)
-**Objective**: Secure production deployment with monitoring
-
-**Tasks:**
-- [ ] Backend deployment on Railway/Render:
-  - PostgreSQL database provisioning
-  - Environment variable configuration
-  - API endpoint security and rate limiting
-- [ ] Frontend deployment on Vercel:
-  - Environment-specific API endpoint configuration
-  - Performance optimization and build verification
-- [ ] Security implementation:
-  - API tokens stored securely in backend environment only
-  - CORS configuration for frontend-backend communication
-  - Input validation and SQL injection prevention
-- [ ] Monitoring and logging:
-  - Application performance monitoring
-  - Error tracking and alerting
-  - API usage analytics
-
-### Phase 5: Documentation & Handoff (Week 8)
-**Objective**: Complete documentation and knowledge transfer
-
-**Tasks:**
-- [ ] Technical documentation:
-  - API documentation with OpenAPI/Swagger
-  - Database schema documentation
-  - Scoring algorithm explanation
-- [ ] Operational runbook:
-  - Deployment procedures
-  - Environment setup guide
-  - Troubleshooting guide
-- [ ] User documentation:
-  - Admin panel usage guide
-  - Scoring interpretation guide
-  - Data validation workflows
-- [ ] Code quality:
-  - Lighthouse/accessibility audit
-  - Code review and refactoring
-  - Test coverage verification
-
-### System Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Canvas LMS    │    │  Zoho Surveys   │    │  Other Sources  │
-│     API         │    │      API        │    │    (Future)     │
-└─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
-          │                      │                      │
-          └──────────────────────┼──────────────────────┘
-                                 │
-          ┌─────────────────────────────────────────────┐
-          │           FastAPI Backend                   │
-          │  ┌─────────────┐  ┌─────────────────────┐   │
-          │  │ Ingestion   │  │   Scoring Engine    │   │
-          │  │ Services    │  │   - Impact          │   │
-          │  │             │  │   - Urgency         │   │
-          │  └─────────────┘  │   - Effort          │   │
-          │                   │   - Strategic       │   │
-          │  ┌─────────────┐  │   - Trend           │   │
-          │  │   API       │  └─────────────────────┘   │
-          │  │  Routes     │                            │
-          │  └─────────────┘                            │
-          └─────────────────┬───────────────────────────┘
-                            │
-          ┌─────────────────┴───────────────────────────┐
-          │            PostgreSQL                       │
-          │  ┌─────────┐ ┌─────────┐ ┌─────────────┐   │
-          │  │ Courses │ │Feedback │ │Recommendations│  │
-          │  └─────────┘ └─────────┘ └─────────────┘   │
-          │  ┌─────────────────┐ ┌─────────────────┐   │
-          │  │ Weight_Configs  │ │   Audit_Log     │   │
-          │  └─────────────────┘ └─────────────────┘   │
-          └─────────────────┬───────────────────────────┘
-                            │
-          ┌─────────────────┴───────────────────────────┐
-          │           React Frontend                    │
-          │  ┌─────────────┐ ┌─────────────────────┐   │
-          │  │   Course    │ │    Priority         │   │
-          │  │ Dashboard   │ │   Recommendations   │   │
-          │  └─────────────┘ └─────────────────────┘   │
-          │  ┌─────────────┐ ┌─────────────────────┐   │
-          │  │   Admin     │ │   Evidence &        │   │
-          │  │   Panel     │ │   Explanation       │   │
-          │  └─────────────┘ └─────────────────────┘   │
-          └─────────────────────────────────────────────┘
-```
-
-### Risk Mitigation Strategies
-
-**Data Security & Access**
-- Canvas/Zoho API tokens secured in backend environment variables only
-- No credentials stored in frontend code or repository
-- Token rotation and access monitoring procedures
-
-**Data Integrity & Mapping**
-- Robust course/instructor ID mapping layer to handle system differences
-- Data validation at ingestion points
-- Audit logging for all data modifications
-
-**Scoring Explainability**
-- Store weight snapshots with each scoring run for reproducibility
-- Maintain detailed factor contribution logs
-- Version control for scoring algorithm changes
-
-**System Dependencies**
-- Admin/API access coordination for Canvas and Zoho
-- Fallback procedures for API outages
-- Regular backup and recovery testing
+### Infrastructure
+- Frontend: Vercel
+- Backend: Railway/Render
+- Database: Neon PostgreSQL
+- Monitoring: TBD
 
 ## Development Commands
 
-### Start Development Server
+### Frontend
 ```bash
-npm start
+cd apps/frontend
+npm install
+npm run dev          # Start development server (port 5173)
+npm run build        # Build for production
+npm run preview      # Preview production build
 ```
-Runs the app at http://localhost:3000 with hot reload
 
-### Build for Production
+### Backend
 ```bash
-npm run build
+cd apps/backend
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8003  # Start development server
 ```
-Creates optimized production build in `build/` folder
 
-### Run Tests
+## Environment Variables
+
+### Backend (.env)
+```env
+# Database (TO BE CONFIGURED)
+DATABASE_URL=postgresql://user:pass@host/dbname
+
+# Canvas API
+CANVAS_API_TOKEN=15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY
+CANVAS_BASE_URL=https://executiveeducation.instructure.com
+
+# Zoho OAuth
+ZOHO_CLIENT_ID=1000.LFJC5W9CC2VV5A0VBHZBI8HFY0OWYH
+ZOHO_CLIENT_SECRET=your_secret_here
+ZOHO_REFRESH_TOKEN=to_be_obtained
+```
+
+### Frontend (.env)
+```env
+VITE_API_URL=http://localhost:8003
+```
+
+## 📊 Priority Scoring Algorithm
+
+Current implementation in `scoring_service.py`:
+- **Impact**: Student enrollment × feedback frequency
+- **Urgency**: Severity keywords + timing factors
+- **Effort**: Issue type classification
+- **Strategic**: Alignment with institutional goals
+- **Trend**: Pattern analysis over time
+
+**Default Weights**:
+- Impact: 0.4
+- Urgency: 0.35
+- Effort: 0.15
+- Strategic: 0.1
+
+## 🚀 Current Development Status
+
+### ✅ **Webhook MVP Successfully Operational**
+- **Real-time data ingestion**: Zoho survey responses flowing to FastAPI
+- **Course feedback parsing**: Extracting ratings, feedback text, show-stopper flags
+- **Development environment**: Local server + ngrok tunnel for Zoho connectivity
+- **Data structure validation**: Confirmed course feedback schema compatibility
+
+### **Current Development Setup**
 ```bash
-npm test
-```
-Launches Jest test runner in watch mode
+# Backend Server
+cd apps/backend
+./venv/bin/python -m uvicorn app.main:app --reload --port 8000
 
-### Type Checking
-No separate TypeScript command needed - handled by Create React App
+# ngrok Tunnel (for Zoho webhooks)
+ngrok http 8000
+# URL: https://unilluminant-marion-severally.ngrok-free.dev/api/webhooks/zoho-survey
 
-### Linting
-No explicit lint command configured - uses ESLint via React Scripts
-
-## Project Structure
-
-**Current Frontend (React)**
-```
-src/
-├── components/           # React components
-│   ├── CourseCard.tsx   # Individual course display cards
-│   ├── CourseGrid.tsx   # Main course listing with sorting
-│   ├── Header.tsx       # Navigation with search
-│   ├── Sidebar.tsx      # Category navigation
-│   ├── SmartFilters.tsx # Advanced filtering options
-│   ├── StatsCards.tsx   # Analytics dashboard
-│   └── UploadModal.tsx  # CSV upload interface
-├── services/            # Business logic
-│   └── issueAnalysis.ts # Course review analysis
-└── __tests__/          # Test files
+# Test Webhook
+cd dev-kit/testing/zoho
+python3 test_webhook_local.py
 ```
 
-**Planned Backend Structure (FastAPI)**
-```
-backend/
-├── api/                 # API routes and endpoints
-│   ├── routes/
-│   │   ├── feedback.py  # Feedback data endpoints
-│   │   ├── priorities.py # Priority recommendations
-│   │   ├── ingest.py   # Data ingestion endpoints
-│   │   └── health.py   # Health check
-│   └── dependencies.py  # Shared dependencies
-├── core/               # Core application logic
-│   ├── config.py       # Configuration management
-│   ├── database.py     # Database connection
-│   └── security.py     # Authentication & security
-├── models/             # Database models
-│   ├── course.py       # Course data models
-│   ├── feedback.py     # Feedback data models
-│   └── recommendation.py # Recommendation models
-├── services/           # Business logic services
-│   ├── canvas_client.py    # Canvas API integration
-│   ├── zoho_client.py      # Zoho API integration
-│   ├── scoring_engine.py   # Priority scoring logic
-│   └── data_mapper.py      # Cross-system data mapping
-├── schemas/            # Pydantic schemas
-│   └── api_schemas.py  # Request/response models
-└── tests/             # Backend tests
-    ├── test_api/      # API endpoint tests
-    └── test_services/ # Service layer tests
-```
+### **Live Data Flow Confirmed**
+- **Survey**: "Women In Leadership" course feedback
+- **Response ID**: CGC4SCMP
+- **Data Quality**: Complete section ratings, detailed feedback text, show-stopper analysis
+- **Webhook Reliability**: Successfully receiving and processing real survey submissions
 
-## Key Features
+## Known Issues & Next Steps
 
-**Current MVP Features**
-- **Apple-style UI**: Custom Tailwind theme with SF Pro fonts and Apple shadows
-- **Course Analytics**: Real-time sorting by rating, date, issues, and name
-- **Smart Filtering**: Filter by issue categories, priority levels, and action status
-- **CSV Upload**: Drag & drop interface for course data import
-- **Priority Dashboard**: Overview of urgent issues and quick wins
-- **Responsive Design**: Mobile-friendly layout
+### Critical Issues
+1. **🔄 Persistent Storage**: Webhook data logging only (no database persistence)
+2. **No Database Models**: ORM models need implementation for unified schema
+3. **Canvas Integration Missing**: Course ID mapping layer not implemented
+4. **Controllers Empty**: Business logic needs to be moved to controllers
 
-**Planned Advanced Features**
-- **Multi-Source Data Integration**: Unified Canvas LMS and Zoho Survey data ingestion
-- **Intelligent Priority Scoring**: Multi-factor algorithm (Impact, Urgency, Effort, Strategic, Trend)
-- **Explainable AI**: "Why This Priority?" explanations with source evidence linking
-- **Tunable Weights**: Admin panel for adjusting scoring factors in real-time
-- **Recommendation Validation**: Workflow for reviewing and validating AI recommendations
-- **Full Provenance Tracking**: Every data point traceable back to original source
-- **Real-time Scoring**: Dynamic recalculation based on new data and weight changes
-- **Audit Trail**: Complete history of scoring decisions and weight configurations
+### Immediate Actions Required
+1. Set up Neon PostgreSQL database
+2. Implement SQLAlchemy models
+3. Complete Canvas API client
+4. Set up Zoho webhooks
+5. Connect frontend to real backend
 
-## Data Sources
+## Additional Documentation
 
-**Current (MVP)**
-- Static JSON files in `public/courses/`:
-  - `course_catalog.json` - Master course list
-  - Individual course folders with:
-    - `course_info.json` - Course metadata
-    - `reviews.json` - Student review data
-    - `analytics.json` - Computed analytics
+### Zoho Survey Integration Strategy
+Based on investigation, Zoho Survey API does not provide historical response retrieval. Recommended approach:
+1. Use webhooks for new responses
+2. Manual push from "Untried" section for historical data
+3. Store raw webhook payloads for reprocessing
+4. Implement idempotency checks
 
-**Target Production Sources**
-- **Canvas LMS API**: Course evaluations, gradebook data, discussion posts
-- **Zoho Surveys**: Custom feedback surveys, student satisfaction data
-- **PostgreSQL Database**: Unified storage with full provenance tracking
-- **Future Integrations**: Blackboard, Moodle, Google Classroom
+### Canvas Integration Notes
+- Use official API documentation patterns
+- Implement rate limiting (3000 requests/hour)
+- Handle pagination for large datasets
+- Cache frequently accessed data
 
-## Development Notes
+##  Learning Resources
 
-**Current MVP**
-- Uses Create React App configuration (no custom webpack)
-- Custom Apple-inspired color palette and shadows in `tailwind.config.js`
-- TypeScript strict mode enabled
-- No backend - operates on static JSON data files
-
-**Production Architecture Notes**
-- FastAPI backend with async/await patterns for API performance
-- SQLAlchemy ORM for database operations with Alembic migrations
-- Redis caching layer for expensive scoring computations
-- JWT-based authentication for admin features
-- Docker containerization for consistent deployment
-- Environment-specific configurations (dev/staging/prod)
-
-## Security Considerations
-- **API Tokens**: Canvas/Zoho credentials stored in backend environment variables only
-- **Data Privacy**: PII scrubbing and anonymization of student feedback
-- **Access Control**: Role-based permissions for admin vs. viewer access
-- **Audit Logging**: Complete trail of data access and scoring decisions
-- **CORS Configuration**: Strict cross-origin policies for production
-
-## Testing
-**Frontend Testing**
-- Test files located in `src/__tests__/` and `src/components/__tests__/`
-- Jest and React Testing Library for component and integration tests
-
-**Backend Testing (Planned)**
-- `pytest` for unit and integration testing
-- `httpx` for async API endpoint testing  
-- Test database isolation with fixtures
-- Mock external API calls (Canvas/Zoho) for reliable testing
+For detailed implementation guide, see:
+- MVP Code-Along Guide (12-day structured learning plan)
+- Canvas API Documentation: https://canvas.instructure.com/doc/api/
+- Zoho Webhook Documentation: https://help.zoho.com/portal/en/kb/survey/hub/triggers/webhook/
 
 ---
 
-## 📈 Recent Progress (September 5, 2025)
-
-### ✅ **Major UI/UX Overhaul Completed**
-**Professional Dashboard Transformation:**
-- **Removed AI-generated elements**: Eliminated all emojis, flashy colors, and "generated" indicators
-- **Focused on core mission**: Header now reads "Feedback Intelligence - Explainable Course Improvement Priorities"
-- **Real use case demonstration**: Using actual course data (IT Leadership, Customer Experience Program)
-- **Priority-first design**: Dashboard leads with explainable priority recommendations
-
-**New Components Implemented:**
-- **PriorityRecommendations**: Complete priority dashboard with real course feedback
-- **Explainable "Why This Priority?"**: Interactive modals showing scoring breakdown (Impact: 9.2, Urgency: 8.5, etc.)
-- **Source Traceability**: Canvas LMS and Zoho Survey indicators with reviewer attribution
-- **Professional Navigation**: "Priority Queue" and "Feedback Sources" instead of generic categories
-
-### ✅ **CourseCard Major Refactor**
-**Before**: Bloated component with star ratings, animations, export functions, rounded corners
-**After**: Clean, feedback-focused cards with:
-- **Priority-first header**: Color-coded priority scores (Critical: 8.7, High: 6.2, Medium: 4.8)
-- **Gradient backgrounds**: Professional red/orange/amber/emerald priority indicators
-- **Issue preview**: Shows actual student feedback with truncation
-- **Student impact metrics**: Clear display of affected students and reported issues
-- **Shadcn/ui styling**: Professional buttons, spacing, and minimal border radius
-- **50% code reduction**: Eliminated unnecessary complexity while adding functionality
-
-### ✅ **TypeScript Architecture Fixed**
-**Comprehensive Type Safety:**
-- **Unified Course interface**: Consolidated conflicting Course types from multiple files
-- **Resolved circular dependencies**: Fixed imports between types, services, and components
-- **API type integration**: Proper handling of Canvas/Zoho API response types
-- **Missing properties added**: All Course objects now include required `priority` field
-- **Build compilation**: ✅ No TypeScript errors
-
-**Files Affected:**
-- `App.tsx`: API type integration and data processing
-- `CourseCard.tsx`: Complete rewrite with professional design
-- `Header.tsx`: Rebranded to "Feedback Intelligence" with Configure Scoring button
-- `Sidebar.tsx`: Updated navigation for feedback workflow
-- `types/index.ts`: Unified type definitions
-- `UploadModal.tsx`: Added missing required properties
-
-### 🎯 **Alignment with Notion Specification**
-**Core Mission Achieved:**
-- ✅ **Explainable Priority Scoring**: "Why This Priority?" feature with factor breakdowns
-- ✅ **Source Provenance**: Every recommendation links to Canvas/Zoho with reviewer names
-- ✅ **Real Course Data**: Using actual feedback from IT Leadership course
-- ✅ **Professional Appearance**: Removed all AI-generated styling and content
-- ✅ **Actionable Workflow**: Clear next steps for course administrators
-
-**Evidence of Value Proposition:**
-- Shows specific issues: "Video 1 and Video 2 talk about different attributes - this offers inconsistency"
-- Student impact: "23 students affected" with source attribution
-- Priority justification: Impact (9.2), Urgency (8.5), Effort (6.0) scoring
-- Business context: "Critical Issues", "Quick Fixes", "Improvements" categorization
-
----
-
-## 🚀 Next Steps (Priority Order)
-
-### **Phase 1: Backend Foundation (Week 1-2)**
-**Status**: Ready to begin with real API access
-- **FastAPI Setup**: Use established architecture from CLAUDE.md specification
-- **Canvas Integration**: Leverage existing token and testing framework in dev-kit/
-- **Database Schema**: Implement unified feedback storage with source provenance
-- **Priority Scoring Engine**: Server-side implementation of Impact/Urgency/Effort/Strategic/Trend factors
-
-### **Phase 2: API Integration (Week 3)**
-**Prerequisites**: Admin access to Canvas and Zoho accounts
-- **Live Data Ingestion**: Replace static JSON with real API calls
-- **Weight Configuration**: Implement tunable scoring parameters
-- **Recommendation Validation**: Add reviewer workflow for marking recommendations as reviewed
-
-### **Phase 3: Production Deployment (Week 4)**
-**Frontend**: ✅ Ready for immediate deployment to Vercel
-**Backend**: Deploy to Railway/Render with secure environment variables
-**Monitoring**: Implement basic analytics and error tracking
-
-### **Immediate Action Items**
-1. **Obtain API Access**: Secure admin permissions for Canvas LMS and Zoho Survey accounts
-2. **Backend Development**: Start FastAPI implementation using existing specification
-3. **Demo Preparation**: Current frontend is demo-ready with professional appearance
-4. **Testing**: Validate Canvas API integration using dev-kit testing framework
-
----
-
-**Last Updated:** September 5, 2025  
-**Current Status:** ✅ Professional MVP frontend completed - Backend development ready to begin
-**Demo Ready:** Yes - Explainable priority scoring with real course feedback data
-**Dev Server:** http://localhost:3000/
+**Last Updated**: September 22, 2025
+**Current Focus**: Complete backend infrastructure and database implementation
+**Demo Status**: Frontend functional with mock data
+**Production Readiness**: ~40% complete
