@@ -73,6 +73,324 @@ Build an explainable prioritization system that pulls course feedback from Canva
 - Priority scoring engine (no business logic)
 - Course attribution system
 
+## Zoho Survey Data Structures
+
+The webhook endpoint successfully receives and processes three distinct survey types. Each has unique field structures and data patterns that inform our database schema and mapping logic.
+
+### 1. Chief Advisor Course Review Worksheet
+
+**Response Volume**: 98 responses
+**Key Characteristics**: Module-based feedback (1-4), company/title info, testimonial data
+**Reviewer Role**: `chief_advisor`
+
+**Sample Payload Structure**:
+```json
+{
+  "response_id": "12345678901234567890",
+  "survey_id": "987654321",
+  "collector_id": "456789123",
+  "collector_name": "Chief Advisor - Course Review Worksheet",
+  "response_start_time": "2024-01-15T10:30:00Z",
+
+  // Course identification
+  "course_name": "Advanced Leadership Strategy",
+
+  // Reviewer information (unique to Chief Advisor)
+  "reviewer_first_name": "Sarah",
+  "reviewer_last_name": "Johnson",
+  "reviewer_title": "VP of Operations",
+  "reviewer_company": "TechCorp Industries",
+  "reviewer_email": "sarah.johnson@techcorp.com",
+
+  // Course Overview feedback
+  "course_overview_rating": 4,
+  "course_overview_positive": "Excellent strategic frameworks and real-world applications",
+  "course_overview_improvements": "Could use more industry-specific case studies",
+
+  // Module-based feedback (1-4)
+  "module_1_rating": 4,
+  "module_1_positive": "Strong foundational concepts",
+  "module_1_improvements": "More interactive exercises needed",
+
+  "module_2_rating": 5,
+  "module_2_positive": "Outstanding facilitator engagement",
+  "module_2_improvements": "",
+
+  "module_3_rating": 3,
+  "module_3_positive": "Good content coverage",
+  "module_3_improvements": "Pacing was too fast, need more time for discussion",
+
+  "module_4_rating": 4,
+  "module_4_positive": "Practical tools and templates",
+  "module_4_improvements": "Templates could be more customizable",
+
+  // Program Wrap-Up
+  "program_wrapup_rating": 4,
+  "program_wrapup_positive": "Good synthesis and action planning",
+  "program_wrapup_improvements": "Follow-up resources would be valuable",
+
+  // Marketing/Testimonial (unique to Chief Advisor)
+  "testimonial_text": "This program transformed how our leadership team approaches strategic planning. Highly recommended.",
+  "allow_testimonial_use": "Yes",
+  "wants_video_testimonial": "No"
+}
+```
+
+**Processed Data Structure**:
+```json
+{
+  "response_id": "12345678901234567890",
+  "survey_type": "chief_advisor_course_review",
+  "course_name": "Advanced Leadership Strategy",
+
+  "reviewer": {
+    "first_name": "Sarah",
+    "last_name": "Johnson",
+    "title": "VP of Operations",
+    "company": "TechCorp Industries",
+    "email": "sarah.johnson@techcorp.com",
+    "full_name": "Sarah Johnson",
+    "role": "chief_advisor"
+  },
+
+  "course_overview": {
+    "rating": 4,
+    "positive_comments": "Excellent strategic frameworks...",
+    "improvement_suggestions": "Could use more industry-specific...",
+    "has_improvements": true
+  },
+
+  "modules": {
+    "module_1": {"rating": 4, "positive_comments": "...", "improvement_suggestions": "...", "has_improvements": true},
+    "module_2": {"rating": 5, "positive_comments": "...", "improvement_suggestions": "", "has_improvements": false},
+    "module_3": {"rating": 3, "positive_comments": "...", "improvement_suggestions": "...", "has_improvements": true},
+    "module_4": {"rating": 4, "positive_comments": "...", "improvement_suggestions": "...", "has_improvements": true}
+  },
+
+  "program_wrapup": {
+    "rating": 4,
+    "positive_comments": "Good synthesis and action planning",
+    "improvement_suggestions": "Follow-up resources would be valuable",
+    "has_improvements": true
+  },
+
+  "marketing": {
+    "testimonial_text": "This program transformed how...",
+    "allow_testimonial_use": true,
+    "wants_video_testimonial": false
+  },
+
+  "analysis": {
+    "total_sections_with_improvements": 4,
+    "has_marketing_value": true,
+    "reviewer_seniority": "chief_advisor"
+  }
+}
+```
+
+### 2. Course Review Worksheet
+
+**Response Volume**: 31 responses
+**Key Characteristics**: Two-section structure, showstopper flags, document attachments
+**Reviewer Role**: `general_reviewer`
+
+**Sample Payload Structure**:
+```json
+{
+  "response_id": "23456789012345678901",
+  "survey_id": "876543210",
+  "collector_id": "345678912",
+  "collector_name": "Course Review Worksheet",
+  "response_start_time": "2024-01-20T14:15:00Z",
+
+  // Course identification
+  "course_name": "Digital Marketing Fundamentals",
+
+  // Reviewer information (basic)
+  "reviewer_first_name": "Michael",
+  "reviewer_last_name": "Chen",
+  "reviewer_email": "michael.chen@company.com",
+
+  // Section 1 feedback
+  "section_1_area": "Content Structure & Flow",
+  "section_1_overall_rating": 3,
+  "section_1_positive": "Well-organized modules with clear learning objectives",
+  "section_1_improvements": "Module 2 needs better transition between topics. Some concepts introduced too quickly.",
+  "section_1_showstopper": "No",
+  "section_1_showstopper_details": "",
+  "section_1_documents": "",
+
+  // Section 2 feedback
+  "section_2_area": "Technical Implementation",
+  "section_2_overall_rating": 2,
+  "section_2_positive": "Good use of real-world examples",
+  "section_2_improvements": "Video quality is poor in Module 3. Audio cuts out frequently. Platform keeps crashing during exercises.",
+  "section_2_showstopper": "Yes - it needs to be fixed ASAP!",
+  "section_2_showstopper_details": "Platform crashes prevent students from completing assignments. This blocks course progression.",
+  "section_2_documents": "error_screenshots.pdf"
+}
+```
+
+**Processed Data Structure**:
+```json
+{
+  "response_id": "23456789012345678901",
+  "survey_type": "course_review_worksheet",
+  "course_name": "Digital Marketing Fundamentals",
+  "reviewer_email": "michael.chen@company.com",
+  "reviewer_name": "Michael Chen",
+  "reviewer_role": "general_reviewer",
+
+  "section_1": {
+    "area": "Content Structure & Flow",
+    "overall_rating": 3,
+    "positive_comments": "Well-organized modules with clear learning objectives",
+    "improvement_suggestions": "Module 2 needs better transition between topics...",
+    "is_showstopper": false,
+    "showstopper_details": null,
+    "documents": null
+  },
+
+  "section_2": {
+    "area": "Technical Implementation",
+    "overall_rating": 2,
+    "positive_comments": "Good use of real-world examples",
+    "improvement_suggestions": "Video quality is poor in Module 3...",
+    "is_showstopper": true,
+    "showstopper_details": "Platform crashes prevent students from completing assignments...",
+    "documents": "error_screenshots.pdf"
+  },
+
+  "metadata": {
+    "survey_source": "zoho_course_review_worksheet",
+    "submitted_at": "2024-01-20T14:15:00Z",
+    "processing_timestamp": "2024-01-20T14:15:23.456Z",
+    "collector_name": "Course Review Worksheet"
+  }
+}
+```
+
+### 3. EE Instructor Course Reviewer Worksheet
+
+**Response Volume**: 87 responses
+**Key Characteristics**: Same two-section structure as Course Review, but from instructor perspective
+**Reviewer Role**: `ee_instructor`
+
+**Sample Payload Structure**:
+```json
+{
+  "response_id": "34567890123456789012",
+  "survey_id": "765432109",
+  "collector_id": "234567891",
+  "collector_name": "EE Instructor - Course Reviewer Worksheet",
+  "response_start_time": "2024-01-18T09:45:00Z",
+
+  // Course identification
+  "course_name": "Executive Finance for Non-Financial Managers",
+
+  // Reviewer information (instructor)
+  "reviewer_first_name": "Dr. Jennifer",
+  "reviewer_last_name": "Rodriguez",
+  "reviewer_email": "j.rodriguez@university.edu",
+
+  // Section 1 feedback (instructor perspective)
+  "section_1_area": "Curriculum Design & Learning Outcomes",
+  "section_1_overall_rating": 4,
+  "section_1_positive": "Clear learning objectives aligned with executive needs. Good balance of theory and practical application.",
+  "section_1_improvements": "Case studies should include more recent examples. Module 4 learning outcomes too broad.",
+  "section_1_showstopper": "No",
+  "section_1_showstopper_details": "",
+  "section_1_documents": "",
+
+  // Section 2 feedback (instructor perspective)
+  "section_2_area": "Instructional Materials & Resources",
+  "section_2_overall_rating": 5,
+  "section_2_positive": "Excellent instructor guides and supplementary materials. Video content is professional quality.",
+  "section_2_improvements": "Would benefit from additional assessment rubrics for group projects.",
+  "section_2_showstopper": "No",
+  "section_2_showstopper_details": "",
+  "section_2_documents": "suggested_rubrics.docx"
+}
+```
+
+**Processed Data Structure**:
+```json
+{
+  "response_id": "34567890123456789012",
+  "survey_type": "ee_instructor_course_review",
+  "course_name": "Executive Finance for Non-Financial Managers",
+  "reviewer_email": "j.rodriguez@university.edu",
+  "reviewer_name": "Dr. Jennifer Rodriguez",
+  "reviewer_role": "ee_instructor",
+
+  "section_1": {
+    "area": "Curriculum Design & Learning Outcomes",
+    "overall_rating": 4,
+    "positive_comments": "Clear learning objectives aligned with executive needs...",
+    "improvement_suggestions": "Case studies should include more recent examples...",
+    "is_showstopper": false,
+    "showstopper_details": null,
+    "documents": null
+  },
+
+  "section_2": {
+    "area": "Instructional Materials & Resources",
+    "overall_rating": 5,
+    "positive_comments": "Excellent instructor guides and supplementary materials...",
+    "improvement_suggestions": "Would benefit from additional assessment rubrics...",
+    "is_showstopper": false,
+    "showstopper_details": null,
+    "documents": "suggested_rubrics.docx"
+  },
+
+  "metadata": {
+    "survey_source": "zoho_ee_instructor_course_review",
+    "submitted_at": "2024-01-18T09:45:00Z",
+    "processing_timestamp": "2024-01-18T09:45:31.789Z",
+    "collector_name": "EE Instructor - Course Reviewer Worksheet"
+  }
+}
+```
+
+### Survey Type Detection Logic
+
+The webhook automatically detects survey types based on payload fields:
+
+```python
+def detect_survey_type(payload: Dict[str, Any]) -> str:
+    # Chief Advisor: Has module ratings and company info
+    if any(key in payload for key in [
+        "course_overview_rating", "module_1_rating", "module_2_rating",
+        "reviewer_title", "reviewer_company"
+    ]):
+        return "chief_advisor_course_review"
+
+    # EE Instructor vs Course Review: Both have section structure
+    elif payload.get("collector_name") and "ee instructor" in payload.get("collector_name", "").lower():
+        return "ee_instructor_course_review"
+
+    # Course Review Worksheet: Has section areas and showstopper flags
+    elif any(key in payload for key in [
+        "section_1_area", "section_2_area", "section_1_showstopper", "section_2_showstopper"
+    ]):
+        return "course_review_worksheet"
+
+    else:
+        return "unknown_survey_type"
+```
+
+### Key Data Insights for Database Design
+
+1. **Course Attribution Challenge**: Course names vary between surveys ("Advanced Leadership Strategy" vs "Adv Leadership" vs "Leadership Strategy - Advanced")
+
+2. **Reviewer Hierarchy**: Chief Advisors > EE Instructors > General Reviewers (for priority weighting)
+
+3. **Showstopper Criticality**: Technical issues flagged as showstoppers should trigger immediate priority scoring
+
+4. **Content vs Technical Feedback**: Different improvement categories require different effort estimation (content changes vs platform fixes)
+
+5. **Marketing Value**: Chief Advisor testimonials provide additional business value beyond course improvement
+
 ## System Architecture
 
 ### Database Schema
