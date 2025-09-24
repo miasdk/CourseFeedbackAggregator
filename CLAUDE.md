@@ -1,5 +1,41 @@
 # Course Feedback Aggregator - Complete Project Documentation
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+   - [Core Mission](#core-mission)
+2. [Current Implementation Status](#current-implementation-status)
+   - [Operational Components](#operational-components)
+   - [Missing Components](#missing-components)
+3. [System Architecture](#system-architecture)
+   - [Database Schema](#database-schema)
+   - [Data Flow Architecture](#data-flow-architecture)
+   - [System Architecture Diagrams](#system-architecture-diagrams)
+4. [Priority Scoring Engine (MVP)](#priority-scoring-engine-mvp)
+   - [Core Algorithm](#core-algorithm)
+   - [Explainable Recommendations](#explainable-recommendations)
+5. [Implementation Roadmap](#implementation-roadmap)
+   - [Phase 1: Database Foundation](#phase-1-database-foundation)
+   - [Phase 2: Canvas Integration](#phase-2-canvas-integration)
+   - [Phase 3: Data Processing](#phase-3-data-processing)
+   - [Phase 4: Priority Scoring Engine](#phase-4-priority-scoring-engine)
+   - [Phase 5: Frontend Integration](#phase-5-frontend-integration)
+   - [Phase 6: Production Deployment](#phase-6-production-deployment)
+6. [Updated Frontend Architecture](#updated-frontend-architecture)
+   - [Component Structure](#component-structure)
+   - [API Integration Updates](#api-integration-updates)
+7. [Proposed Repository Structure](#proposed-repository-structure)
+8. [Phase 1: Database Foundation - Actionable Next Steps](#phase-1-database-foundation---actionable-next-steps)
+   - [Immediate Tasks](#immediate-tasks-this-week)
+   - [Week 1 Deliverables](#week-1-deliverables)
+   - [Repository Structure Changes Needed](#repository-structure-changes-needed)
+9. [Development Commands](#development-commands)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+   - [Database Operations](#database-operations)
+10. [Technology Stack](#technology-stack)
+11. [Success Metrics](#success-metrics)
+
 ## Project Overview
 
 **Course Feedback Aggregation & Priority Intelligence System** - A platform that unifies course feedback from Canvas LMS and Zoho Surveys into a single database with intelligent prioritization scoring and explainable recommendations for course improvements.
@@ -884,7 +920,10 @@ uvicorn app.main:app --reload --port 8000
 ```bash
 cd apps/frontend
 npm install
-npm run dev  # Start Vite development server (port 5173)
+npm run dev          # Start Vite development server (port 5173)
+npm run start        # Alternative start command (same as dev)
+npm run build        # Build for production using Vite
+npm run preview      # Preview production build locally
 ```
 
 ### Database Operations

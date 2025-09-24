@@ -5,9 +5,9 @@
 ### **Course Review Surveys**
 | Survey Name | Responses | Owner | Last Modified | Status |
 |-------------|-----------|-------|---------------|---------|
-| **EE Instructor - Course Reviewer Worksheet** | 87 | Carol Buehrens | Sep 24, 2025 | 🔥 Priority |
-| **Chief Advisor - Course Review Worksheet** | 98 | Carol Buehrens | Sep 24, 2025 | 🔥 Priority |
-| **Course Review Worksheet** | 31 | Carol Buehrens | Sep 24, 2025 | 🔥 Priority |
+| **EE Instructor - Course Reviewer Worksheet** | 87 | Carol Buehrens | Sep 24, 2025 | Priority |
+| **Chief Advisor - Course Review Worksheet** | 98 | Carol Buehrens | Sep 24, 2025 | Priority |
+| **Course Review Worksheet** | 31 | Carol Buehrens | Sep 24, 2025 | Priority |
 
 ---
 
