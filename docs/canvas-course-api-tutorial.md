@@ -1,7 +1,7 @@
 # Canvas Course API Integration Tutorial
 
 **Building a Course API Client for Course Feedback Aggregation**
-
+ 
 This tutorial shows how to build a Canvas API client to fetch course data needed for your course feedback aggregation project. We'll focus on the specific endpoints and data you need for course attribution and priority scoring.
 
 ## Prerequisites
