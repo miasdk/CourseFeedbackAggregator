@@ -4,15 +4,15 @@
 
 1. [Project Overview](#project-overview)
    - [Core Mission](#core-mission)
+   - [Project Pivot Decision](#project-pivot-decision)
 2. [Current Implementation Status](#current-implementation-status)
    - [Operational Components](#operational-components)
    - [Missing Components](#missing-components)
-3. [Zoho Survey Data Structures](#zoho-survey-data-structures)
-   - [1. Chief Advisor Course Review Worksheet](#1-chief-advisor-course-review-worksheet)
-   - [2. Course Review Worksheet](#2-course-review-worksheet)
-   - [3. EE Instructor Course Reviewer Worksheet](#3-ee-instructor-course-reviewer-worksheet)
-   - [Survey Type Detection Logic](#survey-type-detection-logic)
-   - [Key Data Insights for Database Design](#key-data-insights-for-database-design)
+3. [Canvas Survey Data Architecture](#canvas-survey-data-architecture)
+   - [Canvas API Endpoints](#canvas-api-endpoints)
+   - [Survey Detection Logic](#survey-detection-logic)
+   - [Student Feedback Data Structures](#student-feedback-data-structures)
+   - [Key Integration Insights](#key-integration-insights)
 4. [System Architecture](#system-architecture)
    - [Database Schema](#database-schema)
    - [Data Flow Architecture](#data-flow-architecture)
@@ -21,381 +21,228 @@
    - [Core Algorithm](#core-algorithm)
    - [Explainable Recommendations](#explainable-recommendations)
 6. [Implementation Roadmap](#implementation-roadmap)
-   - [Phase 1: Database Foundation](#phase-1-database-foundation)
-   - [Phase 2: Canvas Integration](#phase-2-canvas-integration)
-   - [Phase 3: Data Processing](#phase-3-data-processing)
-   - [Phase 4: Priority Scoring Engine](#phase-4-priority-scoring-engine)
-   - [Phase 5: Frontend Integration](#phase-5-frontend-integration)
-   - [Phase 6: Production Deployment](#phase-6-production-deployment)
+   - [Phase 1: Canvas Survey Discovery](#phase-1-canvas-survey-discovery)
+   - [Phase 2: Student Response Extraction](#phase-2-student-response-extraction)
+   - [Phase 3: Priority Scoring Engine](#phase-3-priority-scoring-engine)
+   - [Phase 4: Dashboard Integration](#phase-4-dashboard-integration)
 7. [Updated Frontend Architecture](#updated-frontend-architecture)
    - [Component Structure](#component-structure)
    - [API Integration Updates](#api-integration-updates)
-8. [Proposed Repository Structure](#proposed-repository-structure)
-9. [Phase 1: Database Foundation - Actionable Next Steps](#phase-1-database-foundation---actionable-next-steps)
-   - [Immediate Tasks](#immediate-tasks-this-week)
+8. [Repository Structure](#repository-structure)
+9. [Phase 1: Canvas Integration - Actionable Next Steps](#phase-1-canvas-integration---actionable-next-steps)
+   - [Immediate Tasks](#immediate-tasks-week-1)
    - [Week 1 Deliverables](#week-1-deliverables)
-   - [Repository Structure Changes Needed](#repository-structure-changes-needed)
+   - [Canvas API Testing](#canvas-api-testing)
 10. [Development Commands](#development-commands)
    - [Backend](#backend)
    - [Frontend](#frontend)
-   - [Database Operations](#database-operations)
+   - [Canvas Integration Testing](#canvas-integration-testing)
 11. [Technology Stack](#technology-stack)
 12. [Success Metrics](#success-metrics)
 
 ## Project Overview
 
-**Course Feedback Aggregation & Priority Intelligence System** - A platform that unifies course feedback from Canvas LMS and Zoho Surveys into a single database with intelligent prioritization scoring and explainable recommendations for course improvements.
+**Course Feedback Aggregation & Priority Intelligence System** - A Canvas-native platform that aggregates student feedback from Canvas course surveys/quizzes into a unified analytics system with intelligent prioritization scoring and explainable recommendations for course improvements.
 
 ### Core Mission
-Build an explainable prioritization system that pulls course feedback from Canvas and Zoho into one database, scores what to "fix" first, and shows the "why" behind each recommendation in a live dashboard with tunable weights.
+Build an explainable prioritization system that extracts student feedback from Canvas course surveys, scores what to "fix" first, and shows the "why" behind each recommendation in a live dashboard with tunable weights.
+
+### Project Pivot Decision
+Based on stakeholder meeting (Sep 25, 2024), the project has pivoted to **Canvas-only integration**:
+- **Eliminated**: Zoho surveys (contained outdated advisor feedback)
+- **Focus**: Canvas surveys provide actual student insights - the valuable data source
+- **Technical Discovery**: Course surveys appear as quizzes within Canvas courses
+- **Key Advantage**: No manual webhook configuration - scalable API-based solution
 
 ## Current Implementation Status
 
 ### Operational Components
 
-#### 1. Zoho Survey Webhook Integration
-- **Real-time webhook endpoint**: `/webhooks/zoho-survey`
-- **Three survey types configured**:
-  - Chief Advisor - Course Review Worksheet (98 responses)
-  - Course Review Worksheet (31 responses)
-  - EE Instructor - Course Reviewer Worksheet (87 responses)
-- **Automatic survey type detection** based on payload structure
-- **Structured data extraction** from course feedback
-
-#### 2. Canvas API Foundation
+#### 1. Canvas API Foundation
 - **API Token**: `15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY`
 - **Base URL**: `https://executiveeducation.instructure.com`
 - **Testing infrastructure** functional
 - **Course data structure** documented
 
-#### 3. Frontend Dashboard (Mock Data)
+#### 2. Frontend Dashboard (Mock Data)
 - **React 18 + TypeScript** with Tailwind CSS + shadcn/ui
 - **Working components**: PriorityRecommendations, CoursesList, DashboardOverview, ScoringControls
 - **Mock API integration** with tunable weight sliders
 
 ### Missing Components
 - Database layer (no persistence)
-- Canvas integration (no data fetching)
+- Canvas survey extraction (no quiz/submission fetching)
+- Student response processing pipeline
 - Priority scoring engine (no business logic)
-- Course attribution system
+- Survey detection and categorization system
 
-## Zoho Survey Data Structures
+## Canvas Survey Data Architecture
 
-The webhook endpoint successfully receives and processes three distinct survey types. Each has unique field structures and data patterns that inform our database schema and mapping logic.
+Canvas course surveys are implemented as quizzes within Canvas courses. Our system identifies and extracts student feedback from these quiz submissions using the Canvas API.
 
-### 1. Chief Advisor Course Review Worksheet
+### Canvas API Endpoints
 
-**Response Volume**: 98 responses
-**Key Characteristics**: Module-based feedback (1-4), company/title info, testimonial data
-**Reviewer Role**: `chief_advisor`
-
-**Sample Payload Structure**:
-```json
-{
-  "response_id": "12345678901234567890",
-  "survey_id": "987654321",
-  "collector_id": "456789123",
-  "collector_name": "Chief Advisor - Course Review Worksheet",
-  "response_start_time": "2024-01-15T10:30:00Z",
-
-  // Course identification
-  "course_name": "Advanced Leadership Strategy",
-
-  // Reviewer information (unique to Chief Advisor)
-  "reviewer_first_name": "Sarah",
-  "reviewer_last_name": "Johnson",
-  "reviewer_title": "VP of Operations",
-  "reviewer_company": "TechCorp Industries",
-  "reviewer_email": "sarah.johnson@techcorp.com",
-
-  // Course Overview feedback
-  "course_overview_rating": 4,
-  "course_overview_positive": "Excellent strategic frameworks and real-world applications",
-  "course_overview_improvements": "Could use more industry-specific case studies",
-
-  // Module-based feedback (1-4)
-  "module_1_rating": 4,
-  "module_1_positive": "Strong foundational concepts",
-  "module_1_improvements": "More interactive exercises needed",
-
-  "module_2_rating": 5,
-  "module_2_positive": "Outstanding facilitator engagement",
-  "module_2_improvements": "",
-
-  "module_3_rating": 3,
-  "module_3_positive": "Good content coverage",
-  "module_3_improvements": "Pacing was too fast, need more time for discussion",
-
-  "module_4_rating": 4,
-  "module_4_positive": "Practical tools and templates",
-  "module_4_improvements": "Templates could be more customizable",
-
-  // Program Wrap-Up
-  "program_wrapup_rating": 4,
-  "program_wrapup_positive": "Good synthesis and action planning",
-  "program_wrapup_improvements": "Follow-up resources would be valuable",
-
-  // Marketing/Testimonial (unique to Chief Advisor)
-  "testimonial_text": "This program transformed how our leadership team approaches strategic planning. Highly recommended.",
-  "allow_testimonial_use": "Yes",
-  "wants_video_testimonial": "No"
-}
+#### Course & Quiz Discovery
+```http
+GET /api/v1/courses
+GET /api/v1/courses/{course_id}/quizzes
+GET /api/v1/courses/{course_id}/quizzes/{quiz_id}
+GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/questions
 ```
 
-**Processed Data Structure**:
-```json
-{
-  "response_id": "12345678901234567890",
-  "survey_type": "chief_advisor_course_review",
-  "course_name": "Advanced Leadership Strategy",
-
-  "reviewer": {
-    "first_name": "Sarah",
-    "last_name": "Johnson",
-    "title": "VP of Operations",
-    "company": "TechCorp Industries",
-    "email": "sarah.johnson@techcorp.com",
-    "full_name": "Sarah Johnson",
-    "role": "chief_advisor"
-  },
-
-  "course_overview": {
-    "rating": 4,
-    "positive_comments": "Excellent strategic frameworks...",
-    "improvement_suggestions": "Could use more industry-specific...",
-    "has_improvements": true
-  },
-
-  "modules": {
-    "module_1": {"rating": 4, "positive_comments": "...", "improvement_suggestions": "...", "has_improvements": true},
-    "module_2": {"rating": 5, "positive_comments": "...", "improvement_suggestions": "", "has_improvements": false},
-    "module_3": {"rating": 3, "positive_comments": "...", "improvement_suggestions": "...", "has_improvements": true},
-    "module_4": {"rating": 4, "positive_comments": "...", "improvement_suggestions": "...", "has_improvements": true}
-  },
-
-  "program_wrapup": {
-    "rating": 4,
-    "positive_comments": "Good synthesis and action planning",
-    "improvement_suggestions": "Follow-up resources would be valuable",
-    "has_improvements": true
-  },
-
-  "marketing": {
-    "testimonial_text": "This program transformed how...",
-    "allow_testimonial_use": true,
-    "wants_video_testimonial": false
-  },
-
-  "analysis": {
-    "total_sections_with_improvements": 4,
-    "has_marketing_value": true,
-    "reviewer_seniority": "chief_advisor"
-  }
-}
+#### Student Response Extraction
+```http
+GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions
+GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions/{submission_id}
+GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions/{submission_id}/questions
 ```
 
-### 2. Course Review Worksheet
+### Survey Detection Logic
 
-**Response Volume**: 31 responses
-**Key Characteristics**: Two-section structure, showstopper flags, document attachments
-**Reviewer Role**: `general_reviewer`
-
-**Sample Payload Structure**:
-```json
-{
-  "response_id": "23456789012345678901",
-  "survey_id": "876543210",
-  "collector_id": "345678912",
-  "collector_name": "Course Review Worksheet",
-  "response_start_time": "2024-01-20T14:15:00Z",
-
-  // Course identification
-  "course_name": "Digital Marketing Fundamentals",
-
-  // Reviewer information (basic)
-  "reviewer_first_name": "Michael",
-  "reviewer_last_name": "Chen",
-  "reviewer_email": "michael.chen@company.com",
-
-  // Section 1 feedback
-  "section_1_area": "Content Structure & Flow",
-  "section_1_overall_rating": 3,
-  "section_1_positive": "Well-organized modules with clear learning objectives",
-  "section_1_improvements": "Module 2 needs better transition between topics. Some concepts introduced too quickly.",
-  "section_1_showstopper": "No",
-  "section_1_showstopper_details": "",
-  "section_1_documents": "",
-
-  // Section 2 feedback
-  "section_2_area": "Technical Implementation",
-  "section_2_overall_rating": 2,
-  "section_2_positive": "Good use of real-world examples",
-  "section_2_improvements": "Video quality is poor in Module 3. Audio cuts out frequently. Platform keeps crashing during exercises.",
-  "section_2_showstopper": "Yes - it needs to be fixed ASAP!",
-  "section_2_showstopper_details": "Platform crashes prevent students from completing assignments. This blocks course progression.",
-  "section_2_documents": "error_screenshots.pdf"
-}
-```
-
-**Processed Data Structure**:
-```json
-{
-  "response_id": "23456789012345678901",
-  "survey_type": "course_review_worksheet",
-  "course_name": "Digital Marketing Fundamentals",
-  "reviewer_email": "michael.chen@company.com",
-  "reviewer_name": "Michael Chen",
-  "reviewer_role": "general_reviewer",
-
-  "section_1": {
-    "area": "Content Structure & Flow",
-    "overall_rating": 3,
-    "positive_comments": "Well-organized modules with clear learning objectives",
-    "improvement_suggestions": "Module 2 needs better transition between topics...",
-    "is_showstopper": false,
-    "showstopper_details": null,
-    "documents": null
-  },
-
-  "section_2": {
-    "area": "Technical Implementation",
-    "overall_rating": 2,
-    "positive_comments": "Good use of real-world examples",
-    "improvement_suggestions": "Video quality is poor in Module 3...",
-    "is_showstopper": true,
-    "showstopper_details": "Platform crashes prevent students from completing assignments...",
-    "documents": "error_screenshots.pdf"
-  },
-
-  "metadata": {
-    "survey_source": "zoho_course_review_worksheet",
-    "submitted_at": "2024-01-20T14:15:00Z",
-    "processing_timestamp": "2024-01-20T14:15:23.456Z",
-    "collector_name": "Course Review Worksheet"
-  }
-}
-```
-
-### 3. EE Instructor Course Reviewer Worksheet
-
-**Response Volume**: 87 responses
-**Key Characteristics**: Same two-section structure as Course Review, but from instructor perspective
-**Reviewer Role**: `ee_instructor`
-
-**Sample Payload Structure**:
-```json
-{
-  "response_id": "34567890123456789012",
-  "survey_id": "765432109",
-  "collector_id": "234567891",
-  "collector_name": "EE Instructor - Course Reviewer Worksheet",
-  "response_start_time": "2024-01-18T09:45:00Z",
-
-  // Course identification
-  "course_name": "Executive Finance for Non-Financial Managers",
-
-  // Reviewer information (instructor)
-  "reviewer_first_name": "Dr. Jennifer",
-  "reviewer_last_name": "Rodriguez",
-  "reviewer_email": "j.rodriguez@university.edu",
-
-  // Section 1 feedback (instructor perspective)
-  "section_1_area": "Curriculum Design & Learning Outcomes",
-  "section_1_overall_rating": 4,
-  "section_1_positive": "Clear learning objectives aligned with executive needs. Good balance of theory and practical application.",
-  "section_1_improvements": "Case studies should include more recent examples. Module 4 learning outcomes too broad.",
-  "section_1_showstopper": "No",
-  "section_1_showstopper_details": "",
-  "section_1_documents": "",
-
-  // Section 2 feedback (instructor perspective)
-  "section_2_area": "Instructional Materials & Resources",
-  "section_2_overall_rating": 5,
-  "section_2_positive": "Excellent instructor guides and supplementary materials. Video content is professional quality.",
-  "section_2_improvements": "Would benefit from additional assessment rubrics for group projects.",
-  "section_2_showstopper": "No",
-  "section_2_showstopper_details": "",
-  "section_2_documents": "suggested_rubrics.docx"
-}
-```
-
-**Processed Data Structure**:
-```json
-{
-  "response_id": "34567890123456789012",
-  "survey_type": "ee_instructor_course_review",
-  "course_name": "Executive Finance for Non-Financial Managers",
-  "reviewer_email": "j.rodriguez@university.edu",
-  "reviewer_name": "Dr. Jennifer Rodriguez",
-  "reviewer_role": "ee_instructor",
-
-  "section_1": {
-    "area": "Curriculum Design & Learning Outcomes",
-    "overall_rating": 4,
-    "positive_comments": "Clear learning objectives aligned with executive needs...",
-    "improvement_suggestions": "Case studies should include more recent examples...",
-    "is_showstopper": false,
-    "showstopper_details": null,
-    "documents": null
-  },
-
-  "section_2": {
-    "area": "Instructional Materials & Resources",
-    "overall_rating": 5,
-    "positive_comments": "Excellent instructor guides and supplementary materials...",
-    "improvement_suggestions": "Would benefit from additional assessment rubrics...",
-    "is_showstopper": false,
-    "showstopper_details": null,
-    "documents": "suggested_rubrics.docx"
-  },
-
-  "metadata": {
-    "survey_source": "zoho_ee_instructor_course_review",
-    "submitted_at": "2024-01-18T09:45:00Z",
-    "processing_timestamp": "2024-01-18T09:45:31.789Z",
-    "collector_name": "EE Instructor - Course Reviewer Worksheet"
-  }
-}
-```
-
-### Survey Type Detection Logic
-
-The webhook automatically detects survey types based on payload fields:
+Identifying which Canvas quizzes are actually course feedback surveys:
 
 ```python
-def detect_survey_type(payload: Dict[str, Any]) -> str:
-    # Chief Advisor: Has module ratings and company info
-    if any(key in payload for key in [
-        "course_overview_rating", "module_1_rating", "module_2_rating",
-        "reviewer_title", "reviewer_company"
-    ]):
-        return "chief_advisor_course_review"
+def identify_feedback_surveys(quizzes: List[Dict]) -> List[Dict]:
+    """
+    Identify Canvas quizzes that are actually course feedback surveys
+    Based on title patterns, question types, and quiz settings
+    """
+    feedback_patterns = [
+        'course evaluation', 'course feedback', 'course review',
+        'satisfaction survey', 'course rating', 'end of course',
+        'student feedback', 'course survey', 'evaluation'
+    ]
 
-    # EE Instructor vs Course Review: Both have section structure
-    elif payload.get("collector_name") and "ee instructor" in payload.get("collector_name", "").lower():
-        return "ee_instructor_course_review"
+    feedback_surveys = []
+    for quiz in quizzes:
+        title_lower = quiz.get('title', '').lower()
 
-    # Course Review Worksheet: Has section areas and showstopper flags
-    elif any(key in payload for key in [
-        "section_1_area", "section_2_area", "section_1_showstopper", "section_2_showstopper"
-    ]):
-        return "course_review_worksheet"
+        # Check title patterns
+        if any(pattern in title_lower for pattern in feedback_patterns):
+            # Additional validation checks
+            if is_likely_feedback_survey(quiz):
+                feedback_surveys.append({
+                    **quiz,
+                    'identified_as': 'feedback_survey',
+                    'confidence': calculate_survey_confidence(quiz)
+                })
 
-    else:
-        return "unknown_survey_type"
+    return feedback_surveys
+
+def is_likely_feedback_survey(quiz: Dict) -> bool:
+    """Additional validation for survey identification"""
+    # Check if quiz is ungraded (typical for feedback surveys)
+    if quiz.get('points_possible') == 0:
+        return True
+
+    # Check quiz type
+    if quiz.get('quiz_type') in ['survey', 'graded_survey']:
+        return True
+
+    # Check if it's anonymous (common for feedback)
+    if quiz.get('anonymous_submissions', False):
+        return True
+
+    return False
 ```
 
-### Key Data Insights for Database Design
+### Student Feedback Data Structures
 
-1. **Course Attribution Challenge**: Course names vary between surveys ("Advanced Leadership Strategy" vs "Adv Leadership" vs "Leadership Strategy - Advanced")
+**Canvas Quiz/Survey Structure**:
+```json
+{
+  "id": 12345,
+  "title": "End of Course Evaluation - Spring 2024",
+  "quiz_type": "survey",
+  "points_possible": 0,
+  "anonymous_submissions": true,
+  "question_count": 15,
+  "published": true,
+  "assignment_id": 67890,
+  "course_id": 1234
+}
+```
 
-2. **Reviewer Hierarchy**: Chief Advisors > EE Instructors > General Reviewers (for priority weighting)
+**Student Feedback Response Structure**:
+```json
+{
+  "submission_id": 987654,
+  "quiz_id": 12345,
+  "user_id": null,  // Anonymous submission
+  "submitted_at": "2024-03-15T14:30:00Z",
+  "attempt": 1,
+  "workflow_state": "complete",
+  "score": null,  // Ungraded survey
+  "quiz_submission_questions": [
+    {
+      "id": 1,
+      "question_text": "How would you rate the overall course content?",
+      "question_type": "multiple_choice_question",
+      "answer": "4",
+      "answer_text": "Very Good"
+    },
+    {
+      "id": 2,
+      "question_text": "What aspects of the course were most valuable?",
+      "question_type": "essay_question",
+      "answer": "The practical case studies and group discussions were extremely helpful. The instructor's real-world examples made complex concepts easier to understand."
+    },
+    {
+      "id": 3,
+      "question_text": "What improvements would you suggest?",
+      "question_type": "essay_question",
+      "answer": "The pace was too fast in Module 3. More time for hands-on exercises would be beneficial. Also, the video quality in some lectures was poor."
+    },
+    {
+      "id": 4,
+      "question_text": "Rate the instructor's effectiveness",
+      "question_type": "numerical_question",
+      "answer": "4.5"
+    }
+  ]
+}
 
-3. **Showstopper Criticality**: Technical issues flagged as showstoppers should trigger immediate priority scoring
+**Processed Feedback Structure**:
+```python
+@dataclass
+class CanvasStudentFeedback:
+    submission_id: int
+    course_id: int
+    course_name: str
+    quiz_id: int
+    survey_title: str
+    student_id: Optional[int]  # May be anonymous
+    submitted_at: datetime
+    response_data: Dict[str, Any]  # Raw Canvas response
 
-4. **Content vs Technical Feedback**: Different improvement categories require different effort estimation (content changes vs platform fixes)
+    # Processed feedback sections
+    ratings: Dict[str, int]  # Question ID -> rating score
+    text_responses: Dict[str, str]  # Question ID -> text response
+    multiple_choice: Dict[str, str]  # Question ID -> selected choice
 
-5. **Marketing Value**: Chief Advisor testimonials provide additional business value beyond course improvement
+    # Categorized feedback
+    course_content_rating: Optional[int]
+    instructor_rating: Optional[int]
+    technical_issues: List[str]
+    improvement_suggestions: List[str]
+    critical_issues: List[str]  # Flagged as urgent
+```
+
+### Key Integration Insights
+
+1. **Survey Identification**: Canvas quizzes used for feedback typically have `quiz_type: 'survey'`, zero points, and titles containing "evaluation", "feedback", or "survey"
+
+2. **Anonymous Responses**: Most course feedback surveys have `anonymous_submissions: true`, resulting in `user_id: null` in submissions
+
+3. **Question Categorization**: Feedback questions can be automatically categorized based on keywords:
+   - **Course Content**: "content", "materials", "curriculum", "topics"
+   - **Instructor**: "instructor", "teaching", "presentation", "facilitator"
+   - **Technical**: "platform", "video", "audio", "technical", "access"
+   - **Overall**: "overall", "general", "course rating"
+
+4. **Critical Issue Detection**: Text responses containing keywords like "broken", "cannot access", "crashes", "urgent" should be flagged as critical
+
+5. **Response Volume Metrics**: Canvas API provides total enrollment counts, enabling calculation of response rates for priority weighting
 
 ## System Architecture
 
@@ -417,40 +264,56 @@ CREATE TABLE courses (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- Survey feedback responses
-CREATE TABLE survey_responses (
+-- Canvas surveys/quizzes that contain feedback
+CREATE TABLE canvas_surveys (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    source_type VARCHAR(50) NOT NULL, -- 'chief_advisor', 'course_review', 'ee_instructor'
-    source_response_id VARCHAR(100) UNIQUE,
     course_id INTEGER REFERENCES courses(id),
-    course_name_raw VARCHAR(255) NOT NULL, -- Original survey course name
-    reviewer_email VARCHAR(255),
-    reviewer_name VARCHAR(255),
-    reviewer_role VARCHAR(100), -- 'chief_advisor', 'ee_instructor', 'general'
-    reviewer_title VARCHAR(255),
-    reviewer_company VARCHAR(255),
-    raw_payload JSONB NOT NULL,
-    processed_at TIMESTAMP DEFAULT NOW(),
-    attributed_at TIMESTAMP,
-    attribution_confidence DECIMAL(3,2), -- 0.0 to 1.0
-    attribution_method VARCHAR(100) -- 'exact_match', 'fuzzy_match', 'manual'
+    canvas_quiz_id INTEGER NOT NULL,
+    survey_title VARCHAR(255) NOT NULL,
+    quiz_type VARCHAR(50), -- 'survey', 'graded_survey', 'practice_quiz'
+    is_anonymous BOOLEAN DEFAULT FALSE,
+    points_possible INTEGER DEFAULT 0,
+    question_count INTEGER,
+    response_count INTEGER DEFAULT 0,
+    identification_confidence DECIMAL(3,2), -- How confident we are this is feedback
+    created_at TIMESTAMP DEFAULT NOW(),
+    last_synced TIMESTAMP,
+    UNIQUE(course_id, canvas_quiz_id)
 );
 
--- Structured feedback sections extracted from responses
-CREATE TABLE feedback_sections (
+-- Student feedback responses from Canvas
+CREATE TABLE student_feedback (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    survey_response_id UUID REFERENCES survey_responses(id) ON DELETE CASCADE,
-    section_type VARCHAR(100) NOT NULL, -- 'course_overview', 'module_1', 'section_1', etc.
-    section_name VARCHAR(255), -- 'Module 1', 'Course Overview', etc.
-    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
-    positive_feedback TEXT,
-    improvement_suggestions TEXT,
-    is_showstopper BOOLEAN DEFAULT FALSE,
-    showstopper_details TEXT,
+    canvas_survey_id UUID REFERENCES canvas_surveys(id),
+    course_id INTEGER REFERENCES courses(id),
+    canvas_submission_id INTEGER NOT NULL,
+    student_canvas_id INTEGER, -- May be NULL for anonymous
+    submitted_at TIMESTAMP,
+    attempt_number INTEGER DEFAULT 1,
+    workflow_state VARCHAR(50), -- 'complete', 'pending_review', etc.
+    raw_response_data JSONB NOT NULL, -- Full Canvas submission data
+    processed_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(canvas_survey_id, canvas_submission_id)
+);
+
+-- Individual question responses from student feedback
+CREATE TABLE feedback_responses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_feedback_id UUID REFERENCES student_feedback(id) ON DELETE CASCADE,
+    canvas_question_id INTEGER NOT NULL,
+    question_text TEXT NOT NULL,
+    question_type VARCHAR(50), -- 'multiple_choice_question', 'essay_question', 'numerical_question'
+    response_text TEXT, -- For essay/text responses
+    response_numeric DECIMAL(10,2), -- For numerical responses (ratings)
+    selected_answer_text VARCHAR(500), -- For multiple choice
+    question_category VARCHAR(100), -- Auto-categorized: 'course_content', 'instructor', 'technical', etc.
+    sentiment_score DECIMAL(3,2), -- Future: AI sentiment analysis
+    contains_improvement_suggestion BOOLEAN DEFAULT FALSE,
+    is_critical_issue BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Course priority scores (cached calculations)
+-- Course priority scores (enhanced for Canvas data)
 CREATE TABLE course_priorities (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     course_id INTEGER REFERENCES courses(id) UNIQUE,
@@ -459,10 +322,14 @@ CREATE TABLE course_priorities (
     urgency_score DECIMAL(5,4),
     effort_score DECIMAL(5,4),
     recency_score DECIMAL(5,4),
-    total_responses INTEGER DEFAULT 0,
-    responses_with_improvements INTEGER DEFAULT 0,
-    showstopper_count INTEGER DEFAULT 0,
-    average_rating DECIMAL(3,2),
+
+    -- Canvas-specific metrics
+    total_student_responses INTEGER DEFAULT 0,
+    student_response_rate DECIMAL(3,2), -- Responses / total students
+    average_course_rating DECIMAL(3,2), -- Average across rating questions
+    critical_issues_count INTEGER DEFAULT 0,
+    improvement_suggestions_count INTEGER DEFAULT 0,
+
     last_feedback_date TIMESTAMP,
     calculated_at TIMESTAMP DEFAULT NOW(),
     weights_used JSONB -- Store weights used for calculation
@@ -484,23 +351,14 @@ CREATE TABLE scoring_weights (
     )
 );
 
--- Course mapping for ambiguous survey course names
-CREATE TABLE course_mappings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    survey_course_name VARCHAR(255) NOT NULL,
-    canvas_course_id INTEGER REFERENCES courses(id),
-    confidence_score DECIMAL(3,2),
-    mapping_method VARCHAR(100),
-    verified_by VARCHAR(255),
-    created_at TIMESTAMP DEFAULT NOW(),
-    UNIQUE(survey_course_name, canvas_course_id)
-);
-
 -- Indexes for performance
-CREATE INDEX idx_survey_responses_course_id ON survey_responses(course_id);
-CREATE INDEX idx_feedback_sections_response_id ON feedback_sections(survey_response_id);
+CREATE INDEX idx_canvas_surveys_course_id ON canvas_surveys(course_id);
+CREATE INDEX idx_student_feedback_survey_id ON student_feedback(canvas_survey_id);
+CREATE INDEX idx_feedback_responses_student_feedback_id ON feedback_responses(student_feedback_id);
 CREATE INDEX idx_course_priorities_score ON course_priorities(priority_score DESC);
-CREATE INDEX idx_survey_responses_source_type ON survey_responses(source_type);
+CREATE INDEX idx_feedback_responses_category ON feedback_responses(question_category);
+CREATE INDEX idx_canvas_surveys_quiz_id ON canvas_surveys(canvas_quiz_id);
+CREATE INDEX idx_student_feedback_course_id ON student_feedback(course_id);
 ```
 
 ### Data Flow Architecture
@@ -508,39 +366,42 @@ CREATE INDEX idx_survey_responses_source_type ON survey_responses(source_type);
 #### Primary Data Pipeline
 ```mermaid
 graph LR
-    A[Zoho Survey Response] --> B[Webhook Endpoint]
-    B --> C[FastAPI Parser]
-    C --> D[Neon PostgreSQL]
-    D --> E[Priority Engine]
-    E --> F[React Dashboard]
+    A[Canvas Courses API] --> B[Course Discovery]
+    B --> C[Survey Detection]
+    C --> D[Student Response Extraction]
+    D --> E[Response Processing & Categorization]
+    E --> F[Priority Scoring Engine]
+    F --> G[Dashboard Analytics]
 
-    G[Canvas LMS] --> H[API Client]
-    H --> D
-
-    F --> I[Weight Adjustments]
-    I --> E
+    H[Canvas Quiz API] --> C
+    I[Canvas Submissions API] --> D
 ```
 
 #### Detailed Processing Flow
-1. **Data Ingestion**
-   - Zoho Survey responses arrive via webhook (`/webhooks/zoho-survey`)
-   - Canvas course data pulled via API client
-   - Raw payloads stored with metadata
+1. **Course & Survey Discovery**
+   - Canvas courses retrieved via API (`/api/v1/courses`)
+   - Quiz discovery and survey identification within courses
+   - Survey metadata stored with confidence scores
 
-2. **Data Processing**
-   - Course attribution (fuzzy matching survey names to Canvas courses)
-   - Feedback section extraction (ratings, comments, show-stoppers)
-   - Data validation and cleaning
+2. **Student Response Extraction**
+   - Quiz submissions retrieved (`/api/v1/courses/{id}/quizzes/{id}/submissions`)
+   - Anonymous and identified student responses processed
+   - Raw Canvas data stored for audit trail
 
-3. **Intelligence Layer**
-   - Priority score calculation (Impact × Urgency × Effort × Recency)
-   - Explanation generation for each recommendation
-   - Tunable weight system for score adjustment
+3. **Response Processing & Categorization**
+   - Individual questions and answers extracted and categorized
+   - Text analysis for improvement suggestions and critical issues
+   - Question types classified (content, instructor, technical, overall)
 
-4. **User Interface**
-   - Real-time dashboard updates
-   - Drill-down feedback views
-   - Manual course mapping for edge cases
+4. **Intelligence Layer**
+   - Priority score calculation optimized for student feedback metrics
+   - Theme-based improvement categorization and effort estimation
+   - Real-time score updates when new student responses arrive
+
+5. **User Interface**
+   - Canvas-native dashboard with student feedback insights
+   - Response rate and participation metrics
+   - Drill-down to individual student responses and themes
 
 ### System Architecture Diagrams
 
@@ -558,26 +419,37 @@ erDiagram
         int total_students
     }
 
-    SURVEY_RESPONSES {
+    CANVAS_SURVEYS {
         uuid id PK
-        string source_type
-        string source_response_id UK
         int course_id FK
-        string course_name_raw
-        string reviewer_email
-        jsonb raw_payload
-        timestamp processed_at
+        int canvas_quiz_id
+        string survey_title
+        string quiz_type
+        boolean is_anonymous
+        int points_possible
+        decimal identification_confidence
     }
 
-    FEEDBACK_SECTIONS {
+    STUDENT_FEEDBACK {
         uuid id PK
-        uuid survey_response_id FK
-        string section_type
-        string section_name
-        int rating
-        text positive_feedback
-        text improvement_suggestions
-        boolean is_showstopper
+        uuid canvas_survey_id FK
+        int course_id FK
+        int canvas_submission_id
+        int student_canvas_id
+        timestamp submitted_at
+        jsonb raw_response_data
+    }
+
+    FEEDBACK_RESPONSES {
+        uuid id PK
+        uuid student_feedback_id FK
+        int canvas_question_id
+        string question_text
+        string question_type
+        text response_text
+        decimal response_numeric
+        string question_category
+        boolean is_critical_issue
     }
 
     COURSE_PRIORITIES {
@@ -588,8 +460,9 @@ erDiagram
         decimal urgency_score
         decimal effort_score
         decimal recency_score
-        int total_responses
-        int showstopper_count
+        int total_student_responses
+        decimal student_response_rate
+        int critical_issues_count
     }
 
     SCORING_WEIGHTS {
@@ -602,40 +475,33 @@ erDiagram
         boolean is_active
     }
 
-    COURSE_MAPPINGS {
-        uuid id PK
-        string survey_course_name
-        int canvas_course_id FK
-        decimal confidence_score
-        string mapping_method
-    }
-
-    COURSES ||--o{ SURVEY_RESPONSES : "has responses"
+    COURSES ||--o{ CANVAS_SURVEYS : "contains surveys"
     COURSES ||--o{ COURSE_PRIORITIES : "has priority"
-    COURSES ||--o{ COURSE_MAPPINGS : "maps to"
-    SURVEY_RESPONSES ||--o{ FEEDBACK_SECTIONS : "contains sections"
+    COURSES ||--o{ STUDENT_FEEDBACK : "receives feedback"
+    CANVAS_SURVEYS ||--o{ STUDENT_FEEDBACK : "generates responses"
+    STUDENT_FEEDBACK ||--o{ FEEDBACK_RESPONSES : "contains answers"
 ```
 
 #### Component Architecture
 ```mermaid
 graph TB
     subgraph "External Systems"
-        ZS[Zoho Surveys]
         CL[Canvas LMS]
     end
 
-    subgraph "Data Ingestion"
-        WH[Webhook Handler]
+    subgraph "Canvas Integration"
         CA[Canvas API Client]
+        SD[Survey Discovery]
+        RE[Response Extraction]
     end
 
     subgraph "FastAPI Backend"
         API[API Router]
-        WS[Webhook Service]
         CS[Canvas Service]
-        AS[Attribution Service]
-        PS[Priority Service]
+        SS[Survey Service]
         FS[Feedback Service]
+        PS[Priority Service]
+        TS[Theme Service]
     end
 
     subgraph "Database Layer"
@@ -652,26 +518,30 @@ graph TB
     subgraph "Intelligence Engine"
         PE[Priority Engine]
         EG[Explanation Generator]
+        TC[Theme Categorizer]
         WM[Weight Manager]
     end
 
-    ZS --> WH
     CL --> CA
-    WH --> WS
-    CA --> CS
+    CA --> SD
+    CA --> RE
+    SD --> SS
+    RE --> FS
 
-    WS --> API
+    SS --> API
+    FS --> API
     CS --> API
-    API --> AS
-    API --> PS
-    API --> FS
+    PS --> API
+    TS --> API
 
-    AS --> DB
-    PS --> DB
+    SS --> DB
     FS --> DB
+    PS --> DB
 
+    FS --> TC
     PS --> PE
     PE --> EG
+    TC --> PE
     WM --> PE
 
     ACL --> API
@@ -689,7 +559,7 @@ graph TB
 
         subgraph "Railway/Render"
             BE[FastAPI Backend]
-            WK[Worker Processes]
+            WK[Canvas Sync Workers]
         end
 
         subgraph "Neon"
@@ -698,59 +568,85 @@ graph TB
         end
 
         subgraph "External APIs"
-            ZA[Zoho API]
             CA[Canvas API]
         end
     end
 
     subgraph "Development"
         DEV[Local Development]
-        NG[ngrok Tunnel]
+        TEST[Canvas API Testing]
     end
 
     FE <--> BE
     BE <--> DB
-    BE --> ZA
     BE --> CA
-
-    DEV --> NG
-    NG --> ZA
+    DEV --> TEST
+    TEST --> CA
 ```
 
-## Priority Scoring Engine (MVP)
+## Algorithmic Approach & Evolution Strategy
 
-### Core Algorithm
+### Key Principle: Iterative Refinement
+All algorithms in this system are **reference implementations** designed to evolve. We expect significant refinement based on:
+
+1. **Data-Driven Calibration**: Real Canvas API responses will reveal actual data patterns
+2. **Stakeholder Feedback**: Priority accuracy will be validated by course administrators
+3. **Pattern Recognition**: Machine learning enhancements in future phases
+4. **Performance Metrics**: Algorithm effectiveness measured against improvement outcomes
+
+### Algorithm Evolution Pipeline
+```
+Initial Implementation (Week 1-2)
+  ↓ Canvas Data Collection
+  ↓ Pattern Analysis
+  ↓ Algorithm Refinement
+  ↓ Stakeholder Validation
+  ↓ Production Deployment
+  ↓ Continuous Improvement
+```
+
+## Priority Scoring Engine (Reference Implementation)
+
+**Note**: These algorithms are starting points that will be refined through real-world usage.
+
+### Core Algorithm (Subject to Evolution)
 
 ```python
-def calculate_priority_score(course_id: int, weights: dict = None) -> dict:
+def calculate_canvas_priority_score(course_id: int, weights: Dict = None) -> Dict:
     """
-    Calculate priority score based on feedback data
-    Returns: Complete scoring breakdown with explanations
+    REFERENCE IMPLEMENTATION - Will be tuned with real data
+    Enhanced priority scoring for Canvas student feedback
+    Emphasizes direct student insights over proxy metrics
     """
     if weights is None:
         weights = get_active_weights()
 
-    # Gather data
-    course_data = get_course_feedback_summary(course_id)
+    course_data = get_canvas_feedback_summary(course_id)
 
-    # 1. IMPACT: Affected student volume
-    impact_score = min(
-        course_data.responses_with_improvements / max(course_data.total_responses, 1),
-        1.0
-    )
+    # 1. IMPACT: Student participation and feedback volume
+    response_rate = course_data.student_responses / max(course_data.total_students, 1)
+    participation_impact = min(response_rate * 2, 1.0)  # Higher weight for participation
 
-    # 2. URGENCY: Critical issues + poor ratings
-    showstopper_penalty = min(course_data.showstopper_count * 0.3, 1.0)
-    rating_penalty = max(0, (3.0 - course_data.average_rating) / 2.0)  # Below 3/5 is urgent
-    urgency_score = min(showstopper_penalty + rating_penalty, 1.0)
+    # Feedback density (responses with actionable content)
+    feedback_density = course_data.responses_with_suggestions / max(course_data.student_responses, 1)
+    impact_score = min(participation_impact + (feedback_density * 0.3), 1.0)
 
-    # 3. EFFORT: Estimated implementation difficulty (inverse score)
-    effort_categories = categorize_improvement_types(course_id)
-    effort_score = 1.0 - calculate_effort_estimate(effort_categories)
+    # 2. URGENCY: Poor ratings and critical issues from students
+    rating_urgency = 0.0
+    if course_data.average_course_rating:
+        rating_urgency = max(0, (3.0 - course_data.average_course_rating) / 2.0)
 
-    # 4. RECENCY: Recent feedback matters more
-    days_since_last = (datetime.now() - course_data.last_feedback_date).days
-    recency_score = max(0, 1.0 - (days_since_last / 30))  # 30-day decay
+    # Critical issues reported by students
+    critical_issues_ratio = course_data.critical_issues / max(course_data.student_responses, 1)
+    urgency_score = min(rating_urgency + (critical_issues_ratio * 0.6), 1.0)
+
+    # 3. EFFORT: Categorized by student feedback themes
+    effort_analysis = categorize_canvas_improvement_themes(course_id)
+    effort_score = 1.0 - calculate_implementation_effort(effort_analysis)
+
+    # 4. RECENCY: Recent course runs and feedback
+    days_since_feedback = (datetime.now() - course_data.last_feedback_date).days
+    recency_score = max(0, 1.0 - (days_since_feedback / 90))  # 90-day decay
 
     # Calculate weighted final score
     priority_score = (
@@ -766,159 +662,204 @@ def calculate_priority_score(course_id: int, weights: dict = None) -> dict:
         "urgency_score": round(urgency_score, 4),
         "effort_score": round(effort_score, 4),
         "recency_score": round(recency_score, 4),
-        "weights_used": weights,
-        "explanation": generate_explanation(course_data, impact_score, urgency_score, effort_score, recency_score),
-        "recommendations": generate_recommendations(course_data)
+
+        # Canvas-specific metrics
+        "student_response_rate": response_rate,
+        "total_student_responses": course_data.student_responses,
+        "average_course_rating": course_data.average_course_rating,
+        "critical_issues_count": course_data.critical_issues,
+
+        "explanation": generate_canvas_explanation(
+            course_data, impact_score, urgency_score, effort_score, recency_score
+        ),
+        "top_improvement_themes": get_top_improvement_themes(course_id),
+        "student_sentiment_summary": calculate_sentiment_summary(course_id)
     }
 
-def categorize_improvement_types(course_id: int) -> dict:
-    """Simple keyword-based categorization for effort estimation"""
-    improvements = get_improvement_suggestions(course_id)
+def categorize_canvas_improvement_themes(course_id: int) -> Dict:
+    """
+    Categorize student feedback themes for effort estimation
+    Based on actual student feedback patterns from Canvas
+    """
+    feedback_responses = get_course_feedback_responses(course_id)
 
-    categories = {"content": 0, "technical": 0, "design": 0, "major": 0}
+    themes = {
+        "content_updates": 0,      # Outdated materials, missing content
+        "instructional_clarity": 0, # Confusing explanations, pace issues
+        "technical_platform": 0,   # Canvas issues, video problems, access
+        "assessment_design": 0,     # Assignment clarity, grading rubrics
+        "interaction_engagement": 0, # Discussion, peer interaction, activities
+        "structural_redesign": 0    # Fundamental course restructuring needs
+    }
 
-    for improvement in improvements:
-        text = improvement.lower()
-        if any(word in text for word in ["video", "system", "broken", "technical"]):
-            categories["technical"] += 1
-        elif any(word in text for word in ["redesign", "restructure", "overhaul"]):
-            categories["major"] += 1
-        elif any(word in text for word in ["layout", "interface", "navigation"]):
-            categories["design"] += 1
-        else:
-            categories["content"] += 1
+    # Analyze student responses for themes
+    for response in feedback_responses:
+        text = response.response_text.lower() if response.response_text else ""
 
-    return categories
+        if any(word in text for word in ["outdated", "old", "current", "update", "recent"]):
+            themes["content_updates"] += 1
+        elif any(word in text for word in ["confusing", "unclear", "fast", "slow", "pace"]):
+            themes["instructional_clarity"] += 1
+        elif any(word in text for word in ["canvas", "video", "audio", "technical", "broken", "access"]):
+            themes["technical_platform"] += 1
+        elif any(word in text for word in ["assignment", "rubric", "grading", "criteria", "unclear"]):
+            themes["assessment_design"] += 1
+        elif any(word in text for word in ["discussion", "interaction", "engage", "boring", "active"]):
+            themes["interaction_engagement"] += 1
+        elif any(word in text for word in ["redesign", "restructure", "completely", "overhaul", "redo"]):
+            themes["structural_redesign"] += 1
 
-def calculate_effort_estimate(categories: dict) -> float:
-    """Return effort score (0.0 = easy, 1.0 = very difficult)"""
-    weights = {"content": 0.1, "design": 0.3, "technical": 0.6, "major": 0.9}
-    total_issues = sum(categories.values())
+    return themes
 
+def calculate_implementation_effort(themes: Dict) -> float:
+    """
+    Estimate implementation effort based on student feedback themes
+    Returns 0.0 (easy) to 1.0 (very difficult)
+    """
+    effort_weights = {
+        "content_updates": 0.2,        # Relatively easy content fixes
+        "instructional_clarity": 0.3,   # Moderate - requires instructional design
+        "assessment_design": 0.4,       # Moderate-high - rubric and assignment redesign
+        "interaction_engagement": 0.5,  # High - requires activity redesign
+        "technical_platform": 0.6,     # High - requires IT support
+        "structural_redesign": 0.9      # Very high - complete course overhaul
+    }
+
+    total_issues = sum(themes.values())
     if total_issues == 0:
-        return 0.1  # Minimal effort if no specific improvements
+        return 0.1  # Minimal effort if no specific themes identified
 
-    weighted_effort = sum(count * weights[category] for category, count in categories.items())
+    weighted_effort = sum(count * effort_weights[theme] for theme, count in themes.items())
     return min(weighted_effort / total_issues, 1.0)
 ```
 
 ### Explainable Recommendations
 
 ```python
-def generate_explanation(course_data, impact, urgency, effort, recency) -> str:
-    """Generate human-readable explanation for priority score"""
+def generate_canvas_explanation(course_data, impact, urgency, effort, recency) -> str:
+    """Generate human-readable explanation for Canvas student feedback priority score"""
     explanations = []
 
+    # Student participation impact
     if impact > 0.7:
-        explanations.append(f"High impact: {course_data.responses_with_improvements}/{course_data.total_responses} responses suggest improvements")
+        response_rate = course_data.student_responses / max(course_data.total_students, 1)
+        explanations.append(f"High student engagement: {response_rate:.1%} response rate with actionable feedback")
 
+    # Urgency from student concerns
     if urgency > 0.6:
-        if course_data.showstopper_count > 0:
-            explanations.append(f"Critical issues: {course_data.showstopper_count} show-stopper problems identified")
-        if course_data.average_rating < 3.0:
-            explanations.append(f"Poor satisfaction: Average rating {course_data.average_rating}/5")
+        if course_data.critical_issues > 0:
+            explanations.append(f"Critical student issues: {course_data.critical_issues} urgent problems reported")
+        if course_data.average_course_rating < 3.0:
+            explanations.append(f"Poor student satisfaction: {course_data.average_course_rating:.1f}/5 average rating")
 
+    # Implementation effort
     if effort > 0.7:
-        explanations.append("Quick wins: Most suggested improvements appear to be low-effort content changes")
+        explanations.append("Quick wins: Student suggestions focus on easily addressable improvements")
+    elif effort < 0.3:
+        explanations.append("Complex improvements: Student feedback indicates major structural changes needed")
 
+    # Recent student feedback
     if recency > 0.8:
-        explanations.append("Active feedback: Recent responses indicate ongoing student concerns")
+        explanations.append("Current concerns: Recent student feedback shows ongoing course issues")
 
-    return "; ".join(explanations) if explanations else "Standard priority based on feedback patterns"
+    # Student sentiment summary
+    if hasattr(course_data, 'sentiment_breakdown'):
+        positive_ratio = course_data.sentiment_breakdown.get('positive', 0) / max(course_data.student_responses, 1)
+        if positive_ratio < 0.4:
+            explanations.append(f"Negative sentiment: Only {positive_ratio:.1%} of student feedback is positive")
+
+    return "; ".join(explanations) if explanations else "Standard priority based on student feedback patterns"
 ```
 
 ## Implementation Roadmap
 
-### Phase 1: Database Foundation 
-**Goal**: Establish data persistence
+### Phase 1: Canvas Survey Discovery (Week 1)
+**Goal**: Build Canvas course and survey detection system
 
 **Tasks**:
-- [ ] Set up Neon PostgreSQL database
-- [ ] Implement SQLAlchemy models matching schema above
-- [ ] Create Alembic migration system
-- [ ] Update webhook endpoint to persist data
-- [ ] Test end-to-end data flow: webhook → database
+- [ ] Implement Canvas API client with proper authentication
+- [ ] Build course discovery and metadata extraction
+- [ ] Create survey identification algorithm (quiz title patterns, settings)
+- [ ] Implement survey confidence scoring
+- [ ] Build database models for Canvas surveys and courses
+
+**Deliverables**:
+- Working Canvas API client with full authentication
+- Survey discovery endpoint that identifies feedback surveys
+- Database persistence for discovered courses and surveys
+- Basic admin interface showing discovered surveys
 
 **Acceptance Criteria**:
-- All webhook data persisted in database
-- Survey responses queryable by course
-- Database migrations working
+- Canvas API client successfully authenticates and retrieves course data
+- Survey discovery identifies 80%+ of actual feedback surveys in test courses
+- Database stores discovered courses and surveys with proper relationships
+- Admin interface shows discovered surveys with confidence scores
 
-### Phase 2: Canvas Integration 
-**Goal**: Course master data and attribution
+### Phase 2: Student Response Extraction (Week 2)
+**Goal**: Extract and process student feedback from Canvas quizzes
 
 **Tasks**:
-- [ ] Implement Canvas API client
-- [ ] Create `/api/canvas/sync-courses` endpoint
-- [ ] Build fuzzy matching for course names
-- [ ] Implement course attribution logic
-- [ ] Add manual mapping interface for edge cases
+- [ ] Build Canvas quiz submission extraction
+- [ ] Implement response parsing and categorization
+- [ ] Create student feedback processing pipeline
+- [ ] Build question categorization system (content, instructor, technical)
+- [ ] Implement basic text analysis for improvement suggestions
+
+**Deliverables**:
+- Student response extraction from Canvas quiz submissions
+- Structured feedback storage with categorization
+- Response processing pipeline with error handling
+- Data validation and deduplication system
 
 **Acceptance Criteria**:
-- Canvas courses imported and kept in sync
-- 80%+ of survey responses automatically attributed to courses
-- Manual mapping queue functional for ambiguous cases
+- Student response extraction works for all identified feedback surveys
+- Response processing categorizes questions and answers correctly
+- Text analysis identifies improvement themes in student feedback
+- Database stores structured student feedback with proper categorization
 
-### Phase 3: Data Processing (Week 3)
-**Goal**: Structure feedback for analysis
+### Phase 3: Priority Scoring Engine (Week 3)
+**Goal**: Implement Canvas-optimized priority scoring
 
 **Tasks**:
-- [ ] Build feedback section extraction service
-- [ ] Implement data validation and cleaning
-- [ ] Create aggregation queries for course summaries
-- [ ] Add basic metrics endpoints (response counts, averages)
+- [ ] Build priority calculation engine for Canvas data
+- [ ] Implement theme-based effort estimation
+- [ ] Create explanation generation system
+- [ ] Build priority score caching and updates
+- [ ] Add weight configuration management
+
+**Deliverables**:
+- Priority scores for all courses with student feedback
+- Explainable recommendations with theme analysis
+- Tunable weight system with real-time recalculation
+- Priority score explanations and improvement themes
 
 **Acceptance Criteria**:
-- Structured feedback sections extracted from all response types
-- Course feedback summaries available via API
-- Data quality validation in place
-
-### Phase 4: Priority Scoring Engine 
-**Goal**: MVP prioritization system
-
-**Tasks**:
-- [ ] Implement priority calculation algorithm
-- [ ] Create scoring weights management
-- [ ] Build explanation generation
-- [ ] Add batch recalculation endpoints
-- [ ] Implement tunable weight system
-
-**Acceptance Criteria**:
-- Priority scores calculated for all courses with feedback
-- Weights adjustable via API
-- Explanations generated for each priority score
-- Scores recalculated when new feedback arrives
-
-### Phase 5: Frontend Integration 
-**Goal**: Connect real backend to dashboard
-
-**Tasks**:
-- [ ] Replace mock API calls with real endpoints
-- [ ] Implement weight slider functionality
-- [ ] Add course feedback detail views
-- [ ] Create priority explanation panels
-- [ ] Add manual course mapping interface
-
-**Acceptance Criteria**:
-- Dashboard displays real course data
+- Priority scores calculated for all courses with student feedback
+- Explanations clearly show why courses are prioritized based on student input
 - Weight adjustments update priorities in real-time
-- Users can drill down into specific feedback
-- Manual mapping interface functional
+- Theme analysis provides actionable improvement categories
 
-### Phase 6: Production Deployment (Week 6)
-**Goal**: Live system
+### Phase 4: Dashboard Integration (Week 4)
+**Goal**: Connect frontend to Canvas data pipeline
 
 **Tasks**:
-- [ ] Deploy backend to Railway/Render
-- [ ] Configure production Neon PostgreSQL
-- [ ] Deploy frontend to Vercel
-- [ ] Update Zoho webhooks to production URLs
-- [ ] Set up monitoring and alerts
+- [ ] Update frontend components for Canvas data structure
+- [ ] Build course feedback detail views
+- [ ] Implement priority explanation displays
+- [ ] Add student response rate and participation metrics
+- [ ] Create Canvas sync status and health monitoring
+
+**Deliverables**:
+- Dashboard displaying real Canvas course feedback
+- Priority recommendations with student-focused explanations
+- Course-level feedback analysis with theme breakdown
+- Admin interface for Canvas sync management
 
 **Acceptance Criteria**:
-- System operational in production
-- Webhooks flowing to production database
-- Dashboard accessible with real data
+- Dashboard displays real Canvas student feedback data
+- Users can drill down from priority scores to specific student responses
+- Canvas sync status shows health and last update information
+- System scales to handle multiple courses with hundreds of student responses
 
 ## Updated Frontend Architecture
 
@@ -1000,9 +941,8 @@ CourseFeedbackAggregator/
 │   │   │   │   ├── priorities.py    # Priority scoring endpoints
 │   │   │   │   ├── weights.py       # Weight configuration endpoints
 │   │   │   │   ├── feedback.py      # Feedback retrieval endpoints
-│   │   │   │   ├── webhooks.py      # Zoho webhook handlers
 │   │   │   │   ├── canvas.py        # Canvas sync endpoints
-│   │   │   │   └── mappings.py      # Course mapping endpoints
+│   │   │   │   └── surveys.py       # Survey discovery and validation
 │   │   │   ├── core/                # Core business logic
 │   │   │   │   ├── __init__.py
 │   │   │   │   ├── database.py      # Database configuration
@@ -1120,59 +1060,65 @@ CourseFeedbackAggregator/
 └── CLAUDE.md                       # This file
 ```
 
-## Phase 1: Database Foundation - Actionable Next Steps
+## Phase 1: Canvas Integration Foundation - Actionable Next Steps
 
-### Immediate Tasks (This Week)
+### Immediate Tasks (Week 1)
 
-#### 1. Database Setup
+#### 1. Canvas API Client Setup
 ```bash
-# Create Neon PostgreSQL database
-# URL: https://console.neon.tech/
-# Database name: coursefeedback
-# Get connection string for .env
+# Test Canvas API connectivity
+cd apps/backend
+python -c "import httpx; r = httpx.get('https://executiveeducation.instructure.com/api/v1/courses',
+  headers={'Authorization': 'Bearer 15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY'});
+  print(f'Connected: {r.status_code == 200}')"
 ```
 
-#### 2. Backend Structure Setup
+#### 2. Database & Backend Structure Setup
 ```bash
 cd apps/backend
 
 # Create new directory structure
-mkdir -p app/{models,schemas,services,api,core,utils}
-mkdir -p app/{models,schemas,services,api,core,utils}/__init__.py
+mkdir -p app/{models,schemas,services,api,core,utils,canvas}
+touch app/{models,schemas,services,api,core,utils,canvas}/__init__.py
 
 # Initialize Alembic for migrations
-pip install alembic
+pip install alembic sqlalchemy asyncpg httpx
 alembic init alembic
 ```
 
-#### 3. SQLAlchemy Models Implementation
+#### 3. Canvas Integration Models
 Create the following files in order:
 
-**Priority 1: Core Models**
+**Priority 1: Canvas Models**
 - `app/models/course.py` - Canvas course data
-- `app/models/survey.py` - Survey response model
-- `app/models/feedback.py` - Feedback sections
+- `app/models/canvas_survey.py` - Canvas quiz/survey model
+- `app/models/student_feedback.py` - Student response model
+- `app/models/feedback_response.py` - Individual question responses
 - `app/models/priority.py` - Priority scores
-- `app/models/mapping.py` - Course mappings
 
-**Priority 2: Database Configuration**
-- `app/core/database.py` - Database connection and session management
-- `app/core/config.py` - Environment variables and settings
-- `alembic/env.py` - Configure Alembic with SQLAlchemy models
+**Priority 2: Canvas Service Layer**
+- `app/canvas/client.py` - Canvas API client wrapper
+- `app/services/canvas_service.py` - Canvas data synchronization
+- `app/services/survey_service.py` - Survey detection logic
+- `app/services/response_service.py` - Response extraction
 
-#### 4. First Migration
+#### 4. First Migration & Canvas Sync
 ```bash
 # Generate initial migration
-alembic revision --autogenerate -m "Initial database schema"
+alembic revision --autogenerate -m "Canvas integration schema"
 
 # Apply migration
 alembic upgrade head
+
+# Test Canvas course discovery
+python -m app.canvas.client --discover-courses
 ```
 
-#### 5. Update Webhook Endpoint
-Modify existing webhook to persist data:
-- `app/api/webhooks.py` - Update to save to database
-- `app/services/webhook_service.py` - Create service for webhook processing
+#### 5. Survey Detection Implementation
+Create survey detection service:
+- `app/services/survey_detector.py` - Implement reference algorithm
+- `app/api/canvas.py` - Canvas sync endpoints
+- `app/schemas/canvas.py` - Pydantic models for Canvas data
 
 ### Week 1 Deliverables
 
@@ -1207,12 +1153,16 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM survey_responses;"
 
 ### Repository Structure Changes Needed
 
-**Move/Rename:**
-1. `app/services/zoho_auth.py` → `app/utils/zoho_auth.py` (token utility)
-2. Create `app/core/database.py` (new)
-3. Create `app/models/` directory (new)
-4. Create `app/schemas/` directory (new)
-5. Restructure `app/api/` with specific endpoint files
+**New Directories to Create:**
+1. `app/canvas/` - Canvas-specific integration code
+2. `app/models/` - SQLAlchemy ORM models
+3. `app/schemas/` - Pydantic validation schemas
+4. `app/services/` - Business logic services
+5. `app/core/` - Core configuration and database setup
+
+**Files to Remove/Archive:**
+1. Remove `app/api/zoho/` directory (no longer needed)
+2. Archive webhook endpoints (may repurpose for Canvas webhooks later)
 
 **Environment Variables to Add:**
 ```env
@@ -1220,9 +1170,8 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM survey_responses;"
 DATABASE_URL=postgresql://user:pass@ep-xxx.neon.tech/coursefeedback
 CANVAS_API_TOKEN=15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY
 CANVAS_BASE_URL=https://executiveeducation.instructure.com
-ZOHO_CLIENT_ID=1000.LFJC5W9CC2VV5A0VBHZBI8HFY0OWYH
-ZOHO_CLIENT_SECRET=your_secret_here
-ZOHO_REFRESH_TOKEN=to_be_obtained
+CANVAS_SYNC_INTERVAL_HOURS=24  # How often to sync Canvas data
+SURVEY_CONFIDENCE_THRESHOLD=0.7  # Minimum confidence for survey identification
 
 # Add to apps/frontend/.env
 VITE_API_URL=http://localhost:8000
