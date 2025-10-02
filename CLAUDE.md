@@ -93,9 +93,11 @@ GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/questions
 #### Student Response Extraction
 ```http
 GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions
-GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions/{submission_id}
-GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions/{submission_id}/questions
+GET /api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions/{id}?include[]=submission_history
+GET /api/v1/quiz_submissions/{quiz_submission_id}/questions
 ```
+
+**Note:** Student answers are retrieved via `submission_data` property when using `include[]=submission_history` parameter (recommended) or via the Quiz Submission Questions API endpoint.
 
 ### Survey Detection Logic
 
@@ -957,11 +959,16 @@ CourseFeedbackAggregator/
 │   │   │   │   └── mapping.py       # Course mapping model
 │   │   │   ├── services/            # Business logic services
 │   │   │   │   ├── __init__.py
-│   │   │   │   ├── canvas_service.py      # Canvas API integration
-│   │   │   │   ├── priority_service.py    # Priority calculation
-│   │   │   │   ├── attribution_service.py # Course attribution
+│   │   │   │   ├── canvas/          # Canvas API integration (separated by resource)
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── base.py      # Shared auth, pagination, HTTP logic
+│   │   │   │   │   ├── courses.py   # Courses API methods
+│   │   │   │   │   ├── quizzes.py   # Quizzes API methods
+│   │   │   │   │   └── submissions.py # Submissions API methods
+│   │   │   │   ├── survey_service.py      # Survey detection logic
 │   │   │   │   ├── feedback_service.py    # Feedback processing
-│   │   │   │   └── webhook_service.py     # Webhook processing
+│   │   │   │   ├── priority_service.py    # Priority calculation
+│   │   │   │   └── attribution_service.py # Course attribution
 │   │   │   ├── schemas/             # Pydantic schemas
 │   │   │   │   ├── __init__.py
 │   │   │   │   ├── course.py        # Course schemas
