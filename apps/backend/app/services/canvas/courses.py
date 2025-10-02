@@ -119,13 +119,38 @@ if __name__ == "__main__":
         client = CanvasCoursesClient()
 
         try:
-            # Test 1: Fetch all courses
-            print(f"TEST 1: Fetching all courses from account {client.settings.CANVAS_ACCOUNT_ID}...")
-            courses = await client.get_all()
+            # Test 1: Fetch all courses (with limit for testing)
+            print(f"TEST 1: Fetching courses from account {client.settings.CANVAS_ACCOUNT_ID}...")
+            print("Note: Limiting to first 200 courses for testing\n")
 
-            print(f"SUCCESS: Found {len(courses)} courses")
+            # Fetch with progress
+            all_courses = []
+            page = 0
+            max_pages = 20  # Reasonable limit for testing
+
+            import httpx
+            async with httpx.AsyncClient(timeout=client.timeout) as http_client:
+                url = f"{client.base_url}/api/v1/accounts/{client.settings.CANVAS_ACCOUNT_ID}/courses"
+                params = {"per_page": 10}  # Small pages for visible progress
+
+                while url and page < max_pages:
+                    page += 1
+                    print(f"  Page {page}...", end=" ", flush=True)
+
+                    response = await http_client.get(url, headers=client.headers, params=params)
+                    response.raise_for_status()
+
+                    courses_batch = response.json()
+                    all_courses.extend(courses_batch)
+                    print(f"{len(courses_batch)} courses (total: {len(all_courses)})")
+
+                    url = client._get_next_page_url(response)
+                    params = {}
+
+            courses = all_courses
+            print(f"\nSUCCESS: Found {len(courses)} courses")
             print(f"API: GET /api/v1/accounts/{client.settings.CANVAS_ACCOUNT_ID}/courses")
-            print(f"Pagination: Automatically fetched all pages\n")
+            print(f"Pagination: Fetched {page} pages\n")
 
             # Show first 5 courses
             print("Sample courses:")
