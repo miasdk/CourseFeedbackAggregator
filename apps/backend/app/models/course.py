@@ -5,7 +5,7 @@ Represents Canvas course data with filtering support for active/inactive courses
 """
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Index, func
-from sqlalchemy.orm import column_property
+from sqlalchemy.orm import column_property, relationship
 from sqlalchemy.sql import case
 from app.core.database import Base
 
@@ -40,6 +40,9 @@ class Course(Base):
     # Audit Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    # Relationships
+    surveys = relationship("CanvasSurvey", back_populates="course", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Course(id={self.id}, canvas_id={self.canvas_id}, name='{self.name}', workflow_state='{self.workflow_state}')>"

@@ -3,8 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from datetime import datetime
 
-# Only import the webhook router (the only functional API file)
-from .api.webhooks import router as webhooks_router
+# Import routers
+from .api.zoho.webhooks import router as webhooks_router
+from .api.courses import router as courses_router
+from .api.quizzes import router as quizzes_router
+from .api.feedback import router as feedback_router
 
 app = FastAPI(
     title="Course Feedback Aggregator API",
@@ -21,8 +24,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include webhook router
+# Include routers
 app.include_router(webhooks_router, tags=["webhooks"])
+app.include_router(courses_router)
+app.include_router(quizzes_router)
+app.include_router(feedback_router)
 # CORS preflight handler
 @app.options("/{path:path}")
 async def options_handler(path: str):
@@ -35,7 +41,7 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
-        "message": "Webhook service operational"
+        "message": "API service operational"
     }
 
 # Root endpoint
@@ -45,10 +51,31 @@ async def root():
         "message": "Course Feedback Aggregator API",
         "version": "1.0.0",
         "status": "operational",
-        "endpoints": [
-            "/health",
-            "/webhooks/zoho-survey"
-        ]
+        "endpoints": {
+            "health": "/health",
+            "canvas_courses": {
+                "sync": "POST /courses/sync",
+                "list": "GET /courses/",
+                "detail": "GET /courses/{id}"
+            },
+            "canvas_quizzes": {
+                "sync_all": "POST /quizzes/sync",
+                "sync_course": "POST /quizzes/sync/{course_id}",
+                "list_surveys": "GET /quizzes/surveys",
+                "survey_detail": "GET /quizzes/surveys/{survey_id}"
+            },
+            "student_feedback": {
+                "sync_survey": "POST /feedback/sync/{survey_id}",
+                "get_survey_feedback": "GET /feedback/surveys/{survey_id}",
+                "course_summary": "GET /feedback/courses/{course_id}/summary",
+                "course_detail": "GET /feedback/courses/{course_id}/detail",
+                "course_categories": "GET /feedback/courses/{course_id}/categories",
+                "course_themes": "GET /feedback/courses/{course_id}/themes"
+            },
+            "webhooks": {
+                "zoho_survey": "POST /webhooks/zoho-survey"
+            }
+        }
     }
 
 if __name__ == "__main__":

@@ -6,7 +6,11 @@ from .config import get_settings
 Base = declarative_base()
 
 settings = get_settings()
-engine = create_async_engine(settings.DATABASE_URL, pool_pre_ping=True, echo=settings.DEBUG)
+engine = create_async_engine(
+    settings.async_database_url,
+    pool_pre_ping=True,
+    echo=settings.DEBUG
+)
 AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession)
 
 async def get_db():

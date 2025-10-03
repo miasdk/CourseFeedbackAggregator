@@ -93,8 +93,18 @@ class CanvasBaseClient:
                 response = await client.get(url, headers=self.headers, params=params)
                 response.raise_for_status()  # Raise exception for 4xx/5xx
 
-                items = response.json()
-                all_items.extend(items)
+                data = response.json()
+
+                # Handle both array responses and object responses
+                if isinstance(data, list):
+                    # Direct array response (most Canvas endpoints)
+                    all_items.extend(data)
+                elif isinstance(data, dict):
+                    # Object response - just add the dict itself
+                    all_items.append(data)
+                else:
+                    # Unexpected response type
+                    print(f"Warning: Unexpected response type from Canvas API: {type(data)}")
 
                 # Check for next page
                 url = self._get_next_page_url(response)

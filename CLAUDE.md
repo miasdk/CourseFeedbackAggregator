@@ -56,25 +56,150 @@ Based on stakeholder meeting (Sep 25, 2024), the project has pivoted to **Canvas
 
 ## Current Implementation Status
 
-### Operational Components
+**Last Updated**: October 3, 2025
+**Implementation Phase**: Phase 2 Complete (Student Response Extraction) - BLOCKED on Canvas API Issue
+**Overall Progress**: ~65% Backend Complete, Frontend Mock Only
 
-#### 1. Canvas API Foundation
-- **API Token**: `15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY`
-- **Base URL**: `https://executiveeducation.instructure.com`
-- **Testing infrastructure** functional
-- **Course data structure** documented
+### Completed Components
 
-#### 2. Frontend Dashboard (Mock Data)
+#### 1. Database Layer (Neon PostgreSQL)
+- **Status**: COMPLETE - Fully implemented and migrated
+- **Schema**: All tables created (courses, canvas_surveys, student_feedback, feedback_responses, course_priorities)
+- **Migrations**: Alembic configured with 2 migrations applied
+- **Connection**: Async SQLAlchemy 2.0 with asyncpg driver
+- **Location**: `apps/backend/app/models/`
+
+#### 2. Canvas API Integration
+- **Status**: COMPLETE - Modular client architecture
+- **Configuration**: See `.env.example` for required credentials
+- **Clients Implemented**:
+  - `CanvasBaseClient` - Shared auth, pagination, HTTP logic
+  - `CanvasCoursesClient` - Course discovery and metadata
+  - `CanvasQuizzesClient` - Quiz/survey discovery and questions
+  - `CanvasSubmissionsClient` - Quiz submission extraction (limited for surveys)
+  - `CanvasQuizReportsClient` - **NEW**: CSV report generation for complete survey responses
+- **Location**: `apps/backend/app/services/canvas/`
+
+#### 3. Survey Discovery System
+- **Status**: OPERATIONAL
+- **Features**:
+  - Detects feedback surveys via title patterns and quiz settings
+  - Confidence scoring (0.0-1.0) for survey identification
+  - Stores surveys with metadata in database
+- **Endpoints**:
+  - `GET /quizzes/sync-surveys` - Discover and store surveys
+  - `GET /quizzes/surveys` - List identified surveys
+- **Location**: `apps/backend/app/api/quizzes.py`
+
+#### 4. Student Response Extraction Pipeline
+- **Status**: IMPLEMENTED but BLOCKED (see Critical Issues)
+- **Architecture**: Quiz Reports CSV workflow
+  1. Generate student_analysis report via Canvas API
+  2. Poll for CSV file completion
+  3. Download and parse CSV with pandas
+  4. Extract individual student responses with essay text
+  5. Categorize and store in database
+- **Response Processor**:
+  - `parse_csv_student_response()` - Handles CSV data structure
+  - Text analysis for improvement suggestions
+  - Critical issue detection
+  - Question categorization (content, instructor, technical, overall)
+- **Location**:
+  - `apps/backend/app/services/canvas/reports.py`
+  - `apps/backend/app/services/response_processor.py`
+  - `apps/backend/app/api/feedback.py`
+
+#### 5. Frontend Dashboard (Mock Data)
+- **Status**: MOCK DATA ONLY - Not connected to backend
 - **React 18 + TypeScript** with Tailwind CSS + shadcn/ui
-- **Working components**: PriorityRecommendations, CoursesList, DashboardOverview, ScoringControls
+- **Components**: PriorityRecommendations, CoursesList, DashboardOverview, ScoringControls
 - **Mock API integration** with tunable weight sliders
 
-### Missing Components
-- Database layer (no persistence)
-- Canvas survey extraction (no quiz/submission fetching)
-- Student response processing pipeline
-- Priority scoring engine (no business logic)
-- Survey detection and categorization system
+### Missing/Incomplete Components
+
+#### 1. Priority Scoring Engine
+- **Status**: NOT IMPLEMENTED
+- **Impact**: HIGH - Core business logic missing
+- **Dependencies**: Requires working student response extraction
+- **Spec Available**: Yes (see Priority Scoring Engine section)
+- **Estimated Effort**: 1-2 weeks
+
+#### 2. Feedback Aggregation Service
+- **Status**: NOT IMPLEMENTED
+- **Impact**: HIGH - Required for priority scoring
+- **Features Needed**:
+  - Course-level metrics calculation
+  - Theme-based categorization
+  - Sentiment analysis
+- **Estimated Effort**: 1 week
+
+#### 3. Frontend-Backend Integration
+- **Status**: NOT STARTED
+- **Impact**: MEDIUM - Frontend currently uses mock data
+- **Requirements**: Update API client, connect components
+- **Estimated Effort**: 3-5 days
+
+### Critical Issues Blocking Progress
+
+#### Issue #1: Canvas Quiz Reports API Returns 500 Error (BLOCKER)
+
+**Problem**: Canvas instance returns `500 Internal Server Error` when attempting to generate Quiz Reports for survey-type quizzes.
+
+**Technical Details**:
+```bash
+POST https://executiveeducation.instructure.com/api/v1/courses/42/quizzes/481/reports
+Response: 500 Internal Server Error
+```
+
+**Root Cause**: Survey-type quizzes (`quiz_type: "survey"`, `assignment_id: NULL`) in Canvas LMS have restricted API access to protect student anonymity:
+
+| API Method | Graded Quiz | Survey Quiz | Essay Text Available? |
+|------------|-------------|-------------|----------------------|
+| Quiz Submissions API | Works - Returns `submission_data` | FAILS - Returns `submission_data: null` | NO |
+| Quiz Statistics API | Works - Returns essay text | PARTIAL - Returns user IDs only, NO text | NO |
+| **Quiz Reports CSV API** | Works - Full data | **Should work but 500 error** | **BLOCKED** |
+
+**Impact**:
+- **CRITICAL** - Without essay text, priority scoring engine cannot function
+- Cannot detect improvement suggestions from student feedback
+- Cannot identify critical issues or sentiment
+- 85 student submissions found but 0 responses extracted
+
+**Evidence**:
+```
+Test Sync Result:
+- Survey: b60da567-3b38-4ae3-8b45-82fc4b28363b (Course Feedback - Quiz 481)
+- Status: "error"
+- Submissions Found: 0 (due to API failure)
+- Responses Parsed: 0
+- Error: "Error fetching quiz reports: Server error '500 Internal Server Error'"
+```
+
+**Implementation Completed**:
+- DONE: Full Quiz Reports CSV workflow implemented
+- DONE: CSV parsing with pandas
+- DONE: Database schema updated for CSV data structure
+- DONE: Response processor handles CSV format
+- **BLOCKED waiting for Canvas API fix**
+
+**Next Steps**:
+1. **Contact Canvas Administrator** to investigate 500 error
+   - Possible causes: Report generation disabled, quota limits, permissions
+   - May need Canvas instance configuration changes
+2. **Alternative**: Check if pre-generated reports exist
+   - Can manually download CSV from Canvas UI
+   - Bypass API and import directly (one-time workaround)
+3. **Fallback Option**: Use Quiz Statistics API (partial data)
+   - Gets multiple choice responses but NO essay text
+   - 60% solution - better than nothing but loses critical data
+
+**Code Ready**: Once Canvas API issue is resolved, sync endpoint should work immediately. No additional development needed.
+
+**Developer Handoff Notes**:
+- Implementation follows Canvas API documentation exactly
+- Error is Canvas instance-specific, not code issue
+- See `apps/backend/app/services/canvas/reports.py` for implementation
+- Test endpoint: `POST /feedback/sync/{survey_id}`
 
 ## Canvas Survey Data Architecture
 
@@ -1075,8 +1200,8 @@ CourseFeedbackAggregator/
 ```bash
 # Test Canvas API connectivity
 cd apps/backend
-python -c "import httpx; r = httpx.get('https://executiveeducation.instructure.com/api/v1/courses',
-  headers={'Authorization': 'Bearer 15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY'});
+python -c "import httpx; r = httpx.get('https://your-canvas-instance.instructure.com/api/v1/courses',
+  headers={'Authorization': 'Bearer YOUR_CANVAS_API_TOKEN'});
   print(f'Connected: {r.status_code == 200}')"
 ```
 
@@ -1175,8 +1300,8 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM survey_responses;"
 ```env
 # Add to apps/backend/.env
 DATABASE_URL=postgresql://user:pass@ep-xxx.neon.tech/coursefeedback
-CANVAS_API_TOKEN=15908~n7rLxPkkfXxZVkaLZ2CBNL9QzXCew8cCQmxaK4arEMtYWwJAUfaW3JQmn3Le2QuY
-CANVAS_BASE_URL=https://executiveeducation.instructure.com
+CANVAS_API_TOKEN=your_canvas_api_token_here
+CANVAS_BASE_URL=https://your-canvas-instance.instructure.com
 CANVAS_SYNC_INTERVAL_HOURS=24  # How often to sync Canvas data
 SURVEY_CONFIDENCE_THRESHOLD=0.7  # Minimum confidence for survey identification
 

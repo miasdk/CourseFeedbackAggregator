@@ -45,15 +45,54 @@ class Settings(BaseSettings):
         """API prefix"""
         return f"/api/{self.API_VERSION}"
     
-    @property 
-    def is_development(self) -> bool: 
+    @property
+    def is_development(self) -> bool:
         """Check if development environment"""
         return self.ENVIRONMENT == "development"
-    
+
     @property
     def is_production(self) -> bool:
         """Check if production environment"""
         return self.ENVIRONMENT == "production"
+
+    @property
+    def async_database_url(self) -> Optional[str]:
+        """
+        Convert DATABASE_URL to async format (postgresql+asyncpg://).
+
+        Neon provides DATABASE_URL as postgresql://, but async SQLAlchemy
+        needs postgresql+asyncpg:// to use the asyncpg driver.
+
+        Also removes psycopg2-specific SSL parameters and adds asyncpg equivalents.
+        """
+        if not self.DATABASE_URL:
+            return None
+
+        url = self.DATABASE_URL
+
+        # Replace postgresql:// with postgresql+asyncpg://
+        if url.startswith("postgresql://"):
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+        # Remove psycopg2-specific parameters that asyncpg doesn't support
+        # asyncpg uses `ssl` parameter instead of `sslmode`
+        url = url.replace("sslmode=require&", "")
+        url = url.replace("&sslmode=require", "")
+        url = url.replace("sslmode=require", "")
+        url = url.replace("channel_binding=require&", "")
+        url = url.replace("&channel_binding=require", "")
+        url = url.replace("channel_binding=require", "")
+
+        # Clean up any trailing ? or &
+        url = url.rstrip("?&")
+
+        # Add asyncpg's ssl parameter for Neon (asyncpg uses `ssl` not `sslmode`)
+        if "?" in url:
+            url = url + "&ssl=require"
+        else:
+            url = url + "?ssl=require"
+
+        return url
 
 
 # Singleton pattern - create settings once, cache forever
