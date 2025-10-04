@@ -169,7 +169,7 @@ class SurveyDetector:
         else:
             signals['is_ungraded'] = False
 
-        # Cap confidence at 1.00
+        # Cap confidence score at 1.00
         confidence_score = min(confidence_score, Decimal('1.00'))
 
         # Determine if it's likely a survey (confidence >= 0.50)
